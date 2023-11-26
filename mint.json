@@ -41,7 +41,7 @@
   "navigation": [
     {
       "group": "Get Started",
-      "pages": ["introduction", "account-management"]
+      "pages": ["introduction"]
     },
     {
       "group": "Frequently Asked Questions",
@@ -54,6 +54,10 @@
     {
       "group": "Exploring Soundverse",
       "pages": ["explore/explore","explore/my-library"]
+    },
+    {
+      "group": "Account Management",
+      "pages": ["account/manage-your-account","account/user-settings"]
     }
   ],
   "footerSocials": {
