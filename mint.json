@@ -45,7 +45,7 @@
     },
     {
       "group": "Frequently Asked Questions",
-      "pages": ["faqs/content-and-generation","faqs/billing-and-payment","faqs/managing-your-account", "faqs/limitations"]
+      "pages": ["faqs/content-and-generation","faqs/billing-and-payment","faqs/licensing-model","faqs/managing-your-account", "faqs/limitations"]
     },
     {
       "group": "Creating with Soundverse",
