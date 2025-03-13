@@ -1,0 +1,133 @@
+---
+title: 'Extend music'
+---
+
+#### **Extend Music using Prompt, by providing Audio URL**
+
+This endpoint can be used to Extend the Existing song by providing the publicly available URL.
+
+### **Core Parameters:**
+
+- ``` `userId` (string) - Required ``` : User ID associated with the request
+- ``` `prompt` (string) - Required``` : Text prompt describing the music
+- ``` `audioUrl` (string) - Required ``` : Provide the publicly available URL to entend it.
+- ``` `model` (string) - Optional ``` :  `sansaar_1_lite` is Default value.
+
+
+**Note** :
+- Sansaar_1 uses a large model that extends high-quality music but generates slower.
+- Sansaar_1_lite uses a smaller model, enabling faster song extension.
+
+### **Request Body**
+
+```
+Request body: 
+{
+  "userId": "string",
+  "audioUrl": "string",
+  "prompt": "string",
+  "model": "sansaar_1_lite"
+}
+
+```
+
+### Code Samples
+
+<Tabs>
+  <Tab title="Python">
+  
+  ```python
+
+    import requests
+
+    url = "https://api.soundverse.ai/generate/extend"
+    headers = {
+        "Authorization": "Bearer your_api_key_here",
+        "Content-Type": "application/json"
+    }
+    payload = {
+    userId: "67b9ca2f20e711017fc1b6c5"
+        "audio_url": "
+    https://storage.googleapis.com/x-one/67b9ca2f20e711017fc1b6c5/67b9ca2f20e711017fc1b6c5/xone20250312100522scsuxkec.wav
+    ,
+        "prompt": "Extend the provided audio clip by generating an additional 45 seconds of music. Maintain the style and mood of the original piece while seamlessly continuing the composition.",
+        "model": "sansaar_1_lite"
+    }
+
+    response = requests.post(url, json=payload, headers=headers)
+    print(response.json())
+
+    ```
+   </Tab>
+
+   <Tab title="cURL">
+  
+  ```sh
+
+   curl -X POST "https://api.soundverse.ai/generate/extend" \
+    -H "Authorization: Bearer your_api_key_here" \
+    -H "Content-Type: application/json" \
+    -d '{
+        "userId": "67b9ca2f20e711017fc1b6c5",
+        "audio_url":"https://storage.googleapis.com/x-one/67b9ca2f20e711017fc1b6c5/67b9ca2f20e711017fc1b6c5/xone20250312100522scsuxkec.wav,
+        "prompt": "Extend the provided audio clip by generating an additional 45 seconds of music. Maintain the style and mood of the original piece while seamlessly continuing the composition.",
+        "model": "sansaar_1_lite"
+    }'
+
+
+    ```
+   </Tab>
+   
+</Tabs>
+
+### Response
+
+
+<Tabs>
+   <Tab title="200 OK">
+  
+  ```sh
+
+   {
+    "success": true,
+    "messageId": "str",
+    "aiMagicTool": "extend"
+    }
+
+
+    ```
+   </Tab>
+
+   <Tab title="400 Bad Request">
+  
+  ```sh
+      
+    {
+      Success: false,
+      “Message”: “str”
+    }
+
+
+    ```
+   </Tab>
+</Tabs>
+
+
+#### Possible Responses for Bad Request :
+
+- If NSFW words are detected
+```
+{
+"success": False,
+"message": "NSFW words detected. Please try again with a different prompt.",
+}
+```
+
+- If Artist name is detected
+```
+{
+"success": False,
+"message": "Artist name detected. Please try again with a different prompt.",
+}
+```
+

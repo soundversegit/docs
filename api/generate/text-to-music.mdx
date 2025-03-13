@@ -1,0 +1,131 @@
+---
+title: 'Text to Music'
+---
+
+#### **Generate Music from Text**
+
+This endpoint generates music from a text-based prompt using AI models. You can choose between **HD quality (`sansaar_1`)** and **faster generation (`sansaar_1_lite`)**.
+
+
+### **Core Parameters:**
+
+- ``` `userId` (string) - Required ``` : User ID associated with the request
+- ``` `prompt` (string) - Required``` : Text prompt describing the music
+- ``` `duration` (integer) - Optional ``` : Length of the generated music (Accepted values: `15`, `30`, `60`, `180` seconds)
+- ``` `model` (string) - Optional ``` :  `sansaar_1` for HQ, `sansaar_1_lite` for faster generation
+- ``` `loop` (boolean) - Optional ``` : Whether the music should loop
+
+### **Request Body**
+
+```
+Request body: 
+{
+  "userId": "string",
+  "prompt": "string",
+  "duration": 15,
+  "model": "sansaar_1_lite",
+  "loop": false
+}
+```
+
+### Code Samples
+
+<Tabs>
+  <Tab title="Python">
+  
+  ```python
+
+    import requests
+
+    url = "https://api.soundverse.ai/generate/text_to_music"
+    headers = {
+        "Authorization": "Bearer your_api_key_here",
+        "Content-Type": "application/json"
+    }
+    payload = {
+    "userId": "67b9ca2f20e711017fc1b6c5",
+    "prompt": "Compose a futuristic electronic track with cutting-edge synth sounds and pulsing beats.",
+    "duration": 15,
+    "model": "sansaar_1_lite",
+    "loop": false
+    }
+
+
+
+    response = requests.post(url, json=payload, headers=headers)
+    print(response.json())
+    ```
+   </Tab>
+
+   <Tab title="cURL">
+  
+  ```sh
+
+   curl -X POST "https://api.soundverse.ai/generate/text_to_music" \
+    -H "Authorization: Bearer your_api_key_here" \
+    -H "Content-Type: application/json" \
+    -d '{
+    "userId": "67b9ca2f20e711017fc1b6c5",
+    "prompt": "Compose a futuristic electronic track with cutting-edge synth sounds and pulsing beats.",
+    "duration": 15,
+    "model": "sansaar_1_lite",
+    "loop": false
+    }'
+
+    ```
+   </Tab>
+   
+</Tabs>
+
+
+
+### Response
+
+
+<Tabs>
+   <Tab title="200 OK">
+  
+  ```sh
+
+   {
+    "success": true,
+    "messageId": "str",
+    "aiMagicTool": "generate_music"
+    }
+
+
+    ```
+   </Tab>
+
+   <Tab title="400 Bad Request">
+  
+  ```sh
+      
+    {
+      Success: false,
+      “Message”: “str”
+    }
+
+
+    ```
+   </Tab>
+</Tabs>
+
+
+#### Possible Responses for Bad Request :
+
+- If NSFW words are detected
+```
+{
+"success": False,
+"message": "NSFW words detected. Please try again with a different prompt.",
+}
+```
+
+- If Artist name is detected
+```
+{
+"success": False,
+"message": "Artist name detected. Please try again with a different prompt.",
+}
+```

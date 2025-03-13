@@ -1,0 +1,72 @@
+---
+title: 'Fetch Status'
+---
+
+#### Check the status of a generation task.
+
+```GET  /status/generations/{message_id}``` : This is used to check status of the generation using message_id.
+
+### **Core Parameters:**
+
+- ``` `message_id` (string) - Required ``` : message ID associated with the generated response.
+
+
+### Code Samples
+
+<Tabs>
+  <Tab title="Python">
+  
+  ```python
+    import requests
+
+    message_id = "your_message_id"
+    url = f"https://api.soundverse.ai/status/generations/{message_id}"
+    headers = {
+        "Authorization": "Bearer your_api_key_here"
+    }
+
+    response = requests.get(url, headers=headers)
+    print(response.json())
+
+    ```
+   </Tab>
+
+   <Tab title="cURL">
+  
+  ```sh
+   curl "https://api.soundverse.ai/status/generations/your_message_id" \
+     -H "Authorization: Bearer your_api_key_here"
+    ```
+   </Tab>
+   
+</Tabs>
+
+
+#### Response
+  ```sh
+   { "success": True,
+    "data": status
+    }
+    ```
+
+<Tabs>
+   <Tab title="SUCCESSFUL">
+  
+  ```sh
+   { 
+     "success": True,
+     "data": “SUCCESSFUL”
+   }
+    ```
+   </Tab>
+
+   <Tab title="PROCESSING">
+  
+  ```sh
+    {
+      "success": True,
+      "data": “PROCESSING”
+    }
+    ```
+   </Tab>
+</Tabs>

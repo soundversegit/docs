@@ -58,6 +58,14 @@
     {
       "group": "Account Management",
       "pages": ["account/manage-your-account","account/user-settings"]
+    },
+    {
+      "group": "Developer APIs",
+      "pages": ["api_documentation"]
+    },
+    {
+      "group": "API Documentation",
+      "pages": ["api/generate/text-to-music","api/generate/extend-music", "api/generations/fetch_status", "api/generations/fetch_result"]
     }
   ],
   "footerSocials": {

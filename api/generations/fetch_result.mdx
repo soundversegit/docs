@@ -1,0 +1,119 @@
+---
+title: 'Fetch Result'
+---
+
+```GET /generation/{userId}/{messageId}```: Use this endpoint to retrieve the data when the generation request is processed successfully.
+
+#### Data Fetching Endpoint
+Retrieve the final generated song and all the parameters used to generate it.
+
+### **Core Parameters:**
+
+- ``` `message_id` (string) - Required ```: The message ID associated with the generated response.
+- ``` `userId` (string) - Required ```: The user ID associated with the request.
+
+### Code Samples
+<Tabs>
+  <Tab title="Python">
+  
+  ```python
+    import requests
+
+    User_id = “user_id”
+    message_id = "your_message_id"
+    url = f"https://api.soundverse.ai/generation/{user_id}/{message_id}"
+    headers = {
+        "Authorization": "Bearer your_api_key_here"
+    }
+
+    response = requests.get(url, headers=headers)
+    print(response.json())
+    ```
+   </Tab>
+
+   <Tab title="cURL">
+  
+  ```sh
+   curl "https://api.soundverse.ai/generation/{user_id}/{message_id}" \
+     -H "Authorization: Bearer your_api_key_here"
+    ```
+   </Tab>
+</Tabs>
+
+### Response
+
+```
+{
+  "success": "boolean",
+  "data": {
+    "_id": "string (UUID)",
+    "userId": "string (UUID)",
+    "author": "string | null",
+    "prompt": "string",
+    "projectId": "string (UUID)",
+    "createdAt": "string (ISO 8601 timestamp)",
+    "updatedAt": "string (ISO 8601 timestamp)",
+    "albumArt": "string (URL)",
+    "aiMagicTool": {
+      "user": "string",
+      "assistant": "string"
+    },
+    "aiReply": "string",
+    "status": "string",
+    "audioData": [
+      {
+        "_id": "string (UUID)",
+        "audioUrl": "string (URL)",
+        "bpm": "integer | null",
+        "duration": "float | null",
+        "songName": "string | null",
+        "likeCount": "integer",
+        "playCount": "integer",
+        "audioType": "string",
+        "messageId": "string (UUID)",
+        "isLoopable": "boolean",
+        "isLiked": "boolean",
+        "isHidden": "boolean",
+        "muted": "boolean",
+        "userId": "string (UUID)",
+        "createdAt": "string (ISO 8601 timestamp)",
+        "updatedAt": "string (ISO 8601 timestamp)",
+        "licenses": "string | null",
+        "isThread": "boolean",
+        "isPublic": "boolean",
+        "isRestricted": "boolean",
+        "loopedComponentUrl": "string (URL) | null",
+        "loopedComponentDuration": "float | null",
+        "isStaffPick": "boolean"
+      }
+    ]
+  }
+}
+```
+
+
+### Field Descriptions
+- **_id** : Unique identifier for the audio generation.
+- **createdAt**: Timestamp when the audio was created.
+- **status**: Current status of the audio generation process.
+- **audioUrl**: Direct URL to the generated audio file.
+- **bpm**: Beats per minute (if applicable).
+- **duration**: Length of the generated audio (if available).
+- **songName**: Name of the generated song (if provided).
+- **likeCount**: Number of likes received.
+- **playCount**: Number of times the audio has been played.
+- **audioType**: Category or type of the generated audio.
+- **messageId**: Identifier linking the audio to a specific message.
+- **isLoopable**: Indicates if the audio can be looped.
+- **isLiked**: Whether the user has liked the audio.
+- **isHidden**: Determines if the audio is hidden from public view.
+- **muted**: Indicates if the audio is muted.
+- **userId**: Identifier of the user who created the audio.
+- **licenses**: Licensing details (if applicable).
+- **isThread**: Whether the audio belongs to a threaded conversation.
+- **isPublic**: Indicates if the audio is publicly accessible.
+- **isRestricted**: Specifies if there are restrictions on the audio.
+- **loopedComponentUrl**: URL to a looped version of the audio (if available).
+- **loopedComponentDuration**: Duration of the looped section (if applicable).
+
+
