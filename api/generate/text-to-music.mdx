@@ -1,34 +1,49 @@
 ---
-title: 'Text to Music'
+title: "Text to Music"
 ---
 
-#### **Generate Music from Text**
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-This endpoint generates music from a text-based prompt using AI models. You can choose between **HD quality (`sansaar_1`)** and **faster generation (`sansaar_1_lite`)**.
+## 🎵 Generate Music from Text  
+This API allows you to generate **AI-powered music** based on a text description.  
+Choose between:  
+- 🎧 **HD Quality** → `sansaar_1` (Higher fidelity)  
+- ⚡ **Fast Mode** → `sansaar_1_lite` (Quicker processing)  
 
+---
 
-### **Core Parameters:**
+## 🔹 **Core Parameters**  
+> 🛈 The parameters below define the request body for this API.
 
-- ``` `userId` (string) - Required ``` : User ID associated with the request
-- ``` `prompt` (string) - Required``` : Text prompt describing the music
-- ``` `duration` (integer) - Optional ``` : Length of the generated music (Accepted values: `15`, `30`, `60`, `180` seconds)
-- ``` `model` (string) - Optional ``` :  `sansaar_1` for HQ, `sansaar_1_lite` for faster generation
-- ``` `loop` (boolean) - Optional ``` : Whether the music should loop
+| Parameter  | Type      | Required? | Description |
+|------------|----------|-----------|-------------|
+| **`userId`**  | `string`  | ✅ Required |  &#x2003;&emsp;&emsp;Unique ID of the user. |
+| **`prompt`**  | `string`  | ✅ Required |  &#x2003;&emsp;&emsp;Text description of the music. |
+| **`duration`** | `integer` | ⚠️ Optional | &#x2003;&emsp;&emsp;Track length (`15s`, `30s`, `60s`, `180s`). |
+| **`model`**  | `string`  | ⚠️ Optional |  &#x2003;&emsp;`"sansaar_1"` (HQ) or `"sansaar_1_lite"` (Faster). |
+| **`loop`**  | `boolean` | ⚠️ Optional | &#x2003;&emsp;&emsp;Whether the music should loop. |
 
-### **Request Body**
+---
 
-```
-Request body: 
+#### 📩 **Request Body**
+
+<div style={{ backgroundColor: "#e9ecef", padding: "0.75rem", borderRadius: "0.3rem" }}>
+  
+```json
 {
-  "userId": "string",
-  "prompt": "string",
+  "userId": "your_unique_id",
+  "prompt": "A futuristic electronic track with deep bass and synths.",
   "duration": 15,
   "model": "sansaar_1_lite",
   "loop": false
 }
 ```
+</div>
 
-### Code Samples
+
+
+#### 🖥️ Code Samples
 
 <Tabs>
   <Tab title="Python">
@@ -43,7 +58,7 @@ Request body:
         "Content-Type": "application/json"
     }
     payload = {
-    "userId": "67b9ca2f20e711017fc1b6c5",
+    "userId": "61b7ca2f20e711017fc1b6c4",
     "prompt": "Compose a futuristic electronic track with cutting-edge synth sounds and pulsing beats.",
     "duration": 15,
     "model": "sansaar_1_lite",
@@ -65,7 +80,7 @@ Request body:
     -H "Authorization: Bearer your_api_key_here" \
     -H "Content-Type: application/json" \
     -d '{
-    "userId": "67b9ca2f20e711017fc1b6c5",
+    "userId": "61b7ca2f20e711017fc1b6c4",
     "prompt": "Compose a futuristic electronic track with cutting-edge synth sounds and pulsing beats.",
     "duration": 15,
     "model": "sansaar_1_lite",
@@ -79,7 +94,7 @@ Request body:
 
 
 
-### Response
+#### 📌 Response
 
 
 <Tabs>
@@ -112,20 +127,24 @@ Request body:
 </Tabs>
 
 
-#### Possible Responses for Bad Request :
+#### 🚫 Possible Errors :
 
 - If NSFW words are detected
+<div style={{ backgroundColor: "#e9ecef", padding: "0.75rem", borderRadius: "0.3rem" }}>
 ```
 {
 "success": False,
 "message": "NSFW words detected. Please try again with a different prompt.",
 }
 ```
+</div>
 
 - If Artist name is detected
+<div style={{ backgroundColor: "#e9ecef", padding: "0.75rem", borderRadius: "0.3rem" }}>
 ```
 {
 "success": False,
 "message": "Artist name detected. Please try again with a different prompt.",
 }
 ```
+</div>

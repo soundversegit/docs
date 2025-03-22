@@ -1,17 +1,32 @@
 ---
-title: 'Fetch Status'
+title: "Fetch Status"
 ---
 
-#### Check the status of a generation task.
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-```GET  /status/generations/{message_id}``` : This is used to check status of the generation using message_id.
+## 📌 Check the Status of a Generation Task  
+Use this API to retrieve the status of a generation task using `message_id`.
 
-### **Core Parameters:**
+---
 
-- ``` `message_id` (string) - Required ``` : message ID associated with the generated response.
+## 🔹 **Core Parameters**  
+> 🛈 The parameters below define the request for this API.
+
+| Parameter  | Type      | Required? | Description |
+|------------|----------|-----------|-------------|
+| **`message_id`**  | `string`  | ✅ Required |  &#x2003;&emsp;&emsp;Unique ID of the generated response. |
+
+---
+
+## 🔍 **Request Format**  
+
+```http
+GET  /status/generations/{message_id}
+```
 
 
-### Code Samples
+### 🖥️ Code Samples
 
 <Tabs>
   <Tab title="Python">
@@ -42,7 +57,7 @@ title: 'Fetch Status'
 </Tabs>
 
 
-#### Response
+#### 📌 Response
   ```sh
    { "success": True,
     "data": status

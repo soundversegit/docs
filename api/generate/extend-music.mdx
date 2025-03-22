@@ -1,24 +1,35 @@
 ---
-title: 'Extend music'
+title: "Extend Music"
 ---
 
-#### **Extend Music using Prompt, by providing Audio URL**
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-This endpoint can be used to Extend the Existing song by providing the publicly available URL.
+## 🎵 Extend Music using Prompt & Audio URL  
+This API allows you to **extend an existing song** by providing a **publicly accessible URL** of the original audio.  
+Choose between:  
+- 🎧 **HD Quality** → `sansaar_1` (Higher fidelity, slower processing)  
+- ⚡ **Fast Mode** → `sansaar_1_lite` (Quicker processing, lower fidelity)  
 
-### **Core Parameters:**
+---
 
-- ``` `userId` (string) - Required ``` : User ID associated with the request
-- ``` `prompt` (string) - Required``` : Text prompt describing the music
-- ``` `audioUrl` (string) - Required ``` : Provide the publicly available URL to entend it.
-- ``` `model` (string) - Optional ``` :  `sansaar_1_lite` is Default value.
+## 🔹 **Core Parameters**  
+> 🛈 The parameters below define the request body for this API.
 
+| Parameter  | Type      | Required? | Description |
+|------------|----------|-----------|-------------|
+| **`userId`**  | `string`  | ✅ Required |  &#x2003;&emsp;&emsp;Unique ID of the user. |
+| **`audioUrl`**  | `string`  | ✅ Required |  &#x2003;&emsp;&emsp;Publicly available URL of the audio file to extend. |
+| **`prompt`**  | `string`  | ✅ Required |  &#x2003;&emsp;&emsp;Text description guiding how the music should be extended. |
+| **`model`**  | `string`  | ⚠️ Optional |  &#x2003;&emsp;`"sansaar_1"` (HQ) or `"sansaar_1_lite"` (Faster, default). |
 
-**Note** :
-- Sansaar_1 uses a large model that extends high-quality music but generates slower.
-- Sansaar_1_lite uses a smaller model, enabling faster song extension.
+---
 
-### **Request Body**
+## 📩 **Request Body**
+
+<div style={{ backgroundColor: "#e9ecef", padding: "0.75rem", borderRadius: "0.3rem" }}>
+  
+#### **Request Body**
 
 ```
 Request body: 
@@ -30,8 +41,9 @@ Request body:
 }
 
 ```
+</div>
 
-### Code Samples
+#### 🖥️ Code Samples
 
 <Tabs>
   <Tab title="Python">
@@ -80,7 +92,7 @@ Request body:
    
 </Tabs>
 
-### Response
+#### 📌 Response
 
 
 <Tabs>
@@ -113,21 +125,27 @@ Request body:
 </Tabs>
 
 
-#### Possible Responses for Bad Request :
+#### 🚫 Possible Errors :
 
 - If NSFW words are detected
+<div style={{ backgroundColor: "#e9ecef", padding: "0.75rem", borderRadius: "0.3rem" }}>
+
 ```
 {
 "success": False,
 "message": "NSFW words detected. Please try again with a different prompt.",
 }
 ```
+</div>
+
 
 - If Artist name is detected
+<div style={{ backgroundColor: "#e9ecef", padding: "0.75rem", borderRadius: "0.3rem" }}>
+
 ```
 {
 "success": False,
 "message": "Artist name detected. Please try again with a different prompt.",
 }
 ```
-
+</div>

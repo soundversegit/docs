@@ -14,6 +14,7 @@
       "from": "#6E35EF",
       "to": "#9164ff"
     }
+    
   },
   "topbarLinks": [
     {
@@ -65,7 +66,11 @@
     },
     {
       "group": "API Documentation",
-      "pages": ["api/generate/text-to-music","api/generate/extend-music", "api/generations/fetch_status", "api/generations/fetch_result"]
+      "pages": ["api/generate/text-to-music","api/generate/ai-song-gen","api/generate/generate-lyrics", "api/generate/extend-music", "api/assistant/chat", "api/assistant/voice"]
+    },
+    {
+      "group": "Fetching Points",
+      "pages": [ "api/generations/fetch_status", "api/generations/fetch_result"]
     }
   ],
   "footerSocials": {
