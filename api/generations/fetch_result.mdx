@@ -23,7 +23,7 @@ Use this API to retrieve the final generated song and its associated parameters 
 ## 🔍 **Request Format**  
 
 ```http
-GET  /generation/{userId}/{messageId}
+GET  /generated_data/{userId}/{messageId}
 ```
 
 
@@ -36,10 +36,7 @@ GET  /generation/{userId}/{messageId}
 
     User_id = “user_id”
     message_id = "your_message_id"
-    url = f"https://api.soundverse.ai/generation/{user_id}/{message_id}"
-    headers = {
-        "Authorization": "Bearer your_api_key_here"
-    }
+    url = f"https://api.soundverse.ai/generated_data/{user_id}/{message_id}"
 
     response = requests.get(url, headers=headers)
     print(response.json())
@@ -49,8 +46,7 @@ GET  /generation/{userId}/{messageId}
    <Tab title="cURL">
   
   ```sh
-   curl "https://api.soundverse.ai/generation/{user_id}/{message_id}" \
-     -H "Authorization: Bearer your_api_key_here"
+   curl "https://api.soundverse.ai/generated_data/{user_id}/{message_id}" 
     ```
    </Tab>
 </Tabs>
