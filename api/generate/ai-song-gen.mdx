@@ -2,24 +2,28 @@
 title: "Generate AI Song"
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
 
-## 🎶 Generate AI Song from Prompt  
-- This endpoint generates music from a **text-based prompt** using AI models. 
+## 🎶 Generate AI Song from Prompt
+
+- This endpoint generates music from a **text-based prompt** using AI models.
+
 ---
 
-#### 🔹 **Core Parameters**  
+#### 🔹 **Core Parameters**
+
 > 🛈 The parameters below define the request body for this API.
 
-| Parameter  | Type      | Required? | Description |
-|------------|----------|-----------|-------------|
-| **`userId`**  | `string`  | ✅ Required | Unique ID of the user. |
-| **`prompt`**  | `string`  | ✅ Required | Text description of the music. |
-| **`styleOfMusic`**  | `string`  | ⚠️ Optional | Preferred genre or style (e.g., jazz, rock). |
-| **`audioUrl`**  | `string`  | ⚠️ Optional | URL to a reference audio file for influence. |
+| Parameter          | Type     | Required?   | Description                                  |
+| ------------------ | -------- | ----------- | -------------------------------------------- |
+| **`userId`**       | `string` | ✅ Required | Unique ID of the user.                       |
+| **`prompt`**       | `string` | ✅ Required | Text description of the music.               |
+| **`styleOfMusic`** | `string` | ⚠️ Optional | Preferred genre or style (e.g., jazz, rock). |
+| **`audioUrl`**     | `string` | ⚠️ Optional | URL to a reference audio file for influence. |
 
 ---
+
 #### 📩 Request Body for Prompt to Song
 
 <div style={{ backgroundColor: "#e9ecef", padding: "0.75rem", borderRadius: "0.3rem" }}>
@@ -42,7 +46,7 @@ import TabItem from '@theme/TabItem';
 
     import requests
 
-    url = "https://api.soundverse.ai/generate/song-from-prompt"
+    url = "https://api.soundverse.ai/v1/generate/song-from-prompt"
     headers = {
         "Authorization": "Bearer your_api_key_here",
         "Content-Type": "application/json"
@@ -59,45 +63,44 @@ import TabItem from '@theme/TabItem';
     response = requests.post(url, json=payload, headers=headers)
     print(response.json())
     ```
+
    </Tab>
 
    <Tab title="cURL">
   
   ```sh
 
-   curl -X POST "https://api.soundverse.ai/generate/song-from-prompt" \
-    -H "Authorization: Bearer your_api_key_here" \
-    -H "Content-Type: application/json" \
-    -d '{
-      "userId": "string",
-      "prompt": "string",
-      "styleOfMusic": "string",
-      "audioUrl": "string"
-    }'
+curl -X POST "https://api.soundverse.ai/v1/generate/song-from-prompt" \
+ -H "Authorization: Bearer your_api_key_here" \
+ -H "Content-Type: application/json" \
+ -d '{
+"userId": "string",
+"prompt": "string",
+"styleOfMusic": "string",
+"audioUrl": "string"
+}'
 
     ```
+
    </Tab>
    
 </Tabs>
 
-
-
 #### 📌 Response
-
 
 <Tabs>
    <Tab title="200 OK">
   
   ```sh
 
-   {
-    "success": true,
-    "messageId": "str",
-    "aiMagicTool": "song_gen"
-    }
-
+{
+"success": true,
+"messageId": "str",
+"aiMagicTool": "song_gen"
+}
 
     ```
+
    </Tab>
 
    <Tab title="400 Bad Request">
@@ -109,23 +112,35 @@ import TabItem from '@theme/TabItem';
       “Message”: “str”
     }
 
-
     ```
+
    </Tab>
 </Tabs>
 
-
 #### 🚫 Possible Errors :
 
+- If Rate Limits have been passed for User.
+  <div style={{ backgroundColor: "#e9ecef", padding: "0.75rem", borderRadius: "0.3rem" }}>
+
+```
+{
+"success": False,
+"message": "Rate limits have been passed for the user.",
+}
+```
+
+</div>
+
 - If NSFW words are detected
-<div style={{ backgroundColor: "#e9ecef", padding: "0.75rem", borderRadius: "0.3rem" }}>
-  
+  <div style={{ backgroundColor: "#e9ecef", padding: "0.75rem", borderRadius: "0.3rem" }}>
+
 ```
 {
 "success": False,
 "message": "NSFW words detected. Please try again with a different prompt.",
 }
 ```
+
 </div>
 
 - If Artist name is detected
@@ -142,22 +157,22 @@ import TabItem from '@theme/TabItem';
 
 ---
 
+## 🎵 Generate AI Song from Lyrics
 
-## 🎵 Generate AI Song from Lyrics  
 This endpoint generates music from **provided lyrics** using AI models.
 
-#### 🔹 **Core Parameters**  
+#### 🔹 **Core Parameters**
+
 > 🛈 The parameters below define the request body for this API.
 
-| Parameter  | Type      | Required? | Description |
-|------------|----------|-----------|-------------|
-| **`userId`**  | `string`  | ✅ Required | Unique ID of the user. |
-| **`lyrics`**  | `string`  | ✅ Required | Lyrics to be converted into a song. |
-| **`prompt`**  | `string`  | ✅ Required | Context or style for the lyrics. |
-| **`audioUrl`**  | `string`  | ⚠️ Optional | URL to a reference audio file for influence. |
+| Parameter      | Type     | Required?   | Description                                  |
+| -------------- | -------- | ----------- | -------------------------------------------- |
+| **`userId`**   | `string` | ✅ Required | Unique ID of the user.                       |
+| **`lyrics`**   | `string` | ✅ Required | Lyrics to be converted into a song.          |
+| **`prompt`**   | `string` | ✅ Required | Context or style for the lyrics.             |
+| **`audioUrl`** | `string` | ⚠️ Optional | URL to a reference audio file for influence. |
 
 ---
-
 
 #### 📩 Request Body for Prompt to Song
 
@@ -181,7 +196,7 @@ This endpoint generates music from **provided lyrics** using AI models.
 
     import requests
 
-    url = "https://api.soundverse.ai/generate/song-from-lyrics"
+    url = "https://api.soundverse.ai/v1/generate/song-from-lyrics"
     headers = {
         "Authorization": "Bearer your_api_key_here",
         "Content-Type": "application/json"
@@ -198,45 +213,44 @@ This endpoint generates music from **provided lyrics** using AI models.
     response = requests.post(url, json=payload, headers=headers)
     print(response.json())
     ```
+
    </Tab>
 
    <Tab title="cURL">
   
   ```sh
 
-   curl -X POST "https://api.soundverse.ai/generate/song-from-lyrics" \
-    -H "Authorization: Bearer your_api_key_here" \
-    -H "Content-Type: application/json" \
-    -d '{
-    "userId": "string",
-    "prompt": "string",
-    "Lyrics": "string" ,
-    "audioUrl": "string",
-    }'
+curl -X POST "https://api.soundverse.ai/v1/generate/song-from-lyrics" \
+ -H "Authorization: Bearer your_api_key_here" \
+ -H "Content-Type: application/json" \
+ -d '{
+"userId": "string",
+"prompt": "string",
+"Lyrics": "string" ,
+"audioUrl": "string",
+}'
 
     ```
+
    </Tab>
    
 </Tabs>
 
-
-
 #### 📌 Response
-
 
 <Tabs>
    <Tab title="200 OK">
   
   ```sh
 
-   {
-    "success": true,
-    "messageId": "str",
-    "aiMagicTool": "song_gen"
-    }
-
+{
+"success": true,
+"messageId": "str",
+"aiMagicTool": "song_gen"
+}
 
     ```
+
    </Tab>
 
    <Tab title="400 Bad Request">
@@ -248,23 +262,35 @@ This endpoint generates music from **provided lyrics** using AI models.
       “Message”: “str”
     }
 
-
     ```
+
    </Tab>
 </Tabs>
 
-
 #### 🚫 Possible Errors :
 
+- If Rate Limits have been passed for User.
+  <div style={{ backgroundColor: "#e9ecef", padding: "0.75rem", borderRadius: "0.3rem" }}>
+
+```
+{
+"success": False,
+"message": "Rate limits have been passed for the user.",
+}
+```
+
+</div>
+
 - If NSFW words are detected
-<div style={{ backgroundColor: "#e9ecef", padding: "0.75rem", borderRadius: "0.3rem" }}>
-  
+  <div style={{ backgroundColor: "#e9ecef", padding: "0.75rem", borderRadius: "0.3rem" }}>
+
 ```
 {
 "success": False,
 "message": "NSFW words detected. Please try again with a different prompt.",
 }
 ```
+
 </div>
 
 - If Artist name is detected
@@ -280,4 +306,3 @@ This endpoint generates music from **provided lyrics** using AI models.
 </div>
 
 ---
-

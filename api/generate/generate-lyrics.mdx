@@ -2,31 +2,32 @@
 title: "Generate Lyrics"
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
 
-## 🎼 Generate Lyrics from Prompt  
+## 🎼 Generate Lyrics from Prompt
+
 This endpoint generates **AI-powered song lyrics** based on a **text prompt**.  
 You can also specify:  
 🎭 **Mood** → Set the emotional tone (e.g., happy, sad, energetic).  
 🎶 **Genre** → Influence the lyrics with a musical style (e.g., pop, rock).  
-📖 **Section** → Generate a specific part (e.g., verse, chorus).  
+📖 **Section** → Generate a specific part (e.g., verse, chorus).
 
 ---
 
-#### 🔹 **Core Parameters**  
+#### 🔹 **Core Parameters**
+
 > 🛈 The parameters below define the request body for this API.
 
-| Parameter  | Type      | Required? | Description |
-|------------|----------|-----------|-------------|
-| **`userId`**  | `string`  | ✅ Required |  &#x2003;&emsp;&emsp;Unique ID of the user. |
-| **`prompt`**  | `string`  | ✅ Required |  &#x2003;&emsp;&emsp;Text description of the lyrics. |
-| **`mood`** | `string` | ⚠️ Optional | &#x2003;&emsp;&emsp;Emotional tone of the lyrics. |
-| **`section`**  | `string`  | ⚠️ Optional |  &#x2003;&emsp;&emsp;Specify part of the song (verse, chorus, bridge). |
-| **`genre`**  | `string`  | ⚠️ Optional | &#x2003;&emsp;&emsp;Musical genre (pop, rock, hip-hop, etc.). |
+| Parameter     | Type     | Required?   | Description                                                           |
+| ------------- | -------- | ----------- | --------------------------------------------------------------------- |
+| **`userId`**  | `string` | ✅ Required | &#x2003;&emsp;&emsp;Unique ID of the user.                            |
+| **`prompt`**  | `string` | ✅ Required | &#x2003;&emsp;&emsp;Text description of the lyrics.                   |
+| **`mood`**    | `string` | ⚠️ Optional | &#x2003;&emsp;&emsp;Emotional tone of the lyrics.                     |
+| **`section`** | `string` | ⚠️ Optional | &#x2003;&emsp;&emsp;Specify part of the song (verse, chorus, bridge). |
+| **`genre`**   | `string` | ⚠️ Optional | &#x2003;&emsp;&emsp;Musical genre (pop, rock, hip-hop, etc.).         |
 
 ---
-
 
 #### 📩 **Request Body**
 
@@ -53,7 +54,7 @@ Request body:
 
     import requests
 
-    url = "https://api.soundverse.ai/generate/lyrics"
+    url = "https://api.soundverse.ai/v1/generate/lyrics"
     headers = {
         "Authorization": "Bearer your_api_key_here",
         "Content-Type": "application/json"
@@ -71,46 +72,45 @@ Request body:
     response = requests.post(url, json=payload, headers=headers)
     print(response.json())
     ```
+
    </Tab>
 
    <Tab title="cURL">
   
   ```sh
 
-   curl -X POST "https://api.soundverse.ai/generate/lyrics" \
-    -H "Authorization: Bearer your_api_key_here" \
-    -H "Content-Type: application/json" \
-    -d '{
-    "userId": "string",
-    "prompt": "string",
-    "mood": "string" ,
-    "section": "optional",
-    "genre": "string"
-    }'
+curl -X POST "https://api.soundverse.ai/v1/generate/lyrics" \
+ -H "Authorization: Bearer your_api_key_here" \
+ -H "Content-Type: application/json" \
+ -d '{
+"userId": "string",
+"prompt": "string",
+"mood": "string" ,
+"section": "optional",
+"genre": "string"
+}'
 
     ```
+
    </Tab>
    
 </Tabs>
 
-
-
 #### 📌 Response
-
 
 <Tabs>
    <Tab title="200 OK">
   
   ```sh
 
-   {
-    "success": true,
-    "messageId": "str",
-    "aiMagicTool": "lyric_writing"
-    }
-
+{
+"success": true,
+"messageId": "str",
+"aiMagicTool": "lyric_writing"
+}
 
     ```
+
    </Tab>
 
    <Tab title="400 Bad Request">
@@ -122,13 +122,24 @@ Request body:
       “Message”: “str”
     }
 
-
     ```
+
    </Tab>
 </Tabs>
 
-
 #### 🚫 Possible Errors :
+
+- If Rate Limits have been passed for User.
+  <div style={{ backgroundColor: "#e9ecef", padding: "0.75rem", borderRadius: "0.3rem" }}>
+
+```
+{
+"success": False,
+"message": "Rate limits have been passed for the user.",
+}
+```
+
+</div>
 
 - If NSFW words are detected
 
