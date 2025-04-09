@@ -2,9 +2,6 @@
 title: "Text to Music"
 ---
 
-import Tabs from "@theme/Tabs";
-import TabItem from "@theme/TabItem";
-
 ## 🎵 Generate Music from Text
 
 This API allows you to generate **AI-powered music** based on a text description.  
@@ -47,7 +44,7 @@ Choose between:
 #### 🖥️ Code Samples
 
 <Tabs>
-  <Tab title="Python">
+  <Tab title="python" >
   
   ```python
 
@@ -74,21 +71,20 @@ Choose between:
 
    </Tab>
 
-   <Tab title="cURL">
+   <Tab title="curl">
   
   ```sh
 
-curl -X POST "https://api.soundverse.ai/v1/generate/text-to-music" \
- -H "Authorization: Bearer your_api_key_here" \
- -H "Content-Type: application/json" \
- -d '{
-"userId": "61b7ca2f20e711017fc1b6c4",
-"prompt": "Compose a futuristic electronic track with cutting-edge synth sounds and pulsing beats.",
-"duration": 15,
-"model": "sansaar_1_lite",
-"loop": false
-}'
-
+    curl -X POST "https://api.soundverse.ai/v1/generate/text-to-music" \
+    -H "Authorization: Bearer your_api_key_here" \
+    -H "Content-Type: application/json" \
+    -d '{
+    "userId": "61b7ca2f20e711017fc1b6c4",
+    "prompt": "Compose a futuristic electronic track with cutting-edge synth sounds and pulsing beats.",
+    "duration": 15,
+    "model": "sansaar_1_lite",
+    "loop": false
+    }'
     ```
 
    </Tab>
@@ -105,7 +101,7 @@ curl -X POST "https://api.soundverse.ai/v1/generate/text-to-music" \
 {
 "success": true,
 "messageId": "str",
-"aiMagicTool": "generate_music"
+"aiMagicTool": "stem_separation"
 }
 
     ```
@@ -126,22 +122,11 @@ curl -X POST "https://api.soundverse.ai/v1/generate/text-to-music" \
    </Tab>
 </Tabs>
 
+---
+
 #### 🚫 Possible Errors :
 
-- If Rate Limits have been passed for User.
-  <div style={{ backgroundColor: "#e9ecef", padding: "0.75rem", borderRadius: "0.3rem" }}>
-
-```
-{
-"success": False,
-"message": "Rate limits have been passed for the user.",
-}
-```
-
-</div>
-
 - If NSFW words are detected
-  <div style={{ backgroundColor: "#e9ecef", padding: "0.75rem", borderRadius: "0.3rem" }}>
 
 ```
 {
@@ -150,10 +135,7 @@ curl -X POST "https://api.soundverse.ai/v1/generate/text-to-music" \
 }
 ```
 
-</div>
-
 - If Artist name is detected
-  <div style={{ backgroundColor: "#e9ecef", padding: "0.75rem", borderRadius: "0.3rem" }}>
 
 ```
 {
@@ -161,5 +143,3 @@ curl -X POST "https://api.soundverse.ai/v1/generate/text-to-music" \
 "message": "Artist name detected. Please try again with a different prompt.",
 }
 ```
-
-</div>

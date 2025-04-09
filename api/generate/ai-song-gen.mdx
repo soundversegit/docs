@@ -2,9 +2,6 @@
 title: "Generate AI Song"
 ---
 
-import Tabs from "@theme/Tabs";
-import TabItem from "@theme/TabItem";
-
 ## 🎶 Generate AI Song from Prompt
 
 - This endpoint generates music from a **text-based prompt** using AI models.
@@ -120,7 +117,6 @@ curl -X POST "https://api.soundverse.ai/v1/generate/song-from-prompt" \
 #### 🚫 Possible Errors :
 
 - If Rate Limits have been passed for User.
-  <div style={{ backgroundColor: "#e9ecef", padding: "0.75rem", borderRadius: "0.3rem" }}>
 
 ```
 {
@@ -129,10 +125,7 @@ curl -X POST "https://api.soundverse.ai/v1/generate/song-from-prompt" \
 }
 ```
 
-</div>
-
 - If NSFW words are detected
-  <div style={{ backgroundColor: "#e9ecef", padding: "0.75rem", borderRadius: "0.3rem" }}>
 
 ```
 {
@@ -141,19 +134,14 @@ curl -X POST "https://api.soundverse.ai/v1/generate/song-from-prompt" \
 }
 ```
 
-</div>
-
 - If Artist name is detected
 
-<div style={{ backgroundColor: "#e9ecef", padding: "0.75rem", borderRadius: "0.3rem" }}>
-  
 ```
 {
 "success": False,
 "message": "Artist name detected. Please try again with a different prompt.",
 }
 ```
-</div>
 
 ---
 
@@ -209,7 +197,6 @@ This endpoint generates music from **provided lyrics** using AI models.
     }
 
 
-
     response = requests.post(url, json=payload, headers=headers)
     print(response.json())
     ```
@@ -220,15 +207,15 @@ This endpoint generates music from **provided lyrics** using AI models.
   
   ```sh
 
-curl -X POST "https://api.soundverse.ai/v1/generate/song-from-lyrics" \
- -H "Authorization: Bearer your_api_key_here" \
- -H "Content-Type: application/json" \
- -d '{
-"userId": "string",
-"prompt": "string",
-"Lyrics": "string" ,
-"audioUrl": "string",
-}'
+    curl -X POST "https://api.soundverse.ai/v1/generate/song-from-lyrics" \
+    -H "Authorization: Bearer your_api_key_here" \
+    -H "Content-Type: application/json" \
+    -d '{
+    "userId": "string",
+    "prompt": "string",
+    "Lyrics": "string" ,
+    "audioUrl": "string",
+    }'
 
     ```
 
@@ -270,7 +257,6 @@ curl -X POST "https://api.soundverse.ai/v1/generate/song-from-lyrics" \
 #### 🚫 Possible Errors :
 
 - If Rate Limits have been passed for User.
-  <div style={{ backgroundColor: "#e9ecef", padding: "0.75rem", borderRadius: "0.3rem" }}>
 
 ```
 {
@@ -279,10 +265,7 @@ curl -X POST "https://api.soundverse.ai/v1/generate/song-from-lyrics" \
 }
 ```
 
-</div>
-
 - If NSFW words are detected
-  <div style={{ backgroundColor: "#e9ecef", padding: "0.75rem", borderRadius: "0.3rem" }}>
 
 ```
 {
@@ -291,18 +274,11 @@ curl -X POST "https://api.soundverse.ai/v1/generate/song-from-lyrics" \
 }
 ```
 
-</div>
-
 - If Artist name is detected
 
-<div style={{ backgroundColor: "#e9ecef", padding: "0.75rem", borderRadius: "0.3rem" }}>
-  
 ```
 {
 "success": False,
 "message": "Artist name detected. Please try again with a different prompt.",
 }
 ```
-</div>
-
----

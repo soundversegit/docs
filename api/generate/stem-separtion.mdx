@@ -2,25 +2,27 @@
 title: "Stem Separation API"
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+## 🎵 Stem Separation API
 
-## 🎵 Stem Separation API  
-This endpoint allows users to **separate audio stems** from a provided track using AI.  
-
-
-#### 🔹 **Core Parameters**  
-> 🛈 The parameters below define the request body for this API.
-
-| Parameter  | Type      | Required? | Description |
-|------------|----------|-----------|-------------|
-| **`userId`**  | `string`  | ✅ Required | Unique ID of the user. |
-| **`audioUrl`**  | `string`  | ✅ Required | URL to the input audio file. |
-| **`prompt`**  | `string`  | ✅ Required | Additional instructions for stem separation. |
+This endpoint allows users to **separate audio stems** from a provided track using AI.
 
 ---
 
+## This Will Be live soon!
 
+---
+
+#### 🔹 **Core Parameters**
+
+> 🛈 The parameters below define the request body for this API.
+
+| Parameter      | Type     | Required?   | Description                                  |
+| -------------- | -------- | ----------- | -------------------------------------------- |
+| **`userId`**   | `string` | ✅ Required | Unique ID of the user.                       |
+| **`audioUrl`** | `string` | ✅ Required | URL to the input audio file.                 |
+| **`prompt`**   | `string` | ✅ Required | Additional instructions for stem separation. |
+
+---
 
 #### 📩 **Request Body**
 
@@ -61,44 +63,43 @@ Request body:
     response = requests.post(url, json=payload, headers=headers)
     print(response.json())
     ```
+
    </Tab>
 
    <Tab title="cURL">
   
   ```sh
 
-   curl -X POST "https://api.soundverse.ai/generate/stem_separation" \
-    -H "Authorization: Bearer your_api_key_here" \
-    -H "Content-Type: application/json" \
-    -d '{
-      "userId": "string",
-      "audioUrl": "string",
-      "prompt": "string"
-    }'
+curl -X POST "https://api.soundverse.ai/generate/stem_separation" \
+ -H "Authorization: Bearer your_api_key_here" \
+ -H "Content-Type: application/json" \
+ -d '{
+"userId": "string",
+"audioUrl": "string",
+"prompt": "string"
+}'
 
     ```
+
    </Tab>
    
 </Tabs>
 
-
-
 #### 📌 Response
-
 
 <Tabs>
    <Tab title="200 OK">
   
   ```sh
 
-   {
-    "success": true,
-    "messageId": "str",
-    "aiMagicTool": "stem_separation"
-    }
-
+{
+"success": true,
+"messageId": "str",
+"aiMagicTool": "stem_separation"
+}
 
     ```
+
    </Tab>
 
    <Tab title="400 Bad Request">
@@ -110,28 +111,27 @@ Request body:
       “Message”: “str”
     }
 
-
     ```
+
    </Tab>
 </Tabs>
 
+---
+
+## 🎼 Retrieve Stems API
+
+This set of endpoints allows users to retrieve **specific audio stems** from a generated file.
 
 ---
 
+#### 🔹 **Retrieval Parameters**
 
-
-## 🎼 Retrieve Stems API  
-This set of endpoints allows users to retrieve **specific audio stems** from a generated file.  
-
----
-
-#### 🔹 **Retrieval Parameters**  
 > 🛈 The parameters below define the request path for retrieving specific stems.
 
-| Parameter  | Type      | Required? | Description |
-|------------|----------|-----------|-------------|
-| **`userId`**  | `string`  | ✅ Required | Unique ID of the user. |
-| **`messageId`**  | `string`  | ✅ Required | Message ID from stem separation response. |
+| Parameter       | Type     | Required?   | Description                               |
+| --------------- | -------- | ----------- | ----------------------------------------- |
+| **`userId`**    | `string` | ✅ Required | Unique ID of the user.                    |
+| **`messageId`** | `string` | ✅ Required | Message ID from stem separation response. |
 
 ---
 
@@ -153,6 +153,7 @@ This set of endpoints allows users to retrieve **specific audio stems** from a g
 ---
 
 #### 🖥️ Code Samples
+
 <Tabs>
   <Tab title="Python">
   
@@ -166,6 +167,7 @@ This set of endpoints allows users to retrieve **specific audio stems** from a g
     response = requests.get(url, headers=headers)
     print(response.json())
     ```
+
    </Tab>
 
    <Tab title="cURL">
@@ -176,38 +178,38 @@ This set of endpoints allows users to retrieve **specific audio stems** from a g
    </Tab>
 </Tabs>
 
-
 #### 📌 Response
 
 <Tabs>
   <Tab title="200 OK">
 
-  ```json
-  [
-    {
-      "audioType": "string",
-      "audioUrl": "string",
-      "audioName": "string"
-    }
-  ]
-  ```
+```json
+[
+  {
+    "audioType": "string",
+    "audioUrl": "string",
+    "audioName": "string"
+  }
+]
+```
+
   </Tab>
 
   <Tab title="404 Not Found">
 
-  ```json
-  {
-    "success": false,
-    "message": "No audio found for the provided parameters."
-  }
-  ```
+```json
+{
+  "success": false,
+  "message": "No audio found for the provided parameters."
+}
+```
+
   </Tab>
 </Tabs>
 
 ---
 
-
-####  🎧 **Example Outputs**
+#### 🎧 **Example Outputs**
 
 <Tabs>
   <Tab title="Vocals">
@@ -242,6 +244,7 @@ This set of endpoints allows users to retrieve **specific audio stems** from a g
         ... Vocals and Instruments combined ...
     ]
     ```
+
   </Tab>
 </Tabs>
 

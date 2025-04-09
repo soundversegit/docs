@@ -130,7 +130,6 @@ curl -X POST "https://api.soundverse.ai/v1/generate/lyrics" \
 #### 🚫 Possible Errors :
 
 - If Rate Limits have been passed for User.
-  <div style={{ backgroundColor: "#e9ecef", padding: "0.75rem", borderRadius: "0.3rem" }}>
 
 ```
 {
@@ -139,28 +138,20 @@ curl -X POST "https://api.soundverse.ai/v1/generate/lyrics" \
 }
 ```
 
-</div>
-
 - If NSFW words are detected
 
-<div style={{ backgroundColor: "#e9ecef", padding: "0.75rem", borderRadius: "0.3rem" }}>
-  
 ```
 {
 "success": False,
 "message": "NSFW words detected. Please try again with a different prompt.",
 }
 ```
-</div>
 
 - If Artist name is detected
 
-<div style={{ backgroundColor: "#e9ecef", padding: "0.75rem", borderRadius: "0.3rem" }}>
-  
 ```
 {
 "success": False,
 "message": "Artist name detected. Please try again with a different prompt.",
 }
 ```
-</div>
