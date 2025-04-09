@@ -1,0 +1,98 @@
+---
+title: 'API Documentation'
+description: 'Welcome to SoundVerse API. Our API domain is https://api.soundverse.ai/'
+---
+
+import React from 'react';
+
+export const Highlight = ({ children }) => (
+  <span style={{ backgroundColor:'#EDE9FE', padding: '0.1rem 0.275rem', borderRadius: '0.25rem', color: '#4C1D95' }}>
+    {children}
+  </span>
+);
+
+export const Note = ({ children }) => (
+  <div style={{ backgroundColor: '#FAF5FF', borderLeft: '0.25rem solid #7C3AED', padding: '0.25rem', margin: '0.5rem 0', color: '#5B21B6' }}>
+    {children}
+  </div>
+);
+
+export const Method = ({ type, children }) => {
+  const styles = {
+    GET: {
+      backgroundColor: "#2563eb",
+      color: "white",
+      padding: "6px 12px",
+      borderRadius: "6px",
+      fontSize: "1.1rem",
+      fontWeight: "bold",
+      display: "inline-block",
+    },
+    POST: {
+      backgroundColor: "#16a34a",
+      color: "white",
+      padding: "6px 12px",
+      borderRadius: "6px",
+      fontSize: "1.1rem",
+      fontWeight: "bold",
+      display: "inline-block",
+    },
+  };
+
+  return <span style={styles[type] || styles.GET}>{children || type}</span>;
+};
+
+
+<Note>
+   📌 Explore this guide to understand how to integrate and utilize our APIs efficiently.
+</Note>
+
+
+## 🔐Authentication
+
+All API requests require authentication using Bearer tokens. Please ensure your API key is included in the Authorization header:
+```json
+Authorization: Bearer your_api_key_here
+```
+
+## 🚀 Available API Endpoints
+
+To generate content, you must provide either ```audioUrl``` or ```prompt``` as input.
+
+### 🎵 Generation Endpoints
+
+- **Text to Music&nbsp;&nbsp;&nbsp;** → <Method type="POST" /> `/api/generate/text-to-music`
+- **AI Song Gen&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** → <Method type="POST" /> `/api/generate/ai-song-gen`
+- **Generate Lyrics** → <Method type="POST" /> `/api/generate/generate-lyrics`
+- **Extend Music&nbsp;&nbsp;&nbsp;&nbsp;** → <Method type="POST" /> `/api/generate/extend-music`
+
+### 🤖 Assistant Endpoints
+
+- **Chat Assistant**     → <Method type="POST" /> `/api/assistant/chat`
+- **Voice Assistant**    → <Method type="POST" /> `/api/assistant/voice`
+
+### 📊 Generation Status Endpoints
+
+- **Generation Status**  → <Method type="GET">GET</Method> `/status/generations/{message_id}`
+- **Generated Result**   → <Method type="GET">GET</Method> `/generation/{userId}/{messageId}`
+
+
+### 🔄 Checking Generation Status
+You can track the status of your generation request using the following endpoint:
+
+```GET /status/generations/{message_id}```
+
+This will return the current processing status of the given message_id.
+
+### 📥 Retrieving Generated Content
+
+Once a generation request is successfully completed, you can fetch the generated data using:
+
+```GET /generations/{userId}/{messageId}```
+
+Replace ```{userId}``` and ```{messageId}``` with the appropriate values to retrieve your generated content.
+
+---
+<Note >
+   📘 For more details, refer to our full API reference documentation.
+</ Note>

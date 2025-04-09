@@ -1,0 +1,135 @@
+---
+title: "AI Voice Assistant"
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+## 🎙️ Real-Time AI Voice & Response Generation  
+Use this API to interact with our AI voice assistant in real time. Simply provide your `userId` and `speech_url` to receive a generated response.
+
+---
+
+#### 🔹 **Core Parameters**  
+> 🛈 The parameters below define the request body for this API.
+
+| Parameter  | Type      | Required? | Description |
+|------------|----------|-----------|-------------|
+| **`userId`**  | `string`  | ✅ Required |  &#x2003;&emsp;&emsp;Unique ID of the user. |
+| **`speech_url`**  | `string`  | ✅ Required |  &#x2003;&emsp;&emsp;URL of the speech or audio file. |
+
+---
+
+#### 📩 **Request Body**
+
+<div style={{ backgroundColor: "#e9ecef", padding: "0.75rem", borderRadius: "0.3rem" }}>
+  
+```json
+{
+  "userId": "your_unique_id",
+  "speech_url": "your_audio_url"
+}
+```
+</div>
+
+---
+
+#### 🖥️ Code Samples
+
+<Tabs>
+  <Tab title="Python">
+  
+  ```python
+
+    import requests
+
+    url = "https://api.soundverse.ai/assistant/voice"
+    headers = {
+        "Authorization": "Bearer your_api_key_here",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "userId" : "67b9ca2f20e711017fc1b6c5"
+        "speech_url" : "your_speech_url",
+    }
+
+    response = requests.post(url, json=payload, headers=headers)
+    print(response.json())
+
+    ```
+   </Tab>
+
+   <Tab title="cURL">
+  
+  ```sh
+
+   curl -X POST "https://api.soundverse.ai/generate/extend" \
+    -H "Authorization: Bearer your_api_key_here" \
+    -H "Content-Type: application/json" \
+    -d '{
+        "userId": "67b9ca2f20e711017fc1b6c5",
+        "speech_url" : "your_speech_url",
+    }
+
+
+    ```
+   </Tab>
+   
+</Tabs>
+
+#### 📌 Response
+
+
+<Tabs>
+   <Tab title="200 OK">
+  
+  ```sh
+
+   {
+    "success": true,
+    "aiReply": "str",
+    }
+
+
+    ```
+   </Tab>
+
+   <Tab title="400 Bad Request">
+  
+  ```sh
+      
+    {
+      Success: false,
+      aiReply : “str”
+    }
+
+
+    ```
+   </Tab>
+</Tabs>
+
+
+#### 🚫 **Possible Errors**  
+
+- If NSFW words are detected  
+<div style={{ backgroundColor: "#e9ecef", padding: "0.75rem", borderRadius: "0.3rem" }}>
+
+```json
+{
+  "success": false,
+  "message": "NSFW words detected. Please try again with a different prompt."
+}
+```
+</div>
+
+- If an artist name is detected  
+<div style={{ backgroundColor: "#e9ecef", padding: "0.75rem", borderRadius: "0.3rem" }}>
+
+```json
+{
+  "success": false,
+  "message": "Artist name detected. Please try again with a different prompt."
+}
+```
+</div>
+
