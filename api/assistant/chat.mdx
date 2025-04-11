@@ -2,23 +2,41 @@
 title: "AI Chat Assistant"
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
 
-## 💬 Real-Time AI Chat & Response Generation  
+## 💬 Real-Time AI Chat & Response Generation
+
 Use this API to interact with our AI assistant in real time. Simply provide your `userId` and `prompt` to receive a generated response.
 
 ---
 
-#### 🔹 **Core Parameters**  
+#### 🔹 **Core Parameters**
+
 > 🛈 The parameters below define the request body for this API.
 
-| Parameter  | Type      | Required? | Description |
-|------------|----------|-----------|-------------|
-| **`userId`**  | `string`  | ✅ Required |  &#x2003;&emsp;&emsp;Unique ID of the user. |
-| **`prompt`**  | `string`  | ✅ Required |  &#x2003;&emsp;&emsp;User's input or query to the AI assistant. |
+| Parameter    | Type     | Required?   | Description                                                    |
+| ------------ | -------- | ----------- | -------------------------------------------------------------- |
+| **`userId`** | `string` | ✅ Required | &#x2003;&emsp;&emsp;Unique ID of the user.                     |
+| **`prompt`** | `string` | ✅ Required | &#x2003;&emsp;&emsp;User's input or query to the AI assistant. |
+| **`action`** | `string` | ✅ Required | &#x2003;&emsp;&emsp;AIMagicTool AI assistant.                  |
 
 ---
+
+#### AIMagicTool (action)
+
+```
+{
+    "generate_music": For Prompts related to Generating text to music,
+    "extend_music": Conversation related to Extending the song,
+    "auto_complete_music": Conversation related to auto-complting the song,
+    "loop_audio": loop_audio,
+    "separate_stems": For stem separtion related Conversation,
+    "edit_music": Conversation related to editing the music,
+    "lyric_writing": Conversation related to generating lyrics,
+    "other": Any other normal Conversation,
+}
+```
 
 #### 📩 **Request Body**
 
@@ -55,78 +73,44 @@ Use this API to interact with our AI assistant in real time. Simply provide your
     print(response.json())
 
     ```
+
    </Tab>
 
    <Tab title="cURL">
   
   ```sh
 
-   curl -X POST "https://api.soundverse.ai/generate/extend" \
-    -H "Authorization: Bearer your_api_key_here" \
-    -H "Content-Type: application/json" \
-    -d '{
-        "userId": "67b9ca2f20e711017fc1b6c5",
-        "prompt": "Extend the provided audio clip by generating an additional 45 seconds of music. Maintain the style and mood of the original piece while seamlessly continuing the composition."
-    }'
-
+curl -X POST "https://api.soundverse.ai/generate/extend" \
+ -H "Authorization: Bearer your_api_key_here" \
+ -H "Content-Type: application/json" \
+ -d '{
+"userId": "67b9ca2f20e711017fc1b6c5",
+"prompt": "Extend the provided audio clip by generating an additional 45 seconds of music. Maintain the style and mood of the original piece while seamlessly continuing the composition."
+}'
 
     ```
+
    </Tab>
    
 </Tabs>
 
 #### 📌 Response
 
-
 <Tabs>
    <Tab title="200 OK">
   
   ```sh
 
-   {
-    "success": true,
-    "aiReply": "str",
-    }
-
+{
+"aiReply": "str",
+}
 
     ```
-   </Tab>
 
-   <Tab title="400 Bad Request">
-  
-  ```sh
-      
-    {
-      Success: false,
-      aiReply : “str”
-    }
-
-
-    ```
    </Tab>
 </Tabs>
 
+#### 🚫 Possible Errors :
 
-#### 🚫 Possible Errors:
-
-- If NSFW words are detected  
-<div style={{ backgroundColor: "#e9ecef", padding: "0.75rem", borderRadius: "0.3rem" }}>
-
-```json
-{
-  "success": false,
-  "message": "NSFW words detected. Please try again with a different prompt."
-}
-```
-</div>
-
-- If an artist name is detected  
-<div style={{ backgroundColor: "#e9ecef", padding: "0.75rem", borderRadius: "0.3rem" }}>
-
-```json
-{
-  "success": false,
-  "message": "Artist name detected. Please try again with a different prompt."
-}
-```
-</div>
+- Internal Server Error -
+  `500 status code `
