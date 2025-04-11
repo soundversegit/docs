@@ -2,29 +2,30 @@
 title: "Fetch Status"
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
 
-## 📌 Check the Status of a Generation Task  
+## 📌 Check the Status of a Generation Task
+
 Use this API to retrieve the status of a generation task using `message_id`.
 
 ---
 
-## 🔹 **Core Parameters**  
+## 🔹 **Core Parameters**
+
 > 🛈 The parameters below define the request for this API.
 
-| Parameter  | Type      | Required? | Description |
-|------------|----------|-----------|-------------|
-| **`message_id`**  | `string`  | ✅ Required |  &#x2003;&emsp;&emsp;Unique ID of the generated response. |
+| Parameter        | Type     | Required?   | Description                                              |
+| ---------------- | -------- | ----------- | -------------------------------------------------------- |
+| **`message_id`** | `string` | ✅ Required | &#x2003;&emsp;&emsp;Unique ID of the generated response. |
 
 ---
 
-## 🔍 **Request Format**  
+## 🔍 **Request Format**
 
 ```http
 GET  /status/generations/{message_id}
 ```
-
 
 ### 🖥️ Code Samples
 
@@ -44,6 +45,7 @@ GET  /status/generations/{message_id}
     print(response.json())
 
     ```
+
    </Tab>
 
    <Tab title="cURL">
@@ -56,32 +58,33 @@ GET  /status/generations/{message_id}
    
 </Tabs>
 
-
 #### 📌 Response
-  ```sh
-   { "success": True,
-    "data": status
-    }
-    ```
+
+````sh
+ { "success": True,
+  "data": status
+  }
+  ```
 
 <Tabs>
-   <Tab title="SUCCESSFUL">
-  
-  ```sh
-   { 
-     "success": True,
-     "data": “SUCCESSFUL”
-   }
-    ```
-   </Tab>
+ <Tab title="SUCCESSFUL">
 
-   <Tab title="PROCESSING">
-  
-  ```sh
-    {
-      "success": True,
-      "data": “PROCESSING”
-    }
-    ```
-   </Tab>
+```sh
+ {
+   "success": True,
+   "data": “SUCCESSFUL”
+ }
+  ```
+ </Tab>
+
+ <Tab title="PROCESSING">
+
+```sh
+  {
+    "success": True,
+    "data": “PROCESSING”
+  }
+  ```
+ </Tab>
 </Tabs>
+````
