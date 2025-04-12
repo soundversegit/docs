@@ -74,7 +74,7 @@
     },
     {
       "group": "Fetching Points",
-      "pages": [ "api/fetch-status", "api/fetch-result"]
+      "pages": ["api/fetch-status", "api/fetch-result"]
     }
   ],
   "footerSocials": {
