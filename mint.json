@@ -66,7 +66,7 @@
     },
     {
       "group": "API Documentation",
-      "pages": ["enterprise-api/text_to_music", "enterprise-api/extend-music", "enterprise-api/ai-song-gen", "enterprise-api/generate-lyrics", "enterprise-api/stem-separation"]
+      "pages": ["enterprise-api/generate/text_to_music", "enterprise-api/generate/extend-music", "enterprise-api/generate/ai-song-gen", "enterprise-api/generate/generate-lyrics", "enterprise-api/generate/stem-separtion"]
     },
     {
       "group": "Assistant Endpoints",
