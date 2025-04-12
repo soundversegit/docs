@@ -1,5 +1,6 @@
 ---
 title: "Fetch Result"
+description: "Welcome to SoundVerse API. Our API domain is https://api.soundverse.ai/"
 ---
 
 ## 📌 Fetch Generated Data
@@ -22,32 +23,6 @@ title: "Fetch Result"
 ```http
 GET  /generated_data/{userId}/{messageId}
 ```
-
-### Code Samples
-
-<Tabs>
-  <Tab title="Python">
-  
-  ```python
-    import requests
-
-    User_id = “user_id”
-    message_id = "your_message_id"
-    url = f"https://api.soundverse.ai/generated_data/{user_id}/{message_id}"
-
-    response = requests.get(url, headers=headers)
-    print(response.json())
-    ```
-
-   </Tab>
-
-   <Tab title="cURL">
-  
-  ```sh
-   curl "https://api.soundverse.ai/generated_data/{user_id}/{message_id}" 
-    ```
-   </Tab>
-</Tabs>
 
 ### Response
 
