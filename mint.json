@@ -67,14 +67,14 @@
     {
       "group": "API Documentation",
       "pages": ["api/generate/text-to-music","api/generate/ai-song-gen","api/generate/generate-lyrics", "api/generate/extend-music","api/generate/stem-separtion"]
-    }, 
+    },
     {
       "group": "Assistant Endpoints",
       "pages": [ "api/assistant/chat", "api/assistant/voice"]
     },
     {
       "group": "Fetching Points",
-      "pages": [ "api/generations/fetch_status", "api/generations/fetch_result"]
+      "pages": [ "api/fetch_status", "api/fetch_result"]
     }
   ],
   "footerSocials": {
