@@ -11,7 +11,7 @@ Use this API to interact with our AI assistant in real time. Simply provide your
 
 ---
 
-#### 🔹 **Core Parameters**
+#### **Core Parameters**
 
 > 🛈 The parameters below define the request body for this API.
 
@@ -38,7 +38,7 @@ Use this API to interact with our AI assistant in real time. Simply provide your
 }
 ```
 
-#### 📩 **Request Body**
+#### **Request Body**
 
 <div style={{ backgroundColor: "#e9ecef", padding: "0.75rem", borderRadius: "0.3rem" }}>
   
@@ -50,13 +50,12 @@ Use this API to interact with our AI assistant in real time. Simply provide your
 ```
 </div>
 
-#### 🖥️ Code Samples
+#### Code Samples
 
 <Tabs>
   <Tab title="Python">
   
   ```python
-
     import requests
 
     url = "https://api.soundverse.ai/assistant/chat"
@@ -79,14 +78,13 @@ Use this API to interact with our AI assistant in real time. Simply provide your
    <Tab title="cURL">
   
   ```sh
-
-curl -X POST "https://api.soundverse.ai/generate/extend" \
- -H "Authorization: Bearer your_api_key_here" \
- -H "Content-Type: application/json" \
- -d '{
-"userId": "67b9ca2f20e711017fc1b6c5",
-"prompt": "Extend the provided audio clip by generating an additional 45 seconds of music. Maintain the style and mood of the original piece while seamlessly continuing the composition."
-}'
+    curl -X POST "https://api.soundverse.ai/generate/extend" \
+    -H "Authorization: Bearer your_api_key_here" \
+    -H "Content-Type: application/json" \
+    -d '{
+    "userId": "67b9ca2f20e711017fc1b6c5",
+    "prompt": "Extend the provided audio clip by generating an additional 45 seconds of music. Maintain the style and mood of the original piece while seamlessly continuing the composition."
+    }'
 
     ```
 
@@ -94,23 +92,21 @@ curl -X POST "https://api.soundverse.ai/generate/extend" \
    
 </Tabs>
 
-#### 📌 Response
+#### Response
 
 <Tabs>
    <Tab title="200 OK">
   
   ```sh
-
-{
-"aiReply": "str",
-}
-
-```
+    {
+    "aiReply": "str",
+    }
+  ```
 
    </Tab>
 </Tabs>
 
-#### 🚫 Possible Errors :
+#### Possible Errors :
 
 - Internal Server Error -
   `500 status code `

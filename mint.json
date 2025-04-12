@@ -66,11 +66,15 @@
     },
     {
       "group": "API Documentation",
-      "pages": ["enterprise-api/generate/text_to_music", "enterprise-api/generate/extend-music", "enterprise-api/generate/ai-song-gen", "enterprise-api/generate/generate-lyrics", "enterprise-api/generate/stem-separtion"]
+      "pages": ["enterprise-api/generate/text-to-music", "enterprise-api/generate/extend-music", "enterprise-api/generate/ai-song-gen", "enterprise-api/generate/generate-lyrics", "enterprise-api/generate/stem-separtion"]
     },
     {
       "group": "Assistant Endpoints",
       "pages": [ "enterprise-api/assistant/chat", "enterprise-api/assistant/voice"]
+    },
+    {
+      "group": "Fetching Points",
+      "pages": ["enterprise-api/generation/fetch-status", "enterprise-api/generation/fetch-result"]
     }
   ],
   "footerSocials": {

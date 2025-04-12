@@ -2,7 +2,7 @@
 title: "Stem Separation API"
 ---
 
-## 🎵 Stem Separation API
+## Stem Separation API
 
 This endpoint allows users to **separate audio stems** from a provided track using AI.
 
@@ -12,7 +12,7 @@ This endpoint allows users to **separate audio stems** from a provided track usi
 
 ---
 
-#### 🔹 **Core Parameters**
+#### **Core Parameters**
 
 > 🛈 The parameters below define the request body for this API.
 
@@ -24,9 +24,9 @@ This endpoint allows users to **separate audio stems** from a provided track usi
 
 ---
 
-#### 📩 **Request Body**
+#### **Request Body**
 
-<div style={{ backgroundColor: "#e9ecef", padding: "0.75rem", borderRadius: "0.3rem" }}>
+<div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md">
   
 ```
 Request body: 
@@ -38,13 +38,12 @@ Request body:
 ```
 </div>
 
-#### 🖥️ Code Samples
+#### Code Samples
 
 <Tabs>
   <Tab title="Python">
   
   ```python
-
     import requests
 
     url = "https://api.soundverse.ai/generate/stem_separation"
@@ -66,51 +65,41 @@ Request body:
 
    <Tab title="cURL">
   
-  ```sh
-
-curl -X POST "https://api.soundverse.ai/generate/stem_separation" \
- -H "Authorization: Bearer your_api_key_here" \
- -H "Content-Type: application/json" \
- -d '{
-"userId": "string",
-"audioUrl": "string",
-"prompt": "string"
-}'
-
-    ```
-
+    ```sh
+        curl -X POST "https://api.soundverse.ai/generate/stem_separation" \
+        -H "Authorization: Bearer your_api_key_here" \
+        -H "Content-Type: application/json" \
+        -d '{
+        "userId": "string",
+        "audioUrl": "string",
+        "prompt": "string"
+        }'
+      ```
    </Tab>
    
 </Tabs>
 
-#### 📌 Response
+#### Response
 
 <Tabs>
    <Tab title="200 OK">
-  
   ```sh
-
-{
-"success": true,
-"messageId": "str",
-"aiMagicTool": "stem_separation"
-}
-
-    ```
-
+    {
+    "success": true,
+    "messageId": "str",
+    "aiMagicTool": "stem_separation"
+    }
+  ```
    </Tab>
 
    <Tab title="400 Bad Request">
   
-  ```sh
-      
+  ```sh  
     {
       Success: false,
       “Message”: “str”
     }
-
-    ```
-
+  ```
    </Tab>
 </Tabs>
 
@@ -122,7 +111,7 @@ This set of endpoints allows users to retrieve **specific audio stems** from a g
 
 ---
 
-#### 🔹 **Retrieval Parameters**
+#### **Retrieval Parameters**
 
 > 🛈 The parameters below define the request path for retrieving specific stems.
 
@@ -133,7 +122,7 @@ This set of endpoints allows users to retrieve **specific audio stems** from a g
 
 ---
 
-#### 📩 **Request Endpoints**
+#### **Request Endpoints**
 
 - **Retrieve Vocals**
   ```sh
@@ -150,7 +139,7 @@ This set of endpoints allows users to retrieve **specific audio stems** from a g
 
 ---
 
-#### 🖥️ Code Samples
+#### Code Samples
 
 <Tabs>
   <Tab title="Python">
@@ -176,20 +165,20 @@ This set of endpoints allows users to retrieve **specific audio stems** from a g
    </Tab>
 </Tabs>
 
-#### 📌 Response
+#### Response
 
 <Tabs>
   <Tab title="200 OK">
 
-```json
-[
-  {
-    "audioType": "string",
-    "audioUrl": "string",
-    "audioName": "string"
-  }
-]
-```
+    ```json
+    [
+      {
+        "audioType": "string",
+        "audioUrl": "string",
+        "audioName": "string"
+      }
+    ]
+    ```
 
   </Tab>
 
@@ -207,7 +196,7 @@ This set of endpoints allows users to retrieve **specific audio stems** from a g
 
 ---
 
-#### 🎧 **Example Outputs**
+#### **Example Outputs**
 
 <Tabs>
   <Tab title="Vocals">
@@ -236,13 +225,11 @@ This set of endpoints allows users to retrieve **specific audio stems** from a g
     </Tab>
 
   <Tab title="All Stems">
-
     ```json
     [
         ... Vocals and Instruments combined ...
     ]
     ```
-
   </Tab>
 </Tabs>
 

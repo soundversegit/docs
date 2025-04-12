@@ -2,7 +2,7 @@
 title: "Text to Music"
 ---
 
-## 🎵 Generate Music from Text
+## Generate Music from Text
 
 This API allows you to generate **AI-powered music** based on a text description.  
 Choose between:
@@ -12,7 +12,7 @@ Choose between:
 
 ---
 
-#### 🔹 **Core Parameters**
+#### **Core Parameters**
 
 > 🛈 The parameters below define the request body for this API.
 
@@ -26,9 +26,9 @@ Choose between:
 
 ---
 
-#### 📩 **Request Body**
+#### **Request Body**
 
-<div style={{ backgroundColor: "#e9ecef", padding: "0.75rem", borderRadius: "0.3rem" }}>
+<div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md">
   
 ```json
 {
@@ -41,13 +41,12 @@ Choose between:
 ```
 </div>
 
-#### 🖥️ Code Samples
+#### Code Samples
 
 <Tabs>
   <Tab title="python" >
   
   ```python
-
     import requests
 
     url = "https://api.soundverse.ai/v1/generate/text-to-music"
@@ -72,7 +71,6 @@ Choose between:
    <Tab title="curl">
   
   ```sh
-
     curl -X POST "https://api.soundverse.ai/v1/generate/text-to-music" \
     -H "Authorization: Bearer your_api_key_here" \
     -H "Content-Type: application/json" \
@@ -84,52 +82,43 @@ Choose between:
     "loop": false
     }'
     ```
-
    </Tab>
    
 </Tabs>
 
-#### 📌 Response
+#### Response
 
 <Tabs>
    <Tab title="200 OK">
-  
-  ```sh
-
-{
-"success": true,
-"messageId": "str",
-"aiMagicTool": "stem_separation"
-}
-
-    ```
-
+    ```sh
+        {
+          "success": true,
+          "messageId": "str",
+          "aiMagicTool": "stem_separation"
+        }
+      ```
    </Tab>
 
    <Tab title="400 Bad Request">
-  
-  ```sh
-      
-    {
-      Success: false,
-      “Message”: “str”
-    }
-
-    ```
-
+    ```sh
+      {
+        Success: false,
+        “Message”: “str”
+      }
+      ```
    </Tab>
 </Tabs>
 
 ---
 
-#### 🚫 Possible Errors :
+#### Possible Errors :
 
 - If NSFW words are detected
 
 ```
 {
-"success": False,
-"message": "NSFW words detected. Please try again with a different prompt.",
+  "success": False,
+  "message": "NSFW words detected. Please try again with a different prompt.",
 }
 ```
 
@@ -137,7 +126,7 @@ Choose between:
 
 ```
 {
-"success": False,
-"message": "Artist name detected. Please try again with a different prompt.",
+  "success": False,
+  "message": "Artist name detected. Please try again with a different prompt.",
 }
 ```

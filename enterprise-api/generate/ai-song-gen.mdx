@@ -8,7 +8,7 @@ title: "Generate AI Song"
 
 ---
 
-#### 🔹 **Core Parameters**
+#### **Core Parameters**
 
 > 🛈 The parameters below define the request body for this API.
 
@@ -21,9 +21,9 @@ title: "Generate AI Song"
 
 ---
 
-#### 📩 Request Body for Prompt to Song
+#### Request Body for Prompt to Song
 
-<div style={{ backgroundColor: "#e9ecef", padding: "0.75rem", borderRadius: "0.3rem" }}>
+<div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md">
 ```json
 {
   "userId": "string",
@@ -34,13 +34,12 @@ title: "Generate AI Song"
 ```
 </div>
 
-#### 🖥️ Code Samples
+#### Code Samples
 
 <Tabs>
   <Tab title="Python">
   
   ```python
-
     import requests
 
     url = "https://api.soundverse.ai/v1/generate/song-from-prompt"
@@ -64,7 +63,6 @@ title: "Generate AI Song"
    <Tab title="cURL">
   
   ```sh
-
 curl -X POST "https://api.soundverse.ai/v1/generate/song-from-prompt" \
  -H "Authorization: Bearer your_api_key_here" \
  -H "Content-Type: application/json" \
@@ -81,7 +79,7 @@ curl -X POST "https://api.soundverse.ai/v1/generate/song-from-prompt" \
    
 </Tabs>
 
-#### 📌 Response
+#### Response
 
 <Tabs>
    <Tab title="200 OK">
@@ -112,7 +110,7 @@ curl -X POST "https://api.soundverse.ai/v1/generate/song-from-prompt" \
    </Tab>
 </Tabs>
 
-#### 🚫 Possible Errors :
+#### Possible Errors :
 
 - If Rate Limits have been passed for User.
 
@@ -147,7 +145,7 @@ curl -X POST "https://api.soundverse.ai/v1/generate/song-from-prompt" \
 
 This endpoint generates music from **provided lyrics** using AI models.
 
-#### 🔹 **Core Parameters**
+#### **Core Parameters**
 
 > 🛈 The parameters below define the request body for this API.
 
@@ -160,9 +158,9 @@ This endpoint generates music from **provided lyrics** using AI models.
 
 ---
 
-#### 📩 Request Body for Prompt to Song
+#### Request Body for Prompt to Song
 
-<div style={{ backgroundColor: "#e9ecef", padding: "0.75rem", borderRadius: "0.3rem" }}>
+<div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md">
 ```json
 {
   "userId": "string",
@@ -173,13 +171,12 @@ This endpoint generates music from **provided lyrics** using AI models.
 ```
 </div>
 
-#### 🖥️ Code Samples
+#### Code Samples
 
 <Tabs>
   <Tab title="Python">
   
   ```python
-
     import requests
 
     url = "https://api.soundverse.ai/v1/generate/song-from-lyrics"
@@ -204,7 +201,6 @@ This endpoint generates music from **provided lyrics** using AI models.
    <Tab title="cURL">
   
   ```sh
-
     curl -X POST "https://api.soundverse.ai/v1/generate/song-from-lyrics" \
     -H "Authorization: Bearer your_api_key_here" \
     -H "Content-Type: application/json" \
@@ -221,7 +217,7 @@ This endpoint generates music from **provided lyrics** using AI models.
    
 </Tabs>
 
-#### 📌 Response
+#### Response
 
 <Tabs>
    <Tab title="200 OK">
@@ -252,7 +248,7 @@ This endpoint generates music from **provided lyrics** using AI models.
    </Tab>
 </Tabs>
 
-#### 🚫 Possible Errors :
+#### Possible Errors :
 
 - If Rate Limits have been passed for User.
 

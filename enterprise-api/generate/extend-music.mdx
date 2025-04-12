@@ -11,17 +11,19 @@ import TabItem from "@theme/TabItem";
 
 ---
 
-## 🎵 Extend Music using Prompt & Audio URL
+## Extend Music using Audio URL
 
-This API allows you to **extend an existing song** by providing a **publicly accessible URL** of the original audio.  
+> This API allows you to **extend an existing song** by providing a **publicly accessible URL** of the original audio.  
 Choose between:
+
 
 - 🎧 **HD Quality** → `sansaar_1` (Higher fidelity, slower processing)
 - ⚡ **Fast Mode** → `sansaar_1_lite` (Quicker processing, lower fidelity)
 
+
 ---
 
-#### 🔹 **Core Parameters**
+#### **Core Parameters**
 
 > 🛈 The parameters below define the request body for this API.
 
@@ -34,11 +36,9 @@ Choose between:
 
 ---
 
-#### 📩 **Request Body**
-
-<div style={{ backgroundColor: "#e9ecef", padding: "0.75rem", borderRadius: "0.3rem" }}>
-  
 #### **Request Body**
+
+<div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md">
 
 ```
 Request body:
@@ -53,13 +53,12 @@ Request body:
 
 </div>
 
-#### 🖥️ Code Samples
+#### Code Samples
 
 <Tabs>
   <Tab title="Python">
   
   ```python
-
     import requests
 
     url = "https://api.soundverse.ai/generate/extend"
@@ -86,15 +85,14 @@ Request body:
    <Tab title="cURL">
   
   ```sh
-
 curl -X POST "https://api.soundverse.ai/generate/extend" \
  -H "Authorization: Bearer your_api_key_here" \
  -H "Content-Type: application/json" \
  -d '{
-"userId": "67b9ca2f20e711017fc1b6c5",
-"audio_url":"https://storage.googleapis.com/x-one/67b9ca2f20e711017fc1b6c5/67b9ca2f20e711017fc1b6c5/xone20250312100522scsuxkec.wav,
-"prompt": "Extend the provided audio clip by generating an additional 45 seconds of music. Maintain the style and mood of the original piece while seamlessly continuing the composition.",
-"model": "sansaar_1_lite"
+  "userId": "67b9ca2f20e711017fc1b6c5",
+  "audio_url":"https://storage.googleapis.com/x-one/67b9ca2f20e711017fc1b6c5/67b9ca2f20e711017fc1b6c5/xone20250312100522scsuxkec.wav,
+  "prompt": "Extend the provided audio clip by generating an additional 45 seconds of music. Maintain the style and mood of the original piece while seamlessly continuing the composition.",
+  "model": "sansaar_1_lite"
 }'
 
 ````
@@ -103,19 +101,17 @@ curl -X POST "https://api.soundverse.ai/generate/extend" \
 
 </Tabs>
 
-#### 📌 Response
+#### Response
 
 <Tabs>
    <Tab title="200 OK">
 
   ```sh
-
-{
-"success": true,
-"messageId": "str",
-"aiMagicTool": "extend"
-}
-
+  {
+    "success": true,
+    "messageId": "str",
+    "aiMagicTool": "extend"
+  }
     ```
 
    </Tab>
@@ -134,28 +130,22 @@ curl -X POST "https://api.soundverse.ai/generate/extend" \
    </Tab>
 </Tabs>
 
-#### 🚫 Possible Errors :
+#### Possible Errors :
 
 - If NSFW words are detected
 
-````
-
-{
-"success": False,
-"message": "NSFW words detected. Please try again with a different prompt.",
-}
-
+```
+  {
+  "success": False,
+  "message": "NSFW words detected. Please try again with a different prompt.",
+  }
 ```
 
 - If Artist name is detected
 
 ```
-
 {
 "success": False,
 "message": "Artist name detected. Please try again with a different prompt.",
 }
-
-```
-
 ```

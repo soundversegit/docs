@@ -5,7 +5,7 @@ title: "Generate Lyrics"
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
-## 🎼 Generate Lyrics from Prompt
+## Generate Lyrics from Prompt
 
 This endpoint generates **AI-powered song lyrics** based on a **text prompt**.  
 You can also specify:  
@@ -15,7 +15,7 @@ You can also specify:
 
 ---
 
-#### 🔹 **Core Parameters**
+#### **Core Parameters**
 
 > 🛈 The parameters below define the request body for this API.
 
@@ -29,9 +29,9 @@ You can also specify:
 
 ---
 
-#### 📩 **Request Body**
+#### **Request Body**
 
-<div style={{ backgroundColor: "#e9ecef", padding: "0.75rem", borderRadius: "0.3rem" }}>
+<div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md">
   
 ```
 Request body: 
@@ -45,7 +45,7 @@ Request body:
 ```
 </div>
 
-#### 🖥️ Code Samples
+#### Code Samples
 
 <Tabs>
   <Tab title="Python">
@@ -96,7 +96,7 @@ curl -X POST "https://api.soundverse.ai/v1/generate/lyrics" \
    
 </Tabs>
 
-#### 📌 Response
+#### Response
 
 <Tabs>
    <Tab title="200 OK">
@@ -126,7 +126,7 @@ curl -X POST "https://api.soundverse.ai/v1/generate/lyrics" \
    </Tab>
 </Tabs>
 
-#### 🚫 Possible Errors :
+#### Possible Errors :
 
 - If Rate Limits have been passed for User.
 
