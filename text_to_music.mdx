@@ -1,0 +1,143 @@
+---
+title: "Text to Music"
+---
+
+## 🎵 Generate Music from Text
+
+This API allows you to generate **AI-powered music** based on a text description.  
+Choose between:
+
+- 🎧 **HD Quality** → `sansaar_1` (Higher fidelity)
+- ⚡ **Fast Mode** → `sansaar_1_lite` (Quicker processing)
+
+---
+
+#### 🔹 **Core Parameters**
+
+> 🛈 The parameters below define the request body for this API.
+
+| Parameter      | Type      | Required?   | Description                                                      |
+| -------------- | --------- | ----------- | ---------------------------------------------------------------- |
+| **`userId`**   | `string`  | ✅ Required | &#x2003;&emsp;&emsp;Unique ID of the user.                       |
+| **`prompt`**   | `string`  | ✅ Required | &#x2003;&emsp;&emsp;Text description of the music.               |
+| **`duration`** | `integer` | ⚠️ Optional | &#x2003;&emsp;&emsp;Track length (`15s`, `30s`, `60s`, `180s`).  |
+| **`model`**    | `string`  | ⚠️ Optional | &#x2003;&emsp;`"sansaar_1"` (HQ) or `"sansaar_1_lite"` (Faster). |
+| **`loop`**     | `boolean` | ⚠️ Optional | &#x2003;&emsp;&emsp;Whether the music should loop.               |
+
+---
+
+#### 📩 **Request Body**
+
+<div style={{ backgroundColor: "#e9ecef", padding: "0.75rem", borderRadius: "0.3rem" }}>
+  
+```json
+{
+  "userId": "your_unique_id",
+  "prompt": "A futuristic electronic track with deep bass and synths.",
+  "duration": 15,
+  "model": "sansaar_1_lite",
+  "loop": false
+}
+```
+</div>
+
+#### 🖥️ Code Samples
+
+<Tabs>
+  <Tab title="python" >
+  
+  ```python
+
+    import requests
+
+    url = "https://api.soundverse.ai/v1/generate/text-to-music"
+    headers = {
+        "Authorization": "Bearer your_api_key_here",
+        "Content-Type": "application/json"
+    }
+    payload = {
+    "userId": "61b7ca2f20e711017fc1b6c4",
+    "prompt": "Compose a futuristic electronic track with cutting-edge synth sounds and pulsing beats.",
+    "duration": 15,
+    "model": "sansaar_1_lite",
+    "loop": false
+    }
+
+    response = requests.post(url, json=payload, headers=headers)
+    print(response.json())
+    ```
+
+   </Tab>
+
+   <Tab title="curl">
+  
+  ```sh
+
+    curl -X POST "https://api.soundverse.ai/v1/generate/text-to-music" \
+    -H "Authorization: Bearer your_api_key_here" \
+    -H "Content-Type: application/json" \
+    -d '{
+    "userId": "61b7ca2f20e711017fc1b6c4",
+    "prompt": "Compose a futuristic electronic track with cutting-edge synth sounds and pulsing beats.",
+    "duration": 15,
+    "model": "sansaar_1_lite",
+    "loop": false
+    }'
+    ```
+
+   </Tab>
+   
+</Tabs>
+
+#### 📌 Response
+
+<Tabs>
+   <Tab title="200 OK">
+  
+  ```sh
+
+{
+"success": true,
+"messageId": "str",
+"aiMagicTool": "stem_separation"
+}
+
+    ```
+
+   </Tab>
+
+   <Tab title="400 Bad Request">
+  
+  ```sh
+      
+    {
+      Success: false,
+      “Message”: “str”
+    }
+
+    ```
+
+   </Tab>
+</Tabs>
+
+---
+
+#### 🚫 Possible Errors :
+
+- If NSFW words are detected
+
+```
+{
+"success": False,
+"message": "NSFW words detected. Please try again with a different prompt.",
+}
+```
+
+- If Artist name is detected
+
+```
+{
+"success": False,
+"message": "Artist name detected. Please try again with a different prompt.",
+}
+```
