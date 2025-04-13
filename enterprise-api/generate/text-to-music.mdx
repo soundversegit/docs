@@ -18,7 +18,6 @@ Choose between:
 
 | Parameter      | Type      | Required?   | Description                                                      |
 | -------------- | --------- | ----------- | ---------------------------------------------------------------- |
-| **`userId`**   | `string`  | ✅ Required | &#x2003;&emsp;&emsp;Unique ID of the user.                       |
 | **`prompt`**   | `string`  | ✅ Required | &#x2003;&emsp;&emsp;Text description of the music.               |
 | **`duration`** | `integer` | ⚠️ Optional | &#x2003;&emsp;&emsp;Track length (`15s`, `30s`, `60s`, `180s`).  |
 | **`model`**    | `string`  | ⚠️ Optional | &#x2003;&emsp;`"sansaar_1"` (HQ) or `"sansaar_1_lite"` (Faster). |
@@ -32,7 +31,6 @@ Choose between:
   
 ```json
 {
-  "userId": "your_unique_id",
   "prompt": "A futuristic electronic track with deep bass and synths.",
   "duration": 15,
   "model": "sansaar_1_lite",
@@ -55,7 +53,6 @@ Choose between:
         "Content-Type": "application/json"
     }
     payload = {
-    "userId": "61b7ca2f20e711017fc1b6c4",
     "prompt": "Compose a futuristic electronic track with cutting-edge synth sounds and pulsing beats.",
     "duration": 15,
     "model": "sansaar_1_lite",
@@ -75,7 +72,6 @@ Choose between:
     -H "Authorization: Bearer your_api_key_here" \
     -H "Content-Type: application/json" \
     -d '{
-    "userId": "61b7ca2f20e711017fc1b6c4",
     "prompt": "Compose a futuristic electronic track with cutting-edge synth sounds and pulsing beats.",
     "duration": 15,
     "model": "sansaar_1_lite",
@@ -92,9 +88,16 @@ Choose between:
    <Tab title="200 OK">
     ```sh
         {
-          "success": true,
-          "messageId": "str",
-          "aiMagicTool": "stem_separation"
+        "prompt":"str",
+        "albumArt":"str",
+        "aiReply":"str",
+        "audioData":[
+          {
+            "audioUrl":"str",
+            "songName":"str",
+            "licenses":"str"
+          }
+        ]
         }
       ```
    </Tab>
@@ -102,7 +105,6 @@ Choose between:
    <Tab title="400 Bad Request">
     ```sh
       {
-        Success: false,
         “Message”: “str”
       }
       ```
@@ -110,6 +112,23 @@ Choose between:
 </Tabs>
 
 ---
+
+#### Sample Output
+
+```python
+{
+  "prompt":"A hopeful melody with rising strings and ambient piano, like the end of a movie when the hero finds peace.",
+  "albumArt":"https://storage.googleapis.com/soundverse-album-art/67b9ca2f20e711017fc1b6c5/67b9ca2f20e711017fc1b6c5/20250413130229_00000_album_cover_art_for_A_hopeful_melody_with_rising_strings_and_ambient_piano_like_the_end_of_a_movie_when_the_hero_finds_peace.png",
+  "aiReply":"Your audio jewel is polished and gleaming, a testament to your artistic prowess. Unleash its melodies and watch the world listen in awe.",
+  "audioData":[
+    {
+      "audioUrl":"https://storage.googleapis.com/x-one/67b9ca2f20e711017fc1b6c5/67b9ca2f20e711017fc1b6c5/xone20250413130323ltyxhk5r.wav",
+      "songName":"A hopeful melody with ris...",
+      "licenses":"Sync"
+    }
+  ]
+}
+```
 
 #### Possible Errors :
 

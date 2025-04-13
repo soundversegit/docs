@@ -71,10 +71,6 @@
     {
       "group": "Assistant Endpoints",
       "pages": [ "enterprise-api/assistant/chat", "enterprise-api/assistant/voice"]
-    },
-    {
-      "group": "Fetching Points",
-      "pages": ["enterprise-api/generation/fetch-status", "enterprise-api/generation/fetch-result"]
     }
   ],
   "footerSocials": {

@@ -14,7 +14,6 @@ title: "Generate AI Song"
 
 | Parameter          | Type     | Required?   | Description                                  |
 | ------------------ | -------- | ----------- | -------------------------------------------- |
-| **`userId`**       | `string` | ✅ Required | Unique ID of the user.                       |
 | **`prompt`**       | `string` | ✅ Required | Text description of the music.               |
 | **`styleOfMusic`** | `string` | ⚠️ Optional | Preferred genre or style (e.g., jazz, rock). |
 | **`audioUrl`**     | `string` | ⚠️ Optional | URL to a reference audio file for influence. |
@@ -26,7 +25,6 @@ title: "Generate AI Song"
 <div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md">
 ```json
 {
-  "userId": "string",
   "prompt": "string",
   "styleOfMusic": "string",
   "audioUrl": "string"
@@ -48,7 +46,6 @@ title: "Generate AI Song"
         "Content-Type": "application/json"
     }
     payload = {
-    "userId": "string",
     "prompt": "string",
     "StyleOfMusic": "optional" ,
     "audioUrl": "string"
@@ -67,7 +64,6 @@ curl -X POST "https://api.soundverse.ai/v1/generate/song-from-prompt" \
  -H "Authorization: Bearer your_api_key_here" \
  -H "Content-Type: application/json" \
  -d '{
-"userId": "string",
 "prompt": "string",
 "styleOfMusic": "string",
 "audioUrl": "string"
@@ -85,12 +81,18 @@ curl -X POST "https://api.soundverse.ai/v1/generate/song-from-prompt" \
    <Tab title="200 OK">
   
   ```sh
-
-{
-"success": true,
-"messageId": "str",
-"aiMagicTool": "song_gen"
-}
+  {
+    "prompt":"str",
+    "albumArt":"str",
+    "aiReply":"str",
+    "audioData":[
+      {
+        "audioUrl":"str",
+        "songName":"str",
+        "licenses":"str"
+      }
+    ]
+  }
 
     ```
 
@@ -101,7 +103,6 @@ curl -X POST "https://api.soundverse.ai/v1/generate/song-from-prompt" \
   ```sh
       
     {
-      Success: false,
       “Message”: “str”
     }
 
@@ -109,6 +110,23 @@ curl -X POST "https://api.soundverse.ai/v1/generate/song-from-prompt" \
 
    </Tab>
 </Tabs>
+
+#### Sample Output
+
+```
+{
+  "prompt":"A hopeful melody with rising strings and ambient piano, like the end of a movie when the hero finds peace.",
+  "albumArt":"https://storage.googleapis.com/soundverse-album-art/67b9ca2f20e711017fc1b6c5/67b9ca2f20e711017fc1b6c5/20250413130229_00000_album_cover_art_for_A_hopeful_melody_with_rising_strings_and_ambient_piano_like_the_end_of_a_movie_when_the_hero_finds_peace.png",
+  "aiReply":"Your audio jewel is polished and gleaming, a testament to your artistic prowess. Unleash its melodies and watch the world listen in awe.",
+  "audioData":[
+    {
+      "audioUrl":"https://storage.googleapis.com/x-one/67b9ca2f20e711017fc1b6c5/67b9ca2f20e711017fc1b6c5/xone20250413130323ltyxhk5r.wav",
+      "songName":"A hopeful melody with ris...",
+      "licenses":"Sync"
+    }
+  ]
+}
+```
 
 #### Possible Errors :
 
@@ -151,9 +169,7 @@ This endpoint generates music from **provided lyrics** using AI models.
 
 | Parameter      | Type     | Required?   | Description                                  |
 | -------------- | -------- | ----------- | -------------------------------------------- |
-| **`userId`**   | `string` | ✅ Required | Unique ID of the user.                       |
 | **`lyrics`**   | `string` | ✅ Required | Lyrics to be converted into a song.          |
-| **`prompt`**   | `string` | ✅ Required | Context or style for the lyrics.             |
 | **`audioUrl`** | `string` | ⚠️ Optional | URL to a reference audio file for influence. |
 
 ---
@@ -163,9 +179,7 @@ This endpoint generates music from **provided lyrics** using AI models.
 <div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md">
 ```json
 {
-  "userId": "string",
   "lyrics": "string",
-  "prompt": "string",
   "audioUrl": "string"
 }
 ```
@@ -185,9 +199,7 @@ This endpoint generates music from **provided lyrics** using AI models.
         "Content-Type": "application/json"
     }
     payload = {
-      "userId": "string",
       "lyrics": "string",
-      "prompt": "string",
       "audioUrl": "string"
     }
 
@@ -205,8 +217,6 @@ This endpoint generates music from **provided lyrics** using AI models.
     -H "Authorization: Bearer your_api_key_here" \
     -H "Content-Type: application/json" \
     -d '{
-    "userId": "string",
-    "prompt": "string",
     "Lyrics": "string" ,
     "audioUrl": "string",
     }'
@@ -224,11 +234,18 @@ This endpoint generates music from **provided lyrics** using AI models.
   
   ```sh
 
-{
-"success": true,
-"messageId": "str",
-"aiMagicTool": "song_gen"
-}
+      {
+        "prompt":"str",
+        "albumArt":"str",
+        "aiReply":"str",
+        "audioData":[
+          {
+            "audioUrl":"str",
+            "songName":"str",
+            "licenses":"str"
+          }
+        ]
+      }
 
     ```
 
@@ -239,7 +256,6 @@ This endpoint generates music from **provided lyrics** using AI models.
   ```sh
       
     {
-      Success: false,
       “Message”: “str”
     }
 
@@ -247,6 +263,23 @@ This endpoint generates music from **provided lyrics** using AI models.
 
    </Tab>
 </Tabs>
+
+#### Sample Output
+
+```python
+{
+  "prompt":"A hopeful melody with rising strings and ambient piano, like the end of a movie when the hero finds peace.",
+  "albumArt":"https://storage.googleapis.com/soundverse-album-art/67b9ca2f20e711017fc1b6c5/67b9ca2f20e711017fc1b6c5/20250413130229_00000_album_cover_art_for_A_hopeful_melody_with_rising_strings_and_ambient_piano_like_the_end_of_a_movie_when_the_hero_finds_peace.png",
+  "aiReply":"Your audio jewel is polished and gleaming, a testament to your artistic prowess. Unleash its melodies and watch the world listen in awe.",
+  "audioData":[
+    {
+      "audioUrl":"https://storage.googleapis.com/x-one/67b9ca2f20e711017fc1b6c5/67b9ca2f20e711017fc1b6c5/xone20250413130323ltyxhk5r.wav",
+      "songName":"A hopeful melody with ris...",
+      "licenses":"Sync"
+    }
+  ]
+}
+```
 
 #### Possible Errors :
 
