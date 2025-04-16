@@ -2,13 +2,20 @@
 title: "Stem Separation API"
 ---
 
-## Stem Separation API
-
 This endpoint allows users to **separate audio stems** from a provided track using AI.
 
 ---
+#### Stem Separation API Overview
 
-## This Will Be live soon!
+> The Stem Separation API by Soundverse allows you to extract specific parts (or "stems") of a song such as:
+
+- Vocals
+
+- Instruments
+
+- All individual stems (vocals, drums, bass, etc.)
+
+> This is useful for remixing, karaoke creation, music analysis, or background score extraction.
 
 ---
 
@@ -16,11 +23,9 @@ This endpoint allows users to **separate audio stems** from a provided track usi
 
 > 🛈 The parameters below define the request body for this API.
 
-| Parameter      | Type     | Required?   | Description                                  |
-| -------------- | -------- | ----------- | -------------------------------------------- |
-| **`userId`**   | `string` | ✅ Required | Unique ID of the user.                       |
-| **`audioUrl`** | `string` | ✅ Required | URL to the input audio file.                 |
-| **`prompt`**   | `string` | ✅ Required | Additional instructions for stem separation. |
+| Parameter      | Type     | Required?   | Description                  |
+| -------------- | -------- | ----------- | ---------------------------- |
+| **`audioUrl`** | `string` | ✅ Required | URL to the input audio file. |
 
 ---
 
@@ -31,30 +36,30 @@ This endpoint allows users to **separate audio stems** from a provided track usi
 ```
 Request body: 
 {
-  "userId": "string",
-  "audioUrl": "string",
-  "prompt": "string"
+  "audioUrl": "string"
 }
 ```
 </div>
 
+---
+
 #### Code Samples
 
+- **Python code sample**
+
 <Tabs>
-  <Tab title="Python">
+  <Tab title="Vocals">
   
   ```python
     import requests
 
-    url = "https://api.soundverse.ai/generate/stem_separation"
+    url = "https://api.soundverse.ai/v1/generate/stem-separation/vocals"
     headers = {
         "Authorization": "Bearer your_api_key_here",
         "Content-Type": "application/json"
     }
     payload = {
-      "userId": "string",
-      "audioUrl": "string",
-      "prompt": "string"
+      "audioUrl": "string"
     }
 
     response = requests.post(url, json=payload, headers=headers)
@@ -63,174 +68,199 @@ Request body:
 
    </Tab>
 
-   <Tab title="cURL">
-  
-    ```sh
-        curl -X POST "https://api.soundverse.ai/generate/stem_separation" \
-        -H "Authorization: Bearer your_api_key_here" \
-        -H "Content-Type: application/json" \
-        -d '{
-        "userId": "string",
-        "audioUrl": "string",
-        "prompt": "string"
-        }'
-      ```
-   </Tab>
-   
-</Tabs>
+     <Tab title="Instruments">
 
-#### Response
+```python
+  import requests
 
-<Tabs>
-   <Tab title="200 OK">
-  ```sh
-    {
-    "success": true,
-    "messageId": "str",
-    "aiMagicTool": "stem_separation"
-    }
-  ```
-   </Tab>
+  url = "https://api.soundverse.ai/v1/generate/stem-separation/instruments"
+  headers = {
+      "Authorization": "Bearer your_api_key_here",
+      "Content-Type": "application/json"
+  }
+  payload = {
+    "audioUrl": "string"
+  }
 
-   <Tab title="400 Bad Request">
-  
-  ```sh  
-    {
-      Success: false,
-      “Message”: “str”
-    }
-  ```
-   </Tab>
-</Tabs>
-
----
-
-## 🎼 Retrieve Stems API
-
-This set of endpoints allows users to retrieve **specific audio stems** from a generated file.
-
----
-
-#### **Retrieval Parameters**
-
-> 🛈 The parameters below define the request path for retrieving specific stems.
-
-| Parameter       | Type     | Required?   | Description                               |
-| --------------- | -------- | ----------- | ----------------------------------------- |
-| **`userId`**    | `string` | ✅ Required | Unique ID of the user.                    |
-| **`messageId`** | `string` | ✅ Required | Message ID from stem separation response. |
-
----
-
-#### **Request Endpoints**
-
-- **Retrieve Vocals**
-  ```sh
-  GET /generation/{userId}/{messageId}/vocals
-  ```
-- **Retrieve Instruments**
-  ```sh
-  GET /generation/{userId}/{messageId}/instruments
-  ```
-- **Retrieve All Stems**
-  ```sh
-  GET /generation/{userId}/{messageId}/stems
-  ```
-
----
-
-#### Code Samples
-
-<Tabs>
-  <Tab title="Python">
-  
-  ```python
-    import requests
-
-    User_id = “user_id”
-    message_id = "your_message_id"
-    url = f"https://api.soundverse.ai/generated_data/{user_id}/{message_id}/vocals"
-
-    response = requests.get(url, headers=headers)
-    print(response.json())
-    ```
-
-   </Tab>
-
-   <Tab title="cURL">
-  
-  ```sh
-   curl "https://api.soundverse.ai/generated_data/{user_id}/{message_id}/vocals" 
-    ```
-   </Tab>
-</Tabs>
-
-#### Response
-
-<Tabs>
-  <Tab title="200 OK">
-
-    ```json
-    [
-      {
-        "audioType": "string",
-        "audioUrl": "string",
-        "audioName": "string"
-      }
-    ]
-    ```
-
-  </Tab>
-
-  <Tab title="404 Not Found">
-
-```json
-{
-  "success": false,
-  "message": "No audio found for the provided parameters."
-}
+  response = requests.post(url, json=payload, headers=headers)
+  print(response.json())
 ```
 
-  </Tab>
+ </Tab>
+
+  <Tab title="All Stems">
+
+```python
+  import requests
+
+  url = "https://api.soundverse.ai/v1/generate/stem-separation/all-stems"
+  headers = {
+      "Authorization": "Bearer your_api_key_here",
+      "Content-Type": "application/json"
+  }
+  payload = {
+    "audioUrl": "string"
+  }
+
+  response = requests.post(url, json=payload, headers=headers)
+  print(response.json())
+```
+
+ </Tab>
+
 </Tabs>
 
----
-
-#### **Example Outputs**
+- **cURL**
 
 <Tabs>
   <Tab title="Vocals">
-  ```json
-    [
-        {
-            "audioType": "65546bad9a8ed5d177b4d8d9",
-            "audioUrl": "vocals.mp3",
-            "audioName": "Vocals"
-        }
-    ]
-    ```
-    </Tab>
 
-    <Tab title="Instruments">
+```sh
+    curl -X POST "https://api.soundverse.ai/v1/generate/stem-separation/vocals" \
+    -H "Authorization: Bearer your_api_key_here" \
+    -H "Content-Type: application/json" \
+    -d '{
+    "audioUrl": "string"
+    }'
+```
 
-    ```json
-    [
-        { "audioType": "guitar", "audioUrl": "guitar.mp3", "audioName": "Guitar" },
-        { "audioType": "other", "audioUrl": "other.mp3", "audioName": "Other" },
-        { "audioType": "drums", "audioUrl": "drums.mp3", "audioName": "Drums" },
-        { "audioType": "bass", "audioUrl": "bass.mp3", "audioName": "Bass" },
-        { "audioType": "piano", "audioUrl": "piano.mp3", "audioName": "Piano" }
-    ]
-    ```
-    </Tab>
+</Tab>
 
-  <Tab title="All Stems">
-    ```json
+<Tab title="Instruments">
+
+```sh
+    curl -X POST "https://api.soundverse.ai/v1/generate/stem-separation/instruments" \
+    -H "Authorization: Bearer your_api_key_here" \
+    -H "Content-Type: application/json" \
+    -d '{
+    "audioUrl": "string"
+    }'
+```
+
+</Tab>
+
+<Tab title="All Stems">
+
+```sh
+    curl -X POST "https://api.soundverse.ai/v1/generate/stem-separation/all-stems" \
+    -H "Authorization: Bearer your_api_key_here" \
+    -H "Content-Type: application/json" \
+    -d '{
+    "audioUrl": "string"
+    }'
+```
+
+</Tab>
+</Tabs>
+
+#### Response
+
+<Tabs>
+  <Tab title="Vocals">
+    ```sh
     [
-        ... Vocals and Instruments combined ...
+      {
+      "audioName": "vocals",
+      "audioUrl": "str"
+      }
     ]
     ```
   </Tab>
+
+   <Tab title="Instruments">
+
+```sh
+  [
+    {
+      "audioName": "Guitar",
+      "audioUrl": "str"
+    },
+    {
+      "audioName": "Other",
+      "audioUrl": "str"
+    },
+    {
+      "audioName": "Drums",
+      "audioUrl": "str"
+    },
+    {
+      "audioName": "Bass",
+      "audioUrl": "str"
+    },
+    {
+      "audioName": "Piano",
+      "audioUrl": "str",
+    }
+  ]
+```
+
+   </Tab>
+
+   <Tab title="All Stems">
+
+```sh
+    [
+      {
+        "audioName": "vocals",
+        "audioUrl": "str"
+      },
+      {
+        "audioName": "Guitar",
+        "audioUrl": "str"
+      },
+      {
+        "audioName": "Other",
+        "audioUrl": "str"
+      },
+      {
+        "audioName": "Drums",
+        "audioUrl": "str"
+      },
+      {
+        "audioName": "Bass",
+        "audioUrl": "str"
+      },
+      {
+        "audioName": "Piano",
+        "audioUrl": "str",
+      }
+    ]
+  ```
+ </Tab>
 </Tabs>
 
+---
+
+#### Possible Errors
+
+
+- If NSFW words are detected
+
+```
+
+{
+"success": False,
+"message": "NSFW words detected. Please try again with a different prompt.",
+}
+
+```
+
+- If Artist name is detected
+
+```
+
+{
+"success": False,
+"message": "Artist name detected. Please try again with a different prompt.",
+}
+
+```
+- Generation Fail Error
+```
+
+{
+"Detail": "str"
+}
+
+```
 ---

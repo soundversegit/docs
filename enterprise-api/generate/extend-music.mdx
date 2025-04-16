@@ -7,10 +7,6 @@ import TabItem from "@theme/TabItem";
 
 ---
 
-## This Will Be live soon!
-
----
-
 ## Extend Music using Audio URL
 
 > This API allows you to **extend an existing song** by providing a **publicly accessible URL** of the original audio.  
@@ -29,10 +25,7 @@ Choose between:
 
 | Parameter      | Type     | Required?   | Description                                                                    |
 | -------------- | -------- | ----------- | ------------------------------------------------------------------------------ |
-| **`userId`**   | `string` | ✅ Required | &#x2003;&emsp;&emsp;Unique ID of the user.                                     |
 | **`audioUrl`** | `string` | ✅ Required | &#x2003;&emsp;&emsp;Publicly available URL of the audio file to extend.        |
-| **`prompt`**   | `string` | ✅ Required | &#x2003;&emsp;&emsp;Text description guiding how the music should be extended. |
-| **`model`**    | `string` | ⚠️ Optional | &#x2003;&emsp;`"sansaar_1"` (HQ) or `"sansaar_1_lite"` (Faster, default).      |
 
 ---
 
@@ -43,10 +36,7 @@ Choose between:
 ```
 Request body:
 {
-  "userId": "string",
-  "audioUrl": "string",
-  "prompt": "string",
-  "model": "sansaar_1_lite"
+  "audioUrl": "string"
 }
 
 ```
@@ -61,18 +51,14 @@ Request body:
   ```python
     import requests
 
-    url = "https://api.soundverse.ai/generate/extend"
+    url = "https://api.soundverse.ai/v1/generate/extend"
     headers = {
         "Authorization": "Bearer your_api_key_here",
         "Content-Type": "application/json"
     }
     payload = {
-    userId: "67b9ca2f20e711017fc1b6c5"
         "audio_url": "
     https://storage.googleapis.com/x-one/67b9ca2f20e711017fc1b6c5/67b9ca2f20e711017fc1b6c5/xone20250312100522scsuxkec.wav
-    ,
-        "prompt": "Extend the provided audio clip by generating an additional 45 seconds of music. Maintain the style and mood of the original piece while seamlessly continuing the composition.",
-        "model": "sansaar_1_lite"
     }
 
     response = requests.post(url, json=payload, headers=headers)
@@ -85,17 +71,14 @@ Request body:
    <Tab title="cURL">
   
   ```sh
-curl -X POST "https://api.soundverse.ai/generate/extend" \
- -H "Authorization: Bearer your_api_key_here" \
- -H "Content-Type: application/json" \
- -d '{
-  "userId": "67b9ca2f20e711017fc1b6c5",
-  "audio_url":"https://storage.googleapis.com/x-one/67b9ca2f20e711017fc1b6c5/67b9ca2f20e711017fc1b6c5/xone20250312100522scsuxkec.wav,
-  "prompt": "Extend the provided audio clip by generating an additional 45 seconds of music. Maintain the style and mood of the original piece while seamlessly continuing the composition.",
-  "model": "sansaar_1_lite"
-}'
+    curl -X POST "https://api.soundverse.ai/v1/generate/extend" \
+    -H "Authorization: Bearer your_api_key_here" \
+    -H "Content-Type: application/json" \
+    -d '{
+      "audio_url":"https://storage.googleapis.com/x-one/67b9ca2f20e711017fc1b6c5/67b9ca2f20e711017fc1b6c5/xone20250312100522scsuxkec.wav,
+    }'
 
-````
+    ```
 
    </Tab>
 
@@ -105,47 +88,66 @@ curl -X POST "https://api.soundverse.ai/generate/extend" \
 
 <Tabs>
    <Tab title="200 OK">
-
-  ```sh
-  {
-    "success": true,
-    "messageId": "str",
-    "aiMagicTool": "extend"
-  }
-    ```
-
+    ```sh
+        {
+        "prompt":"str",
+        "albumArt":"str",
+        "aiReply":"str",
+        "audioData":[
+          {
+            "audioUrl":"str",
+            "songName":"str",
+            "licenses":"str"
+          }
+        ]
+        }
+      ```
    </Tab>
 
    <Tab title="400 Bad Request">
-
-  ```sh
-
-    {
-      Success: false,
-      “Message”: “str”
-    }
-
-    ```
-
+    ```sh
+      {
+        "Detail": “str”
+      }
+      ```
    </Tab>
 </Tabs>
+
+---
+
+#### Sample Output
+
+```python
+{
+  "prompt":"A hopeful melody with rising strings and ambient piano, like the end of a movie when the hero finds peace.",
+  "albumArt":"https://storage.googleapis.com/soundverse-album-art/67b9ca2f20e711017fc1b6c5/67b9ca2f20e711017fc1b6c5/20250413130229_00000_album_cover_art_for_A_hopeful_melody_with_rising_strings_and_ambient_piano_like_the_end_of_a_movie_when_the_hero_finds_peace.png",
+  "aiReply":"Your audio jewel is polished and gleaming, a testament to your artistic prowess. Unleash its melodies and watch the world listen in awe.",
+  "audioData":[
+    {
+      "audioUrl":"https://storage.googleapis.com/x-one/67b9ca2f20e711017fc1b6c5/67b9ca2f20e711017fc1b6c5/xone20250413130323ltyxhk5r.wav",
+      "songName":"A hopeful melody with ris...",
+      "licenses":"Sync"
+    }
+  ]
+}
+```
 
 #### Possible Errors :
 
 - If NSFW words are detected
 
 ```
-  {
+{
   "success": False,
   "message": "NSFW words detected. Please try again with a different prompt.",
-  }
+}
 ```
 
 - If Artist name is detected
 
 ```
 {
-"success": False,
-"message": "Artist name detected. Please try again with a different prompt.",
+  "success": False,
+  "message": "Artist name detected. Please try again with a different prompt.",
 }
 ```
