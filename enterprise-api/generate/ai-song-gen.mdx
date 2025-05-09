@@ -12,11 +12,80 @@ title: "Generate AI Song"
 
 > 🛈 The parameters below define the request body for this API.
 
-| Parameter          | Type     | Required?   | Description                                  |
-| ------------------ | -------- | ----------- | -------------------------------------------- |
-| **`prompt`**       | `string` | ✅ Required | Text description of the music.               |
-| **`styleOfMusic`** | `string` | ⚠️ Optional | Preferred genre or style (e.g., jazz, rock). |
-| **`audioUrl`**     | `string` | ⚠️ Optional | URL to a reference audio file for influence. |
+| Parameter          | Type     | Required?       | Description                                                                 |
+| ------------------ | -------- | --------------- | --------------------------------------------------------------------------- |
+| **`prompt`**       | `string` | ✅ Required     | Text description of the music.                                              |
+| **`styleOfMusic`** | `string` | ✅ Required     | Preferred style. Select one from supported styles listed below. |
+| **`audioUrl`**     | `string` | ⚠️ Optional     | URL to a reference audio file for influence.                                |
+
+#### **Supported Music Styles**
+
+The `styleOfMusic` parameter must be one of the following values:
+
+- Pop
+- Hip Hop
+- Rap
+- Rock
+- EDM
+- Latin
+- Reggaeton
+- K-Pop
+- RnB
+- Country
+- Dance
+- House
+- Bollywood
+- Afrobeat
+- Afropop
+- Dancehall
+- Deep House
+- Electronic
+- Future Bass
+- Trap
+- Pop-Trap
+- Dubstep
+- Synthpop
+- Synthwave
+- Techno
+- Progressive-Metal
+- Alt-Rock
+- Alt-Metal
+- Nu-Metal
+- Metal
+- Jazz
+- Blues
+- Soul
+- Funk
+- Singer-Songwriter
+- Folk
+- Cloud-Rap
+- Lofi
+- Chillout
+- Downtempo
+- Meditative
+- New-Age
+- Western-Classical
+- Classical
+- Opera
+- Piano
+- Spoken-Word
+- Gospel
+- Brazilian-Music
+- Bossa-Nova
+- Salsa
+- Bachata
+- Country-Blues
+- Future-Rave
+- Electrostep
+- Dub
+- Disco
+- Shoegaze
+- Bit-Beat
+- Indian Electronic
+- African
+- 80s
+- Acoustic
+- Melodic
 
 ---
 
