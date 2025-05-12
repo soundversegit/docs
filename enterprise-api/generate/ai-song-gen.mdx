@@ -12,11 +12,11 @@ title: "Generate AI Song"
 
 > 🛈 The parameters below define the request body for this API.
 
-| Parameter          | Type     | Required?       | Description                                                                 |
-| ------------------ | -------- | --------------- | --------------------------------------------------------------------------- |
-| **`prompt`**       | `string` | ✅ Required     | Text description of the music.                                              |
-| **`styleOfMusic`** | `string` | ✅ Required     | Preferred style. Select one from supported styles listed below. |
-| **`audioUrl`**     | `string` | ⚠️ Optional     | URL to a reference audio file for influence.                                |
+| Parameter          | Type     | Required?   | Description                                                     |
+| ------------------ | -------- | ----------- | --------------------------------------------------------------- |
+| **`prompt`**       | `string` | ✅ Required | Text description of the music.                                  |
+| **`styleOfMusic`** | `string` | ✅ Required | Preferred style. Select one from supported styles listed below. |
+| **`audioUrl`**     | `string` | ⚠️ Optional | URL to a reference audio file for influence.                    |
 
 #### **Supported Music Styles**
 
@@ -236,10 +236,11 @@ This endpoint generates music from **provided lyrics** using AI models.
 
 > 🛈 The parameters below define the request body for this API.
 
-| Parameter      | Type     | Required?   | Description                                  |
-| -------------- | -------- | ----------- | -------------------------------------------- |
-| **`lyrics`**   | `string` | ✅ Required | Lyrics to be converted into a song.          |
-| **`audioUrl`** | `string` | ⚠️ Optional | URL to a reference audio file for influence. |
+| Parameter      | Type     | Required?   | Description                                    |
+| -------------- | -------- | ----------- | ---------------------------------------------- |
+| **`prompt`**   | `string` | ✅ Required | Text description of the music to be generated. |
+| **`lyrics`**   | `string` | ✅ Required | Lyrics to be converted into a song.            |
+| **`audioUrl`** | `string` | ⚠️ Optional | URL to a reference audio file for influence.   |
 
 ---
 
@@ -248,6 +249,7 @@ This endpoint generates music from **provided lyrics** using AI models.
 <div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md">
 ```json
 {
+  "prompt": "string",
   "lyrics": "string",
   "audioUrl": "string"
 }
@@ -268,6 +270,7 @@ This endpoint generates music from **provided lyrics** using AI models.
         "Content-Type": "application/json"
     }
     payload = {
+      "prompt": "string",
       "lyrics": "string",
       "audioUrl": "string"
     }
@@ -286,8 +289,9 @@ This endpoint generates music from **provided lyrics** using AI models.
     -H "Authorization: Bearer your_api_key_here" \
     -H "Content-Type: application/json" \
     -d '{
-    "Lyrics": "string" ,
-    "audioUrl": "string",
+    "prompt": "string",
+    "lyrics": "string",
+    "audioUrl": "string"
     }'
 
     ```
