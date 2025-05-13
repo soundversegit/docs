@@ -236,11 +236,11 @@ This endpoint generates music from **provided lyrics** using AI models.
 
 > 🛈 The parameters below define the request body for this API.
 
-| Parameter          | Type     | Required?   | Description                                                     |
-| ------------------ | -------- | ----------- | --------------------------------------------------------------- |
-| **`styleOfMusic`** | `string` | ✅ Required | Preferred style. Select one from supported styles listed above. |
-| **`lyrics`**       | `string` | ✅ Required | Lyrics to be converted into a song.                             |
-| **`audioUrl`**     | `string` | ⚠️ Optional | URL to a reference audio file for influence.                    |
+| Parameter          | Type     | Required?                                                     | Description                                                     |
+| ------------------ | -------- | ------------------------------------------------------------- | --------------------------------------------------------------- |
+| **`styleOfMusic`** | `string` | ⚠️ Optional (Either styleOfMusic or audioUrl must be present) | Preferred style. Select one from supported styles listed above. |
+| **`lyrics`**       | `string` | ✅ Required                                                   | Lyrics to be converted into a song.                             |
+| **`audioUrl`**     | `string` | ⚠️ Optional (Either styleOfMusic or audioUrl must be present) | URL to a reference audio file for influence.                    |
 
 ---
 
