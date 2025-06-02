@@ -1,0 +1,543 @@
+---
+title: "Generate, Trim and Loop Audio"
+description: “Turn your **AI-generated** audio into a **perfectly looping** masterpiece — auto-detected, prompt-powered, and smooth as magic.”
+---
+
+## 🎶  Trim and Loop Audio - Music From Text Generation
+
+This API allows you to Generate stunning **AI-driven music** from text prompts — then intelligently detects and creates a **seamless loop** that syncs perfectly with your creative vision. 
+
+Choose between:
+
+- 🎧 **HD Quality** → `sansaar_1` (Higher fidelity)
+- ⚡ **Fast Mode** → `sansaar_1_lite` (Quicker processing)
+
+---
+
+#### **Core Parameters**
+
+> 🛈 The parameters below define the request body for this API.
+
+| Parameter      | Type      | Required?   | Description                                                      |
+| -------------- | --------- | ----------- | ---------------------------------------------------------------- |
+| **`prompt`**   | `string`  | ✅ Required | &#x2003;&emsp;&emsp;Text description of the music.               |
+| **`duration`** | `int` | ⚠️ Optional | &#x2003;&emsp;&emsp;Track length (`15s`, `30s`, `60s`, `180s`).  |
+| **`model`**    | `string`  | ⚠️ Optional | &#x2003;&emsp;`"sansaar_1"` (HQ) or `"sansaar_1_lite"` (Faster). |
+| **`loop`**     | `bool` | ⚠️ Optional | &#x2003;&emsp;&emsp;Whether the music should loop.               |
+| **`loopCount`**     | `int` | ✅ Required | &#x2003;&emsp;&emsp;Number of times the trimmed part should loop.      |
+
+
+---
+
+#### **Request Example**
+
+<div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md">
+  
+```json
+{
+  "prompt": "A futuristic electronic track with deep bass and synths.",
+  "duration": 15,
+  "model": "sansaar_1_lite",
+  "loop": true,
+  "loopCount": 3
+}
+```
+</div>
+
+#### Code Samples
+
+<Tabs>
+  <Tab title="python" >
+  
+  ```python
+    import requests
+
+    url = "https://api.soundverse.ai/v1/generate/text-to-music"
+    headers = {
+        "Authorization": "Bearer your_api_key_here",
+        "Content-Type": "application/json"
+    }
+    payload = {
+    "prompt": "string",
+    "duration": "int",
+    "model": "string",
+    "loop": "bool",
+    "loopCount": "int"
+    }
+
+    response = requests.post(url, json=payload, headers=headers)
+    print(response.json())
+    ```
+
+   </Tab>
+
+   <Tab title="curl">
+  
+  ```sh
+    curl -X POST "https://api.soundverse.ai/v1/generate/text-to-music" \
+    -H "Authorization: Bearer your_api_key_here" \
+    -H "Content-Type: application/json" \
+    -d '{
+    "prompt": "string",
+    "duration": "int",
+    "model": "string",
+    "loop": "bool",
+    "loopCount": "int"
+    }'
+    ```
+   </Tab>
+   
+</Tabs>
+
+#### Response
+
+<Tabs>
+   <Tab title="200 OK">
+    ```sh
+        {
+        "prompt": looped_data.get("prompt"),
+        "albumArt": looped_data.get("albumArt"),
+        "aiReply": looped_data.get("aiReply"),
+        "generatedAudio": [
+            {
+                "audioUrl": a.get("audioUrl"),
+                "songName": a.get("songName"),
+                "licenses": a.get("licenses")
+            }
+        ],
+        "loopedAudio": [
+            {
+                "audioUrl": a.get("audioUrl"),
+                "songName": a.get("songName"),
+                "licenses": a.get("licenses")
+            }
+        ]
+    }
+      ```
+   </Tab>
+
+   <Tab title="400 Bad Request">
+    ```sh
+      {
+        "Detail": “str”
+      }
+      ```
+   </Tab>
+</Tabs>
+
+---
+
+#### Sample Output
+
+```python
+{
+    "prompt": "hopeful melody with rising strings and ambient piano, like the end of a movie when the hero finds peace",
+    "albumArt": "https://cdn.example.com/artworks/abc123.png",
+    "aiReply": "Congratulations! Your audio file is now at your fingertips. Play it loud, play it proud!",
+    "generatedAudio": [
+        {
+            "audioUrl": "https://storage.googleapis.com/x-one/682389b76cafe82ba0a20d77/682389b76cafe82ba0a20d77/xone20250602054641n60m527u.wav",
+            "songName": "Tranquil Serenade: A Heros Respite",
+            "licenses": null
+        }
+    ],
+    "loopedAudio": [
+        {
+            "audioUrl": "https://storage.googleapis.com/x-one/682389b76cafe82ba0a20d77/682389b76cafe82ba0a20d77/looped/60e8c9ae-ec86-4efd-b0b4-45c4c8b3dcf9.wav",
+            "songName": "Tranquil Triumph: A Heros Serene Resolution",
+            "licenses": null
+        }
+    ]
+}
+```
+
+#### Possible Errors :
+
+- If NSFW words are detected
+
+```
+{
+  "success": False,
+  "message": "NSFW words detected. Please try again with a different prompt.",
+}
+```
+
+- If Artist name is detected
+
+```
+{
+  "success": False,
+  "message": "Artist name detected. Please try again with a different prompt.",
+}
+```
+
+- If Length of provided audio is too short.
+
+```
+{
+"success": False,
+"message": "Not enough beats to create loop.",
+}
+```
+
+---
+
+## 🎶 Trim and Loop Audio - Prompt Based Generation
+
+This API allows you to feed in your prompt, get **AI-powered** audio — then **automatically trim and loop the most seamless segment**, perfectly aligned with your creative vision.
+
+---
+
+###  Core Parameters
+
+The following parameters are required to send a valid request:
+
+| Parameter          | Type     | Required?   | Description                                                     |
+| ------------------ | -------- | ----------- | --------------------------------------------------------------- |
+| **`prompt`**       | `string` | ✅ Required | Text description of the music.                                  |
+| **`styleOfMusic`** | `string` | ✅ Required | Preferred style. Select one from supported styles listed below. |
+| **`audioUrl`**     | `string` | ⚠️ Optional | URL to a reference audio file for influence.                    |
+| `loopCount`        | `int`    | ✅ Yes    | Number of times to loop the detected seamless segment.                |
+
+---
+
+###  Request Example
+<div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md">
+```json
+{
+  "prompt": "A hopeful ambient piano loop that feels cinematic",
+  "styleOfMusic": "Ambient",
+  "audioUrl": "https://example.com/audio.wav",
+  "loopCount": 4
+}
+```
+</div>
+
+### Code Samples
+
+<Tabs>
+  <Tab title="Python">
+  
+  ```python
+    import requests
+
+    url = "https://api-staging.soundverse.ai/v1/trim-and-loop/gen-and-loop/song/prompt/auto"
+    headers = {
+        "Authorization": "Bearer your_api_key_here",
+        "Content-Type": "application/json"
+    }
+    payload = {
+      "prompt": "string",
+      "styleOfMusic": "string",
+      "audioUrl": "string",
+      "loopCount": "int"
+    }
+
+    response = requests.post(url, json=payload, headers=headers)
+    print(response.json())
+    ```
+
+    </Tab>
+
+   <Tab title="cURL">
+  
+  ```sh
+curl -X POST "https://api-staging.soundverse.ai/v1/trim-and-loop/gen-and-loop/song/prompt/auto" \
+ -H "Authorization: Bearer your_api_key_here" \
+ -H "Content-Type: application/json" \
+ -d '{
+      "prompt": "string",
+      "styleOfMusic": "string",
+      "audioUrl": "string",
+      "loopCount": "int"
+    }'
+
+    ```
+
+   </Tab>
+   
+</Tabs>
+
+### Response
+
+<Tabs>
+   <Tab title="200 OK">
+  
+  ```sh
+  {
+    "prompt": string,                
+    "albumArt": string (URL) ,       
+    "aiReply": string,              
+
+    "generatedAudio": [              
+        {
+        "audioUrl": string (URL),    
+        "songName": string
+        }
+    ],
+
+    "loopedAudio": [                
+        {
+        "audioUrl": string (URL),    
+        "songName": string
+        }
+    ]
+  }
+ ```
+
+   </Tab>
+
+   <Tab title="400 Bad Request">
+  
+  ```sh
+      
+    {
+      "Detail": “str”
+}
+
+    ```
+
+   </Tab>
+</Tabs>
+
+### Sample Output
+
+``` python
+{
+  "prompt": "upbeat electronic tune with a futuristic vibe",
+  "albumArt": "https://cdn.example.com/artworks/abc123.png",
+  "aiReply": "Here's an upbeat electronic track matching your prompt.",
+  "generatedAudio": [
+    {
+      "audioUrl": "https://cdn.example.com/audio/generated/xyz789.mp3",
+      "songName": "Futuristic Pulse"
+    }
+  ],
+  "loopedAudio": [
+    {
+      "audioUrl": "https://cdn.example.com/audio/looped/xyz789_looped.mp3",
+      "songName": "Futuristic Pulse (Looped x3)"
+    }
+  ]
+}
+```
+
+### Possible Errors :
+
+- If Rate Limits have been passed for User.
+
+```
+{
+"success": False,
+"message": "Rate limits have been passed for the user.",
+}
+```
+
+- If NSFW words are detected
+
+```
+{
+"success": False,
+"message": "NSFW words detected. Please try again with a different prompt.",
+}
+```
+
+- If Artist name is detected
+
+```
+{
+"success": False,
+"message": "Artist name detected. Please try again with a different prompt.",
+}
+```
+
+- If Length of provided audio is too short.
+
+```
+{
+"success": False,
+"message": "Not enough beats to create loop.",
+}
+```
+
+
+---
+
+
+## 🎶 Trim and Loop Audio - Lyrics Based Generation
+
+This API allows you to feed in your lyrics, get **AI-powered** audio — then **automatically trim and loop the most seamless segment**, perfectly aligned with your creative vision.
+
+---
+
+###  Core Parameters
+
+The following parameters are required to send a valid request:
+
+| Parameter          | Type     | Required?                                                     | Description                                                     |
+| ------------------ | -------- | ------------------------------------------------------------- | --------------------------------------------------------------- |
+| **`lyrics`**       | `string` | ✅ Required                                                   | Lyrics to be converted into a song.                             |
+| **`styleOfMusic`** | `string` | ⚠️ Optional (Either styleOfMusic or audioUrl must be present) | Preferred style. Select one from supported styles listed above. |
+| **`audioUrl`**     | `string` | ⚠️ Optional (Either styleOfMusic or audioUrl must be present) | URL to a reference audio file for influence.                    |
+| `loopCount`        | `int`    | ✅ Yes    | Number of times to loop the detected seamless segment.                |
+
+---
+
+###  Request Example
+<div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md">
+```json
+{
+  "lyrics": "A hopeful ambient piano loop that feels cinematic",
+  "styleOfMusic": "Ambient",
+  "audioUrl": "https://example.com/audio.wav",
+  "loopCount": 4
+}
+```
+</div>
+
+### Code Samples
+
+<Tabs>
+  <Tab title="Python">
+  
+  ```python
+    import requests
+
+    url = "https://api-staging.soundverse.ai/v1/trim-and-loop/gen-and-loop/song/lyrics/auto"
+    headers = {
+        "Authorization": "Bearer your_api_key_here",
+        "Content-Type": "application/json"
+    }
+    payload = {
+      "lyrics": "string",
+      "styleOfMusic": "string",
+      "audioUrl": "string",
+      "loopCount": "int"
+    }
+
+    response = requests.post(url, json=payload, headers=headers)
+    print(response.json())
+    ```
+
+    </Tab>
+
+   <Tab title="cURL">
+  
+  ```sh
+curl -X POST "https://api-staging.soundverse.ai/v1/trim-and-loop/gen-and-loop/song/lyrics/auto" \
+ -H "Authorization: Bearer your_api_key_here" \
+ -H "Content-Type: application/json" \
+ -d '{
+      "lyrics": "string",
+      "styleOfMusic": "string",
+      "audioUrl": "string",
+      "loopCount": "int"
+    }'
+
+    ```
+
+   </Tab>
+   
+</Tabs>
+
+### Response
+
+<Tabs>
+   <Tab title="200 OK">
+  
+  ```sh
+  {
+    "prompt": string,                
+    "albumArt": string (URL) ,       
+    "aiReply": string,              
+
+    "generatedAudio": [              
+        {
+        "audioUrl": string (URL),    
+        "songName": string
+        }
+    ],
+
+    "loopedAudio": [                
+        {
+        "audioUrl": string (URL),    
+        "songName": string
+        }
+    ]
+  }
+ ```
+
+   </Tab>
+
+   <Tab title="400 Bad Request">
+  
+  ```sh
+      
+    {
+      "Detail": “str”
+}
+
+    ```
+
+   </Tab>
+</Tabs>
+
+### Sample Output
+
+``` python
+{
+  "prompt": "upbeat electronic tune with a futuristic vibe",
+  "albumArt": "https://cdn.example.com/artworks/abc123.png",
+  "aiReply": "Here's an upbeat electronic track matching your prompt.",
+  "generatedAudio": [
+    {
+      "audioUrl": "https://cdn.example.com/audio/generated/xyz789.mp3",
+      "songName": "Futuristic Pulse"
+    }
+  ],
+  "loopedAudio": [
+    {
+      "audioUrl": "https://cdn.example.com/audio/looped/xyz789_looped.mp3",
+      "songName": "Futuristic Pulse (Looped x3)"
+    }
+  ]
+}
+```
+
+### Possible Errors :
+
+- If Rate Limits have been passed for User.
+
+```
+{
+"success": False,
+"message": "Rate limits have been passed for the user.",
+}
+```
+
+- If NSFW words are detected
+
+```
+{
+"success": False,
+"message": "NSFW words detected. Please try again with a different prompt.",
+}
+```
+
+- If Artist name is detected
+
+```
+{
+"success": False,
+"message": "Artist name detected. Please try again with a different prompt.",
+}
+```
+
+- If Length of provided audio is too short.
+
+```
+{
+"success": False,
+"message": "Not enough beats to create loop.",
+}
+```

@@ -1,0 +1,484 @@
+---
+title: "Trim and Loop Audio"
+description: "Automatically detect a perfect loop from a user uploaded audio and repeat it based on the text prompt."
+---
+
+## 🎶 Trim and Loop Audio - Auto
+
+This API automatically detects a seamless loop in the provided user uploaded audio, trims it, and loops the trimmed segment based on the **textual description** using AI.
+
+---
+
+###  Core Parameters
+
+The following parameters are required to send a valid request:
+
+| Parameter      | Type     | Required | Description                                                                 |
+|----------------|----------|----------|-----------------------------------------------------------------------------|
+| `prompt`       | `string` | ✅ Yes    | Textual prompt describing the feel or theme of the music.                  |
+| `audioUrl`     | `string` | ✅ Yes    | Public URL of a user uploaded audio file to detect loop from.              |
+| `count`        | `int`    | ✅ Yes    | Number of times to loop the detected seamless segment.                     |
+
+---
+
+###  Request Example
+
+<div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md">
+```json
+{
+  "prompt": "A hopeful ambient piano loop that feels cinematic",
+  "audioUrl": "https://example.com/audio.wav",
+  "count": 4
+}
+```
+</div>
+
+<Tabs>
+  <Tab title="Python">
+  
+  ```python
+    import requests
+
+    url = "https://api.soundverse.ai/v1/generate/trim-and-loop/auto"
+    headers = {
+        "Authorization": "Bearer your_api_key_here",
+        "Content-Type": "application/json"
+    }
+    payload = {
+      "prompt": "string",
+      "audioUrl": "string",
+      "count": "int"
+    }
+
+    response = requests.post(url, json=payload, headers=headers)
+    print(response.json())
+    ```
+
+    </Tab>
+
+   <Tab title="cURL">
+  
+  ```sh
+curl -X POST "https://api.soundverse.ai/v1/generate/trim-and-loop/auto" \
+ -H "Authorization: Bearer your_api_key_here" \
+ -H "Content-Type: application/json" \
+ -d '{
+      "prompt": "string",
+      "audioUrl": "string",
+      "count": "int"
+    }'
+
+    ```
+
+   </Tab>
+   
+</Tabs>
+
+#### Response
+
+<Tabs>
+   <Tab title="200 OK">
+  
+  ```sh
+  {
+    "prompt":"str",
+    "albumArt":"str",
+    "aiReply":"str",
+    "audioData":[
+      {
+        "audioUrl":"str",
+        "songName":"str",
+        "licenses":"str"
+      }
+    ]
+  }
+ ```
+
+   </Tab>
+
+   <Tab title="400 Bad Request">
+  
+  ```sh
+      
+    {
+      "Detail": “str”
+    }
+
+    ```
+
+   </Tab>
+</Tabs>
+
+#### Sample Output
+
+```
+{
+  "prompt": "A hopeful ambient piano loop that feels cinematic",
+  "albumArt": "https://storage.googleapis.com/soundverse-assets/album-art/ambient_piano_loop.png",
+  "aiReply": "Here's your cinematic ambient piano loop, repeated seamlessly 4 times.",
+  "audioData": [
+    {
+      "audioUrl": "https://storage.googleapis.com/soundverse-outputs/looped/ambient_piano_loop_trimmed_x4.wav",
+      "songName": "Hopeful Ambient Piano Loop",
+      "licenses": "Sync"
+    }
+  ]
+}
+```
+
+#### Possible Errors :
+
+- If Rate Limits have been passed for User.
+
+```
+{
+"success": False,
+"message": "Rate limits have been passed for the user.",
+}
+```
+- If Length of provided audio is too short.
+
+```
+{
+"success": False,
+"message": "Not enough beats to create loop.",
+}
+```
+
+
+---
+
+
+## 🎶 Trim and Loop Audio - Beats
+
+This API automatically detects a seamless loop in the provided user uploaded audio, trims it, and loops the trimmed segment based on the **textual description and Number of Beats given by user** using AI.
+
+---
+
+###  Core Parameters
+
+The following parameters are required to send a valid request:
+
+| Parameter      | Type     | Required | Description                                                                 |
+|----------------|----------|----------|-----------------------------------------------------------------------------|
+| `prompt`       | `string` | ✅ Yes    | Textual prompt describing the feel or theme of the music.                  |
+| `audioUrl`     | `string` | ✅ Yes    | Public URL of a user uploaded audio file to detect loop from.                  |
+| `count`        | `int`    | ✅ Yes    | Number of times to loop the detected seamless segment.                     |
+| `beatsToInclude`        | `int`    | ✅ Yes    | Number of beats to include in the looped segment.                     |
+
+---
+
+###  Request Example
+
+<div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md">
+```json
+{
+  "prompt": "A hopeful ambient piano loop that feels cinematic",
+  "audioUrl": "https://example.com/audio.wav",
+  "count": 4,
+  "beatsToInclude": 32
+}
+```
+</div>
+
+<Tabs>
+  <Tab title="Python">
+  
+  ```python
+    import requests
+
+    url = "https://api.soundverse.ai/v1/generate/trim-and-loop/beat-count"
+    headers = {
+        "Authorization": "Bearer your_api_key_here",
+        "Content-Type": "application/json"
+    }
+    payload = {
+      "prompt": "string",
+      "audioUrl": "string",
+      "count": "int",
+      "beatsToInclude": "int"
+    }
+
+    response = requests.post(url, json=payload, headers=headers)
+    print(response.json())
+    ```
+
+    </Tab>
+
+   <Tab title="cURL">
+  
+  ```sh
+curl -X POST "https://api.soundverse.ai/v1/generate/trim-and-loop/beat-count" \
+ -H "Authorization: Bearer your_api_key_here" \
+ -H "Content-Type: application/json" \
+ -d '{
+      "prompt": "string",
+      "audioUrl": "string",
+      "count": "int",
+      "beatsToInclude": "int"
+    }'
+
+    ```
+
+   </Tab>
+   
+</Tabs>
+
+#### Response
+
+<Tabs>
+   <Tab title="200 OK">
+  
+  ```sh
+  {
+    "prompt":"str",
+    "albumArt":"str",
+    "aiReply":"str",
+    "audioData":[
+      {
+        "audioUrl":"str",
+        "songName":"str",
+        "licenses":"str"
+      }
+    ]
+  }
+ ```
+
+   </Tab>
+
+   <Tab title="400 Bad Request">
+  
+  ```sh
+      
+    {
+      "Detail": “str”
+    }
+
+    ```
+
+   </Tab>
+</Tabs>
+
+#### Sample Output
+
+```
+{
+  "prompt": "A hopeful ambient piano loop that feels cinematic",
+  "albumArt": "https://storage.googleapis.com/soundverse-assets/album-art/ambient_piano_loop.png",
+  "aiReply": "Here's your cinematic ambient piano loop, repeated seamlessly 4 times.",
+  "audioData": [
+    {
+      "audioUrl": "https://storage.googleapis.com/soundverse-outputs/looped/ambient_piano_loop_trimmed_x4.wav",
+      "songName": "Hopeful Ambient Piano Loop",
+      "licenses": "Sync"
+    }
+  ]
+}
+```
+
+#### Possible Errors :
+
+- If Rate Limits have been passed for User.
+
+```
+{
+"success": False,
+"message": "Rate limits have been passed for the user.",
+}
+```
+
+- If Length of provided audio is too short.
+
+```
+{
+"success": False,
+"message": "Not enough beats to create loop.",
+}
+```
+---
+
+## 🎶 Trim and Loop Audio - Time Range
+
+This API automatically detects a seamless loop in the provided user uploaded audio, trims it, and loops the trimmed segment based on the **textual description and Time Ranges given by user** using AI.
+
+---
+
+###  Core Parameters
+
+The following parameters are required to send a valid request:
+
+| Parameter      | Type     | Required | Description                                                                 |
+|----------------|----------|----------|-----------------------------------------------------------------------------|
+| `prompt`       | `string` | ✅ Yes    | Textual prompt describing the feel or theme of the music.                  |
+| `audioUrl`     | `string` | ✅ Yes    | Public URL of a user uploaded audio file to detect loop from.                  |
+| `count`        | `int`    | ✅ Yes    | Number of times to loop the detected seamless segment.                     |
+| `timeRanges`        | `List`    | ✅ Yes    | Time ranges to include in the looped segment.                     |
+
+---
+
+###  Request Example
+
+<div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md">
+```json
+{
+  "prompt": "A hopeful ambient piano loop that feels cinematic",
+  "audioUrl": "https://example.com/audio.wav",
+  "count": 4,
+  "timeRanges": [                                 
+        {"start": 10.5, "end": 20.0},
+        {"start": 30.0, "end": 45.0},
+        {"start": 50.25, "end": 65.75}
+  ]
+}
+```
+</div>
+
+<Tabs>
+  <Tab title="Python">
+  
+  ```python
+    import requests
+
+    url = "https://api.soundverse.ai/v1/generate/trim-and-loop/time-range"
+    headers = {
+        "Authorization": "Bearer your_api_key_here",
+        "Content-Type": "application/json"
+    }
+    payload = 
+    {
+      "prompt": "string",
+      "audioUrl": "string",
+      "count": "integer",
+      "timeRanges": [
+        {
+          "start": "float",
+          "end": "float"
+        }
+      ]
+    }
+
+    response = requests.post(url, json=payload, headers=headers)
+    print(response.json())
+    ```
+
+    </Tab>
+
+   <Tab title="cURL">
+  
+  ```sh
+curl -X POST "https://api.soundverse.ai/v1/generate/trim-and-loop/time-range" \
+ -H "Authorization: Bearer your_api_key_here" \
+ -H "Content-Type: application/json" \
+ -d '{
+      "prompt": "string",
+      "audioUrl": "string",
+      "count": "integer",
+      "timeRanges": [
+        {
+          "start": "float",
+          "end": "float"
+        }
+      ]
+     }'
+
+    ```
+
+   </Tab>
+   
+</Tabs>
+
+#### Response
+
+<Tabs>
+   <Tab title="200 OK">
+  
+  ```sh
+  {
+    "prompt":"str",
+    "albumArt":"str",
+    "aiReply":"str",
+    "audioData":[
+      {
+        "audioUrl":"str",
+        "songName":"str",
+        "licenses":"str"
+      }
+    ]
+  }
+ ```
+
+   </Tab>
+
+   <Tab title="400 Bad Request">
+  
+  ```sh
+      
+    {
+      "Detail": “str”
+  }
+
+    ```
+
+   </Tab>
+</Tabs>
+
+#### Sample Output
+
+```
+{
+  "prompt": "A hopeful ambient piano loop that feels cinematic",
+  "albumArt": "https://storage.googleapis.com/soundverse-assets/album-art/ambient_piano_loop.png",
+  "aiReply": "Here's your cinematic ambient piano loop, repeated seamlessly 4 times.",
+  "audioData": [
+    {
+      "audioUrl": "https://storage.googleapis.com/soundverse-outputs/looped/ambient_piano_loop_trimmed_x4.wav",
+      "songName": "Hopeful Ambient Piano Loop",
+      "licenses": "Sync"
+    }
+  ]
+}
+```
+
+#### Possible Errors :
+
+- If Rate Limits have been passed for User.
+
+```
+{
+"success": False,
+"message": "Rate limits have been passed for the user.",
+}
+```
+
+- If Time Range provided is out of bounds.
+
+```
+{
+"success": False,
+"message": "Time range {i} is out of bounds.",
+}
+
+
+```
+
+- If end sample is less than or equal to start sample.
+
+```
+{
+"success": False,
+"message": "Invalid range: start >= end at index {i}.",
+}
+
+
+```
+
+- If Time Range array is empty.
+
+```
+{
+"success": False,
+"message": "No valid segments found.",
+}
+
+
+```
