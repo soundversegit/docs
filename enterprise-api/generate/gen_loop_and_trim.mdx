@@ -52,7 +52,7 @@ Choose between:
   ```python
     import requests
 
-    url = "https://api.soundverse.ai/v1/generate/text-to-music"
+    url = "https://api.soundverse.ai/v1/trim-and-loop/gen-and-loop/music/auto"
     headers = {
         "Authorization": "Bearer your_api_key_here",
         "Content-Type": "application/json"
@@ -74,7 +74,7 @@ Choose between:
    <Tab title="curl">
   
   ```sh
-    curl -X POST "https://api.soundverse.ai/v1/generate/text-to-music" \
+    curl -X POST "https://api.soundverse.ai/v1/trim-and-loop/gen-and-loop/music/auto" \
     -H "Authorization: Bearer your_api_key_here" \
     -H "Content-Type: application/json" \
     -d '{
@@ -197,7 +197,7 @@ The following parameters are required to send a valid request:
 | **`prompt`**       | `string` | ✅ Required | Text description of the music.                                  |
 | **`styleOfMusic`** | `string` | ✅ Required | Preferred style. Select one from supported styles listed below. |
 | **`audioUrl`**     | `string` | ⚠️ Optional | URL to a reference audio file for influence.                    |
-| `loopCount`        | `int`    | ✅ Yes    | Number of times to loop the detected seamless segment.                |
+| `loopCount`        | `int`    | ✅ Required    | Number of times to loop the detected seamless segment.                |
 
 ---
 
@@ -221,7 +221,7 @@ The following parameters are required to send a valid request:
   ```python
     import requests
 
-    url = "https://api-staging.soundverse.ai/v1/trim-and-loop/gen-and-loop/song/prompt/auto"
+    url = "https://api.soundverse.ai/v1/trim-and-loop/gen-and-loop/song/prompt/auto"
     headers = {
         "Authorization": "Bearer your_api_key_here",
         "Content-Type": "application/json"
@@ -242,7 +242,7 @@ The following parameters are required to send a valid request:
    <Tab title="cURL">
   
   ```sh
-curl -X POST "https://api-staging.soundverse.ai/v1/trim-and-loop/gen-and-loop/song/prompt/auto" \
+curl -X POST "https://api.soundverse.ai/v1/trim-and-loop/gen-and-loop/song/prompt/auto" \
  -H "Authorization: Bearer your_api_key_here" \
  -H "Content-Type: application/json" \
  -d '{
@@ -379,7 +379,7 @@ The following parameters are required to send a valid request:
 | **`lyrics`**       | `string` | ✅ Required                                                   | Lyrics to be converted into a song.                             |
 | **`styleOfMusic`** | `string` | ⚠️ Optional (Either styleOfMusic or audioUrl must be present) | Preferred style. Select one from supported styles listed above. |
 | **`audioUrl`**     | `string` | ⚠️ Optional (Either styleOfMusic or audioUrl must be present) | URL to a reference audio file for influence.                    |
-| `loopCount`        | `int`    | ✅ Yes    | Number of times to loop the detected seamless segment.                |
+| `loopCount`        | `int`    | ✅ Required    | Number of times to loop the detected seamless segment.                |
 
 ---
 
@@ -403,7 +403,7 @@ The following parameters are required to send a valid request:
   ```python
     import requests
 
-    url = "https://api-staging.soundverse.ai/v1/trim-and-loop/gen-and-loop/song/lyrics/auto"
+    url = "https://api.soundverse.ai/v1/trim-and-loop/gen-and-loop/song/lyrics/auto"
     headers = {
         "Authorization": "Bearer your_api_key_here",
         "Content-Type": "application/json"
@@ -424,7 +424,7 @@ The following parameters are required to send a valid request:
    <Tab title="cURL">
   
   ```sh
-curl -X POST "https://api-staging.soundverse.ai/v1/trim-and-loop/gen-and-loop/song/lyrics/auto" \
+curl -X POST "https://api.soundverse.ai/v1/trim-and-loop/gen-and-loop/song/lyrics/auto" \
  -H "Authorization: Bearer your_api_key_here" \
  -H "Content-Type: application/json" \
  -d '{
