@@ -1,6 +1,6 @@
 ---
 title: "Upload, Trim and Loop Audio"
-description: "Automatically detect a perfect loop from a user uploaded audio and repeat it based on the text prompt."
+description: "Automatically detect a perfect loop from a user uploaded audio and repeat it ."
 ---
 
 ##  Trim and Loop Audio - Auto
@@ -15,7 +15,6 @@ The following parameters are required to send a valid request:
 
 | Parameter      | Type     | Required | Description                                                                 |
 |----------------|----------|----------|-----------------------------------------------------------------------------|
-| `prompt`       | `string` | ✅ Required   | Textual prompt describing the feel or theme of the music.                  |
 | `audioUrl`     | `string` | ✅ Required   | Public URL of a user uploaded audio file to detect loop from.              |
 | `count`        | `int`    | ✅ Required   | Number of times to loop the detected seamless segment.                     |
 
@@ -26,7 +25,6 @@ The following parameters are required to send a valid request:
 <div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md">
 ```json
 {
-  "prompt": "A hopeful ambient piano loop that feels cinematic",
   "audioUrl": "https://example.com/audio.wav",
   "count": 4
 }
@@ -45,7 +43,6 @@ The following parameters are required to send a valid request:
         "Content-Type": "application/json"
     }
     payload = {
-      "prompt": "string",
       "audioUrl": "string",
       "count": "int"
     }
@@ -63,7 +60,6 @@ curl -X POST "https://api.soundverse.ai/v1/generate/trim-and-loop/auto" \
  -H "Authorization: Bearer your_api_key_here" \
  -H "Content-Type: application/json" \
  -d '{
-      "prompt": "string",
       "audioUrl": "string",
       "count": "int"
     }'
@@ -81,7 +77,6 @@ curl -X POST "https://api.soundverse.ai/v1/generate/trim-and-loop/auto" \
   
   ```sh
   {
-    "prompt":"str",
     "albumArt":"str",
     "aiReply":"str",
     "audioData":[
@@ -113,7 +108,6 @@ curl -X POST "https://api.soundverse.ai/v1/generate/trim-and-loop/auto" \
 
 ```
 {
-  "prompt": "A hopeful ambient piano loop that feels cinematic",
   "albumArt": "https://storage.googleapis.com/soundverse-assets/album-art/ambient_piano_loop.png",
   "aiReply": "Here's your cinematic ambient piano loop, repeated seamlessly 4 times.",
   "audioData": [
@@ -161,7 +155,6 @@ The following parameters are required to send a valid request:
 
 | Parameter      | Type     | Required | Description                                                                 |
 |----------------|----------|----------|-----------------------------------------------------------------------------|
-| `prompt`       | `string` | ✅ Required   | Textual prompt describing the feel or theme of the music.                  |
 | `audioUrl`     | `string` | ✅ Required   | Public URL of a user uploaded audio file to detect loop from.                  |
 | `count`        | `int`    | ✅ Required   | Number of times to loop the detected seamless segment.                     |
 | `beatsToInclude`        | `int`    | ✅ Required   | Number of beats to include in the looped segment.                     |
@@ -173,7 +166,6 @@ The following parameters are required to send a valid request:
 <div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md">
 ```json
 {
-  "prompt": "A hopeful ambient piano loop that feels cinematic",
   "audioUrl": "https://example.com/audio.wav",
   "count": 4,
   "beatsToInclude": 32
@@ -193,7 +185,6 @@ The following parameters are required to send a valid request:
         "Content-Type": "application/json"
     }
     payload = {
-      "prompt": "string",
       "audioUrl": "string",
       "count": "int",
       "beatsToInclude": "int"
@@ -212,7 +203,6 @@ curl -X POST "https://api.soundverse.ai/v1/generate/trim-and-loop/beat-count" \
  -H "Authorization: Bearer your_api_key_here" \
  -H "Content-Type: application/json" \
  -d '{
-      "prompt": "string",
       "audioUrl": "string",
       "count": "int",
       "beatsToInclude": "int"
@@ -231,7 +221,6 @@ curl -X POST "https://api.soundverse.ai/v1/generate/trim-and-loop/beat-count" \
   
   ```sh
   {
-    "prompt":"str",
     "albumArt":"str",
     "aiReply":"str",
     "audioData":[
@@ -263,7 +252,6 @@ curl -X POST "https://api.soundverse.ai/v1/generate/trim-and-loop/beat-count" \
 
 ```
 {
-  "prompt": "A hopeful ambient piano loop that feels cinematic",
   "albumArt": "https://storage.googleapis.com/soundverse-assets/album-art/ambient_piano_loop.png",
   "aiReply": "Here's your cinematic ambient piano loop, repeated seamlessly 4 times.",
   "audioData": [
@@ -309,7 +297,6 @@ The following parameters are required to send a valid request:
 
 | Parameter      | Type     | Required | Description                                                                 |
 |----------------|----------|----------|-----------------------------------------------------------------------------|
-| `prompt`       | `string` | ✅ Required   | Textual prompt describing the feel or theme of the music.                  |
 | `audioUrl`     | `string` | ✅ Required   | Public URL of a user uploaded audio file to detect loop from.                  |
 | `count`        | `int`    | ✅ Required   | Number of times to loop the detected seamless segment.                     |
 | `timeRanges`        | `List`    | ✅ Required   | Time ranges to include in the looped segment.                     |
@@ -321,7 +308,6 @@ The following parameters are required to send a valid request:
 <div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md">
 ```json
 {
-  "prompt": "A hopeful ambient piano loop that feels cinematic",
   "audioUrl": "https://example.com/audio.wav",
   "count": 4,
   "timeRanges": [                                 
@@ -346,7 +332,6 @@ The following parameters are required to send a valid request:
     }
     payload = 
     {
-      "prompt": "string",
       "audioUrl": "string",
       "count": "integer",
       "timeRanges": [
@@ -370,7 +355,6 @@ curl -X POST "https://api.soundverse.ai/v1/generate/trim-and-loop/time-range" \
  -H "Authorization: Bearer your_api_key_here" \
  -H "Content-Type: application/json" \
  -d '{
-      "prompt": "string",
       "audioUrl": "string",
       "count": "integer",
       "timeRanges": [
@@ -394,7 +378,6 @@ curl -X POST "https://api.soundverse.ai/v1/generate/trim-and-loop/time-range" \
   
   ```sh
   {
-    "prompt":"str",
     "albumArt":"str",
     "aiReply":"str",
     "audioData":[
@@ -426,7 +409,6 @@ curl -X POST "https://api.soundverse.ai/v1/generate/trim-and-loop/time-range" \
 
 ```
 {
-  "prompt": "A hopeful ambient piano loop that feels cinematic",
   "albumArt": "https://storage.googleapis.com/soundverse-assets/album-art/ambient_piano_loop.png",
   "aiReply": "Here's your cinematic ambient piano loop, repeated seamlessly 4 times.",
   "audioData": [
