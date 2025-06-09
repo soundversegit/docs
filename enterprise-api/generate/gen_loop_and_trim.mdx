@@ -180,6 +180,15 @@ Choose between:
 }
 ```
 
+- If Length of looped audio is more than 960.
+
+```
+{
+"success": False,
+"message": "Maximum audio duration of 960 seconds reached.",
+}
+```
+
 ---
 
 ##  Trim and Loop Audio - Prompt Based Generation
@@ -357,6 +366,15 @@ curl -X POST "https://api.soundverse.ai/v1/trim-and-loop/gen-and-loop/song/promp
 {
 "success": False,
 "message": "Not enough beats to create loop.",
+}
+```
+
+- If Length of looped audio is more than 960.
+
+```
+{
+"success": False,
+"message": "Maximum audio duration of 960 seconds reached.",
 }
 ```
 
@@ -539,5 +557,13 @@ curl -X POST "https://api.soundverse.ai/v1/trim-and-loop/gen-and-loop/song/lyric
 {
 "success": False,
 "message": "Not enough beats to create loop.",
+}
+```
+- If Length of looped audio is more than 960.
+
+```
+{
+"success": False,
+"message": "Maximum audio duration of 960 seconds reached.",
 }
 ```
