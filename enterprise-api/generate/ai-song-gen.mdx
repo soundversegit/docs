@@ -116,8 +116,8 @@ The `styleOfMusic` parameter must be one of the following values:
     }
     payload = {
     "prompt": "string",
-    "styleOfMusic": "optional" ,
-    "audioUrl": "string"
+    "styleOfMusic": "string",
+    "audioUrl": "optional"
     }
 
     response = requests.post(url, json=payload, headers=headers)
