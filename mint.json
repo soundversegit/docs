@@ -66,7 +66,7 @@
     },
     {
       "group": "API Documentation",
-      "pages": ["enterprise-api/generate/text-to-music", "enterprise-api/generate/extend-music", "enterprise-api/generate/ai-song-gen", "enterprise-api/generate/generate-lyrics", "enterprise-api/generate/stem-separtion", "enterprise-api/generate/loop-and-trim", "enterprise-api/generate/gen_loop_and_trim"]
+      "pages": ["enterprise-api/generate/ai-song-gen-v4", "enterprise-api/generate/ai-song-gen-v1", "enterprise-api/generate/text-to-music", "enterprise-api/generate/extend-music", "enterprise-api/generate/generate-lyrics", "enterprise-api/generate/stem-separtion", "enterprise-api/generate/loop-and-trim", "enterprise-api/generate/gen_loop_and_trim"]
     },
     {
       "group": "Assistant Endpoints",
