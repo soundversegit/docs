@@ -1,0 +1,285 @@
+---
+title: "Generate AI Vocals - v2"
+description: "Generate AI vocals from lyrics with optional style and audio reference."
+---
+
+## Generate AI Vocals from Lyrics
+
+- This endpoint generates **AI vocals/singing** from provided **lyrics** using AI models.
+
+---
+
+#### **Core Parameters**
+
+> 🛈 The parameters below define the request body for this API.
+
+| Parameter          | Type     | Required?   | Description                                                     |
+| ------------------ | -------- | ----------- | --------------------------------------------------------------- |
+| **`lyrics`**       | `string` | ✅ Required | The lyrics to be sung by the AI-generated vocals.               |
+| **`styleOfMusic`** | `string` | ⚠️ Optional | Preferred style. Select one from supported styles listed below. |
+| **`audioUrl`**     | `string` | ⚠️ Optional | URL to a reference audio file for musical influence.            |
+
+#### **Supported Music Styles**
+
+The `styleOfMusic` parameter can be one of the following values:
+
+- Pop
+- Hip Hop
+- Rap
+- Rock
+- EDM
+- Latin
+- Reggaeton
+- K-Pop
+- RnB
+- Country
+- Dance
+- House
+- Bollywood
+- Afrobeat
+- Afropop
+- Dancehall
+- Deep House
+- Electronic
+- Future Bass
+- Trap
+- Pop-Trap
+- Dubstep
+- Synthpop
+- Synthwave
+- Techno
+- Progressive-Metal
+- Alt-Rock
+- Alt-Metal
+- Nu-Metal
+- Metal
+- Jazz
+- Blues
+- Soul
+- Funk
+- Singer-Songwriter
+- Folk
+- Cloud-Rap
+- Lofi
+- Chillout
+- Downtempo
+- Meditative
+- New-Age
+- Western-Classical
+- Classical
+- Opera
+- Piano
+- Spoken-Word
+- Gospel
+- Brazilian-Music
+- Bossa-Nova
+- Salsa
+- Bachata
+- Country-Blues
+- Future-Rave
+- Electrostep
+- Dub
+- Disco
+- Shoegaze
+- Bit-Beat
+- Indian Electronic
+- African
+- 80s
+- Acoustic
+- Melodic
+
+---
+
+#### Request Body
+
+<div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md">
+```json
+{
+  "lyrics": "string",
+  "styleOfMusic": "string",
+  "audioUrl": "string"
+}
+```
+</div>
+
+#### Code Samples
+
+<Tabs>
+  <Tab title="Python">
+  
+  ```python
+    import requests
+
+    url = "https://api.soundverse.ai/v2/generate/ai-singing-gen"
+    headers = {
+        "Authorization": "Bearer your_api_key_here",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "lyrics": "Verse 1: Walking down the street, feeling the beat...",
+        "styleOfMusic": "Pop",
+        "audioUrl": "optional"
+    }
+
+    response = requests.post(url, json=payload, headers=headers)
+    print(response.json())
+    ```
+
+   </Tab>
+
+   <Tab title="cURL">
+  
+  ```sh
+curl -X POST "https://api.soundverse.ai/v2/generate/ai-singing-gen" \
+ -H "Authorization: Bearer your_api_key_here" \
+ -H "Content-Type: application/json" \
+ -d '{
+  "lyrics": "Verse 1: Walking down the street, feeling the beat...",
+  "styleOfMusic": "Pop",
+  "audioUrl": "optional"
+}'
+
+    ```
+
+   </Tab>
+
+   <Tab title="JavaScript">
+  
+  ```javascript
+    const url = "https://api.soundverse.ai/v2/generate/ai-singing-gen";
+    const headers = {
+        "Authorization": "Bearer your_api_key_here",
+        "Content-Type": "application/json"
+    };
+    const payload = {
+        lyrics: "Verse 1: Walking down the street, feeling the beat...",
+        styleOfMusic: "Pop",
+        audioUrl: "optional"
+    };
+
+    fetch(url, {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(payload)
+    })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error('Error:', error));
+    ```
+
+   </Tab>
+   
+</Tabs>
+
+#### Response
+
+<Tabs>
+   <Tab title="200 OK">
+  
+  ```sh
+  {
+    "messageId": "string",
+    "prompt": "string",
+    "albumArt": "string",
+    "aiReply": "string",
+    "audioData": [
+      {
+        "audioUrl": "string",
+        "songName": "string",
+        "licenses": {
+          "licenses": "string"
+        }
+      }
+    ]
+  }
+
+    ```
+
+   </Tab>
+
+   <Tab title="500 Internal Server Error">
+  
+  ```sh
+      
+    {
+      "detail": "Invalid response from generation service"
+    }
+
+    ```
+
+   </Tab>
+
+   <Tab title="504 Gateway Timeout">
+  
+  ```sh
+      
+    {
+      "detail": "Generation failed or timed out after polling."
+    }
+
+    ```
+
+   </Tab>
+</Tabs>
+
+#### Response Fields
+
+| Field             | Type     | Description                                        |
+| ----------------- | -------- | -------------------------------------------------- |
+| **`messageId`**   | `string` | Unique identifier for the generation request.      |
+| **`prompt`**      | `string` | The processed prompt used for generation.          |
+| **`albumArt`**    | `string` | URL to the generated album artwork.                |
+| **`aiReply`**     | `string` | AI-generated message about the creation.           |
+| **`audioData`**   | `array`  | Array containing the generated audio file(s).      |
+| └─ **`audioUrl`** | `string` | Direct URL to download/stream the generated audio. |
+| └─ **`songName`** | `string` | Name/title of the generated song.                  |
+| └─ **`licenses`** | `object` | Licensing information for the generated content.   |
+
+#### Sample Output
+
+```
+{
+  "messageId": "68f28481ce60695f903644b8",
+  "prompt": "La la la, singing in the rain, feeling happy and free",
+  "albumArt": "https://storage.soundverse.ai/soundverse-album-art/681babcdc9b9a92b09132ff5/681babcdc9b9a92b09132ff5/20251017180149_00000_album_cover_art_for_La_la_la_singing_in_the_rain_feeling_happy_and_free.png",
+  "aiReply": "The digital canvas has come alive with your audio masterpiece. It beckons you to listen, explore, and be inspired.",
+  "audioData": [
+    {
+      "audioUrl": "https://storage.soundverse.ai/x-one/681babcdc9b9a92b09132ff5/681babcdc9b9a92b09132ff5/tmpsyokfwlm.mp3",
+      "songName": "Raindrop Serenade: Melodies of Joyful Liberation",
+      "licenses": {
+        "licenses": "Royalty-Free"
+      }
+    }
+  ]
+}
+```
+
+#### Possible Errors :
+
+- If Rate Limits have been passed for User.
+
+```
+{
+"success": False,
+"message": "Rate limits have been passed for the user.",
+}
+```
+
+- If NSFW words are detected
+
+```
+{
+"success": False,
+"message": "NSFW words detected. Please try again with different lyrics.",
+}
+```
+
+- If Artist name is detected
+
+```
+{
+"success": False,
+"message": "Artist name detected. Please try again with different lyrics.",
+}
+```

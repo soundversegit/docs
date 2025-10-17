@@ -14,7 +14,6 @@
       "from": "#6E35EF",
       "to": "#9164ff"
     }
-    
   },
   "topbarLinks": [
     {
@@ -46,19 +45,30 @@
     },
     {
       "group": "Frequently Asked Questions",
-      "pages": ["faqs/content-and-generation","faqs/billing-and-payment","faqs/licensing-model","faqs/managing-your-account", "faqs/limitations"]
+      "pages": [
+        "faqs/content-and-generation",
+        "faqs/billing-and-payment",
+        "faqs/licensing-model",
+        "faqs/managing-your-account",
+        "faqs/limitations"
+      ]
     },
     {
       "group": "Creating with Soundverse",
-      "pages": ["create/studio","create/soundverse-assistant","create/ai-magic-tools","create/arrangement-view"]
+      "pages": [
+        "create/studio",
+        "create/soundverse-assistant",
+        "create/ai-magic-tools",
+        "create/arrangement-view"
+      ]
     },
     {
       "group": "Exploring Soundverse",
-      "pages": ["explore/explore","explore/my-library"]
+      "pages": ["explore/explore", "explore/my-library"]
     },
     {
       "group": "Account Management",
-      "pages": ["account/manage-your-account","account/user-settings"]
+      "pages": ["account/manage-your-account", "account/user-settings"]
     },
     {
       "group": "Developer APIs",
@@ -66,11 +76,24 @@
     },
     {
       "group": "API Documentation",
-      "pages": ["enterprise-api/generate/ai-song-gen-v4", "enterprise-api/generate/ai-song-gen-v1", "enterprise-api/generate/text-to-music", "enterprise-api/generate/extend-music", "enterprise-api/generate/generate-lyrics", "enterprise-api/generate/stem-separtion", "enterprise-api/generate/loop-and-trim", "enterprise-api/generate/gen_loop_and_trim"]
+      "pages": [
+        "enterprise-api/generate/ai-song-gen-v1",
+        "enterprise-api/generate/ai-song-gen-v4",
+        "enterprise-api/generate/ai-vocals-gen-v2",
+        "enterprise-api/generate/text-to-music",
+        "enterprise-api/generate/extend-music",
+        "enterprise-api/generate/generate-lyrics",
+        "enterprise-api/generate/stem-separtion",
+        "enterprise-api/generate/loop-and-trim",
+        "enterprise-api/generate/gen_loop_and_trim"
+      ]
     },
     {
       "group": "Assistant Endpoints",
-      "pages": [ "enterprise-api/assistant/chat", "enterprise-api/assistant/voice"]
+      "pages": [
+        "enterprise-api/assistant/chat",
+        "enterprise-api/assistant/voice"
+      ]
     }
   ],
   "footerSocials": {

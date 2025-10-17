@@ -3,7 +3,7 @@ title: "Generate AI Song - v1"
 description: "For quick, standard song generation. Provides a single song output."
 ---
 
-##  Generate AI Song from Prompt
+## Generate AI Song from Prompt
 
 - This endpoint generates music from a **text-based prompt** using AI models.
 
@@ -202,7 +202,7 @@ curl -X POST "https://api.soundverse.ai/v1/generate/song-from-prompt" \
 
 - If Rate Limits have been passed for User.
 
-```
+```json
 {
 "success": False,
 "message": "Rate limits have been passed for the user.",
@@ -211,7 +211,7 @@ curl -X POST "https://api.soundverse.ai/v1/generate/song-from-prompt" \
 
 - If NSFW words are detected
 
-```
+```json
 {
 "success": False,
 "message": "NSFW words detected. Please try again with a different prompt.",
@@ -220,7 +220,7 @@ curl -X POST "https://api.soundverse.ai/v1/generate/song-from-prompt" \
 
 - If Artist name is detected
 
-```
+```json
 {
 "success": False,
 "message": "Artist name detected. Please try again with a different prompt.",
@@ -229,7 +229,7 @@ curl -X POST "https://api.soundverse.ai/v1/generate/song-from-prompt" \
 
 ---
 
-##  Generate AI Song from Lyrics
+## Generate AI Song from Lyrics
 
 This endpoint generates music from **provided lyrics** using AI models.
 
@@ -359,7 +359,7 @@ This endpoint generates music from **provided lyrics** using AI models.
 
 - If Rate Limits have been passed for User.
 
-```
+```json
 {
 "success": False,
 "message": "Rate limits have been passed for the user.",
@@ -368,7 +368,7 @@ This endpoint generates music from **provided lyrics** using AI models.
 
 - If NSFW words are detected
 
-```
+```json
 {
 "success": False,
 "message": "NSFW words detected. Please try again with a different prompt.",
@@ -377,7 +377,7 @@ This endpoint generates music from **provided lyrics** using AI models.
 
 - If Artist name is detected
 
-```
+```json
 {
 "success": False,
 "message": "Artist name detected. Please try again with a different prompt.",
