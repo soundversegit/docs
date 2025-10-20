@@ -11,13 +11,15 @@ description: "Generate AI singing from lyrics with optional style and audio refe
 
 #### **Core Parameters**
 
-> 🛈 The parameters below define the request body for this API.
+> The parameters below define the request body for this API.
 
 | Parameter          | Type     | Required?   | Description                                                     |
 | ------------------ | -------- | ----------- | --------------------------------------------------------------- |
 | **`lyrics`**       | `string` | ✅ Required | The lyrics to be sung by the AI-generated singing.              |
 | **`styleOfMusic`** | `string` | ⚠️ Optional | Preferred style. Select one from supported styles listed below. |
 | **`audioUrl`**     | `string` | ⚠️ Optional | URL to a reference audio file for musical influence.            |
+
+> The audio URL must contain only singing vocals without background music. If `audioUrl` is provided, `styleOfMusic` will be ignored.
 
 ---
 
