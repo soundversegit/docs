@@ -79,7 +79,7 @@
       "pages": [
         "enterprise-api/generate/ai-song-gen-v1",
         "enterprise-api/generate/ai-song-gen-v4",
-        "enterprise-api/generate/ai-vocals-gen-v2",
+        "enterprise-api/generate/ai-singing-gen-v2",
         "enterprise-api/generate/text-to-music",
         "enterprise-api/generate/extend-music",
         "enterprise-api/generate/generate-lyrics",
