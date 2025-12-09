@@ -1,0 +1,383 @@
+---
+title: "Generate AI Song - v5"
+description: "Generate complete AI songs with lyrics and audio using advanced AI models."
+---
+
+## Generate AI Song (v5)
+
+This endpoint generates **complete AI songs** with lyrics and audio using advanced AI models. Available in both **streaming** and **synchronous** modes.
+
+---
+
+#### **Core Parameters**
+
+> The parameters below define the request body for this API.
+
+| Parameter        | Type      | Required?   | Description                                                                                     |
+| ---------------- | --------- | ----------- | ----------------------------------------------------------------------------------------------- |
+| **`userId`**     | `string`  | ✅ Required | User ID requesting the operation.                                                               |
+| **`projectId`**  | `string`  | ✅ Required | Project ID for organizing generations.                                                          |
+| **`prompt`**     | `string`  | ✅ Required | Prompt describing the song you want to generate (e.g., "A happy upbeat pop song about summer"). |
+| **`lyrics`**     | `string`  | ⚠️ Optional | Lyrics for the song. If not provided, lyrics will be automatically generated from the prompt.   |
+| **`duration`**   | `integer` | ⚠️ Optional | Duration in seconds. Default: `30`.                                                             |
+| **`model`**      | `string`  | ⚠️ Optional | AI model to use. Default: `mureka-7.5`.                                                         |
+| **`parameters`** | `object`  | ⚠️ Optional | Additional parameters for advanced customization.                                               |
+
+> **Note:** If `lyrics` is not provided, the system will automatically generate lyrics based on your `prompt`. Providing both `prompt` and `lyrics` gives you more control over the final output.
+
+---
+
+#### **Endpoints**
+
+This API provides two endpoints:
+
+1. **Streaming Endpoint** (`/v5/generate/song-gen`): Returns real-time progress updates via Server-Sent Events (SSE)
+2. **Synchronous Endpoint** (`/v5/generate/song-gen/sync`): Waits for completion and returns the final result
+
+---
+
+#### **Request Body**
+
+<div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md">
+
+```json
+{
+  "userId": "string",
+  "projectId": "string",
+  "prompt": "string",
+  "lyrics": "string",
+  "duration": 30,
+  "model": "mureka-7.5",
+  "parameters": {}
+}
+```
+
+</div>
+
+#### **Code Samples**
+
+<Tabs>
+  <Tab title="Python (Streaming)">
+
+```python
+import requests
+
+url = "https://api.soundverse.ai/v5/generate/song-gen"
+headers = {
+    "Authorization": "Bearer your_api_key_here",
+    "Content-Type": "application/json"
+}
+payload = {
+    "userId": "your_user_id",
+    "projectId": "your_project_id",
+    "prompt": "A happy upbeat pop song about summer days",
+    "lyrics": "Verse 1: Walking down the beach, feeling the sun...",
+    "duration": 30,
+    "model": "mureka-7.5"
+}
+
+response = requests.post(url, json=payload, headers=headers, stream=True)
+
+# Process streaming response
+for line in response.iter_lines():
+    if line:
+        data = json.loads(line.decode('utf-8'))
+        print(data)
+```
+
+  </Tab>
+
+  <Tab title="Python (Synchronous)">
+
+```python
+import requests
+
+url = "https://api.soundverse.ai/v5/generate/song-gen/sync"
+headers = {
+    "Authorization": "Bearer your_api_key_here",
+    "Content-Type": "application/json"
+}
+payload = {
+    "userId": "your_user_id",
+    "projectId": "your_project_id",
+    "prompt": "A happy upbeat pop song about summer days",
+    "lyrics": "Verse 1: Walking down the beach, feeling the sun...",
+    "duration": 30
+}
+
+response = requests.post(url, json=payload, headers=headers)
+print(response.json())
+```
+
+  </Tab>
+
+  <Tab title="cURL (Streaming)">
+
+```sh
+curl -X POST "https://api.soundverse.ai/v5/generate/song-gen" \
+  -H "Authorization: Bearer your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "userId": "your_user_id",
+    "projectId": "your_project_id",
+    "prompt": "A happy upbeat pop song about summer days",
+    "lyrics": "Verse 1: Walking down the beach, feeling the sun...",
+    "duration": 30
+  }'
+```
+
+  </Tab>
+
+  <Tab title="cURL (Synchronous)">
+
+```sh
+curl -X POST "https://api.soundverse.ai/v5/generate/song-gen/sync" \
+  -H "Authorization: Bearer your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "userId": "your_user_id",
+    "projectId": "your_project_id",
+    "prompt": "A happy upbeat pop song about summer days",
+    "lyrics": "Verse 1: Walking down the beach, feeling the sun...",
+    "duration": 30
+  }'
+```
+
+  </Tab>
+
+  <Tab title="JavaScript (Streaming)">
+
+```javascript
+const url = "https://api.soundverse.ai/v5/generate/song-gen";
+const headers = {
+  Authorization: "Bearer your_api_key_here",
+  "Content-Type": "application/json",
+};
+const payload = {
+  userId: "your_user_id",
+  projectId: "your_project_id",
+  prompt: "A happy upbeat pop song about summer days",
+  lyrics: "Verse 1: Walking down the beach, feeling the sun...",
+  duration: 30,
+};
+
+const eventSource = new EventSource(url, {
+  method: "POST",
+  headers: headers,
+  body: JSON.stringify(payload),
+});
+
+eventSource.onmessage = (event) => {
+  const data = JSON.parse(event.data);
+  console.log(data);
+};
+```
+
+  </Tab>
+
+  <Tab title="JavaScript (Synchronous)">
+
+```javascript
+const url = "https://api.soundverse.ai/v5/generate/song-gen/sync";
+const headers = {
+  Authorization: "Bearer your_api_key_here",
+  "Content-Type": "application/json",
+};
+const payload = {
+  userId: "your_user_id",
+  projectId: "your_project_id",
+  prompt: "A happy upbeat pop song about summer days",
+  lyrics: "Verse 1: Walking down the beach, feeling the sun...",
+  duration: 30,
+};
+
+fetch(url, {
+  method: "POST",
+  headers: headers,
+  body: JSON.stringify(payload),
+})
+  .then((response) => response.json())
+  .then((data) => console.log(data))
+  .catch((error) => console.error("Error:", error));
+```
+
+  </Tab>
+</Tabs>
+
+#### **Response**
+
+<Tabs>
+   <Tab title="200 OK (Streaming)">
+
+```json
+{
+  "content": "Starting song generation...",
+  "isComplete": false,
+  "chunkIndex": 1,
+  "tokens": 10,
+  "totalTokens": 10,
+  "task_id": null,
+  "status": null,
+  "album_art": null,
+  "song_name": null,
+  "error": false
+}
+```
+
+Streaming chunks continue until `isComplete: true`:
+
+```json
+{
+  "content": "Song generation completed successfully!",
+  "isComplete": true,
+  "chunkIndex": 5,
+  "tokens": 150,
+  "totalTokens": 500,
+  "task_id": "123456789",
+  "status": "COMPLETED",
+  "album_art": "https://storage.soundverse.ai/.../album_art.png",
+  "song_name": "Summer Days",
+  "audio_url": "https://storage.soundverse.ai/.../song.mp3",
+  "error": false
+}
+```
+
+  </Tab>
+
+   <Tab title="200 OK (Synchronous)">
+
+```json
+{
+  "success": true,
+  "messageId": "6937bbb3d86e0fd7b969dbf1",
+  "audio_url": "https://storage.soundverse.ai/.../song.mp3",
+  "album_art": "https://storage.soundverse.ai/.../album_art.png",
+  "song_name": "Summer Days",
+  "status": "COMPLETED"
+}
+```
+
+  </Tab>
+
+   <Tab title="400 Bad Request">
+
+```json
+{
+  "detail": "Invalid or empty prompt provided"
+}
+```
+
+  </Tab>
+
+   <Tab title="500 Internal Server Error">
+
+```json
+{
+  "detail": "Internal server error"
+}
+```
+
+  </Tab>
+
+   <Tab title="504 Gateway Timeout">
+
+```json
+{
+  "detail": "Generation failed or timed out after polling."
+}
+```
+
+  </Tab>
+</Tabs>
+
+#### **Response Fields**
+
+| Field            | Type      | Description                                                     |
+| ---------------- | --------- | --------------------------------------------------------------- |
+| **`success`**    | `boolean` | Whether the request was successful (synchronous endpoint only). |
+| **`messageId`**  | `string`  | Unique identifier for the generation request.                   |
+| **`audio_url`**  | `string`  | Direct URL to download/stream the generated audio.              |
+| **`album_art`**  | `string`  | URL to the generated album artwork.                             |
+| **`song_name`**  | `string`  | Name/title of the generated song.                               |
+| **`status`**     | `string`  | Status of the generation (e.g., "COMPLETED", "PROCESSING").     |
+| **`content`**    | `string`  | Progress message (streaming endpoint only).                     |
+| **`isComplete`** | `boolean` | Whether generation is complete (streaming endpoint only).       |
+| **`chunkIndex`** | `integer` | Current chunk index (streaming endpoint only).                  |
+| **`task_id`**    | `string`  | Task ID from the generation service (streaming endpoint only).  |
+
+#### **Sample Output**
+
+**Synchronous Response:**
+
+```json
+{
+  "success": true,
+  "messageId": "6937bbb3d86e0fd7b969dbf1",
+  "audio_url": "https://storage.soundverse.ai/x-one/69344de79f665b78cb97f347/userData/audios/song_1765054186.mp3",
+  "album_art": "https://storage.soundverse.ai/x-one/69344de79f665b78cb97f347/userData/album-arts/album_art_1765054186.webp",
+  "song_name": "Summer Days",
+  "status": "COMPLETED"
+}
+```
+
+**Streaming Response (Final Chunk):**
+
+```json
+{
+  "content": "✅ Song generation completed successfully!",
+  "isComplete": true,
+  "chunkIndex": 5,
+  "tokens": 150,
+  "totalTokens": 500,
+  "task_id": "123456789",
+  "status": "COMPLETED",
+  "album_art": "https://storage.soundverse.ai/x-one/69344de79f665b78cb97f347/userData/album-arts/album_art_1765054186.webp",
+  "song_name": "Summer Days",
+  "audio_url": "https://storage.soundverse.ai/x-one/69344de79f665b78cb97f347/userData/audios/song_1765054186.mp3",
+  "error": false
+}
+```
+
+#### **Possible Errors**
+
+- **Rate Limit Exceeded:**
+
+```json
+{
+  "success": false,
+  "message": "Rate limits have been passed for the user."
+}
+```
+
+- **Insufficient Balance:**
+
+```json
+{
+  "success": false,
+  "message": "Insufficient balance for this operation."
+}
+```
+
+- **Invalid Prompt:**
+
+```json
+{
+  "detail": "Invalid or empty prompt provided"
+}
+```
+
+- **NSFW Content Detected:**
+
+```json
+{
+  "success": false,
+  "message": "NSFW words detected. Please try again with different lyrics."
+}
+```
+
+#### **Notes**
+
+- **Streaming vs Synchronous:** Use the streaming endpoint (`/song-gen`) for real-time progress updates, or the synchronous endpoint (`/song-gen/sync`) for a simple request-response pattern.
+- **Lyrics Generation:** If you don't provide `lyrics`, the system will automatically generate them based on your `prompt`.
+- **Duration:** The `duration` parameter controls the target length of the generated song in seconds.
+- **Billing:** This endpoint uses enterprise billing. Charges are deducted from your account balance based on the selected model and license type.

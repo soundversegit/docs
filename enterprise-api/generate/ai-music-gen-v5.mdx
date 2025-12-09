@@ -1,0 +1,377 @@
+---
+title: "Generate AI Music - v5"
+description: "Generate instrumental AI music using advanced AI models."
+---
+
+## Generate AI Music (v5)
+
+This endpoint generates **instrumental AI music** without vocals using advanced AI models. Available in both **streaming** and **synchronous** modes.
+
+---
+
+#### **Core Parameters**
+
+> The parameters below define the request body for this API.
+
+| Parameter        | Type      | Required?   | Description                                                                                                   |
+| ---------------- | --------- | ----------- | ------------------------------------------------------------------------------------------------------------- |
+| **`userId`**     | `string`  | ✅ Required | User ID requesting the operation.                                                                             |
+| **`projectId`**  | `string`  | ✅ Required | Project ID for organizing generations.                                                                        |
+| **`prompt`**     | `string`  | ✅ Required | Prompt describing the music you want to generate (e.g., "Upbeat electronic dance music with synth melodies"). |
+| **`duration`**   | `integer` | ⚠️ Optional | Duration in seconds. Default: `30`.                                                                           |
+| **`style`**      | `string`  | ⚠️ Optional | Musical style (e.g., "electronic", "jazz", "rock", "ambient").                                                |
+| **`model`**      | `string`  | ⚠️ Optional | AI model to use. Default: `mureka-7.5`.                                                                       |
+| **`parameters`** | `object`  | ⚠️ Optional | Additional parameters for advanced customization.                                                             |
+
+> **Note:** This endpoint generates **instrumental music only** (no vocals). For songs with vocals, use the `/v5/generate/song-gen` endpoint instead.
+
+---
+
+#### **Endpoints**
+
+This API provides two endpoints:
+
+1. **Streaming Endpoint** (`/v5/generate/music-gen`): Returns real-time progress updates via Server-Sent Events (SSE)
+2. **Synchronous Endpoint** (`/v5/generate/music-gen/sync`): Waits for completion and returns the final result
+
+---
+
+#### **Request Body**
+
+<div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md">
+
+```json
+{
+  "userId": "string",
+  "projectId": "string",
+  "prompt": "string",
+  "duration": 30,
+  "style": "string",
+  "model": "mureka-7.5",
+  "parameters": {}
+}
+```
+
+</div>
+
+#### **Code Samples**
+
+<Tabs>
+  <Tab title="Python (Streaming)">
+
+```python
+import requests
+import json
+
+url = "https://api.soundverse.ai/v5/generate/music-gen"
+headers = {
+    "Authorization": "Bearer your_api_key_here",
+    "Content-Type": "application/json"
+}
+payload = {
+    "userId": "your_user_id",
+    "projectId": "your_project_id",
+    "prompt": "Upbeat electronic dance music with synth melodies and a driving bassline",
+    "duration": 30,
+    "style": "electronic"
+}
+
+response = requests.post(url, json=payload, headers=headers, stream=True)
+
+# Process streaming response
+for line in response.iter_lines():
+    if line:
+        data = json.loads(line.decode('utf-8'))
+        print(data)
+```
+
+  </Tab>
+
+  <Tab title="Python (Synchronous)">
+
+```python
+import requests
+
+url = "https://api.soundverse.ai/v5/generate/music-gen/sync"
+headers = {
+    "Authorization": "Bearer your_api_key_here",
+    "Content-Type": "application/json"
+}
+payload = {
+    "userId": "your_user_id",
+    "projectId": "your_project_id",
+    "prompt": "Upbeat electronic dance music with synth melodies and a driving bassline",
+    "duration": 30,
+    "style": "electronic"
+}
+
+response = requests.post(url, json=payload, headers=headers)
+print(response.json())
+```
+
+  </Tab>
+
+  <Tab title="cURL (Streaming)">
+
+```sh
+curl -X POST "https://api.soundverse.ai/v5/generate/music-gen" \
+  -H "Authorization: Bearer your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "userId": "your_user_id",
+    "projectId": "your_project_id",
+    "prompt": "Upbeat electronic dance music with synth melodies and a driving bassline",
+    "duration": 30,
+    "style": "electronic"
+  }'
+```
+
+  </Tab>
+
+  <Tab title="cURL (Synchronous)">
+
+```sh
+curl -X POST "https://api.soundverse.ai/v5/generate/music-gen/sync" \
+  -H "Authorization: Bearer your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "userId": "your_user_id",
+    "projectId": "your_project_id",
+    "prompt": "Upbeat electronic dance music with synth melodies and a driving bassline",
+    "duration": 30,
+    "style": "electronic"
+  }'
+```
+
+  </Tab>
+
+  <Tab title="JavaScript (Streaming)">
+
+```javascript
+const url = "https://api.soundverse.ai/v5/generate/music-gen";
+const headers = {
+  Authorization: "Bearer your_api_key_here",
+  "Content-Type": "application/json",
+};
+const payload = {
+  userId: "your_user_id",
+  projectId: "your_project_id",
+  prompt:
+    "Upbeat electronic dance music with synth melodies and a driving bassline",
+  duration: 30,
+  style: "electronic",
+};
+
+const eventSource = new EventSource(url, {
+  method: "POST",
+  headers: headers,
+  body: JSON.stringify(payload),
+});
+
+eventSource.onmessage = (event) => {
+  const data = JSON.parse(event.data);
+  console.log(data);
+};
+```
+
+  </Tab>
+
+  <Tab title="JavaScript (Synchronous)">
+
+```javascript
+const url = "https://api.soundverse.ai/v5/generate/music-gen/sync";
+const headers = {
+  Authorization: "Bearer your_api_key_here",
+  "Content-Type": "application/json",
+};
+const payload = {
+  userId: "your_user_id",
+  projectId: "your_project_id",
+  prompt:
+    "Upbeat electronic dance music with synth melodies and a driving bassline",
+  duration: 30,
+  style: "electronic",
+};
+
+fetch(url, {
+  method: "POST",
+  headers: headers,
+  body: JSON.stringify(payload),
+})
+  .then((response) => response.json())
+  .then((data) => console.log(data))
+  .catch((error) => console.error("Error:", error));
+```
+
+  </Tab>
+</Tabs>
+
+#### **Response**
+
+<Tabs>
+   <Tab title="200 OK (Streaming)">
+
+```json
+{
+  "content": "Starting music generation...",
+  "isComplete": false,
+  "chunkIndex": 1,
+  "tokens": 10,
+  "totalTokens": 10,
+  "task_id": null,
+  "status": null,
+  "album_art": null,
+  "song_name": null,
+  "error": false
+}
+```
+
+Streaming chunks continue until `isComplete: true`:
+
+```json
+{
+  "content": "Music generation completed successfully!",
+  "isComplete": true,
+  "chunkIndex": 5,
+  "tokens": 150,
+  "totalTokens": 500,
+  "task_id": "123456789",
+  "status": "COMPLETED",
+  "album_art": "https://storage.soundverse.ai/.../album_art.png",
+  "song_name": "Electronic Dreams",
+  "audio_url": "https://storage.soundverse.ai/.../music.mp3",
+  "error": false
+}
+```
+
+  </Tab>
+
+   <Tab title="200 OK (Synchronous)">
+
+```json
+{
+  "success": true,
+  "messageId": "6937bbb3d86e0fd7b969dbf1",
+  "audio_url": "https://storage.soundverse.ai/.../music.mp3",
+  "album_art": "https://storage.soundverse.ai/.../album_art.png",
+  "song_name": "Electronic Dreams",
+  "status": "COMPLETED"
+}
+```
+
+  </Tab>
+
+   <Tab title="400 Bad Request">
+
+```json
+{
+  "detail": "Invalid or empty prompt provided"
+}
+```
+
+  </Tab>
+
+   <Tab title="500 Internal Server Error">
+
+```json
+{
+  "detail": "Internal server error"
+}
+```
+
+  </Tab>
+
+   <Tab title="504 Gateway Timeout">
+
+```json
+{
+  "detail": "Generation failed or timed out after polling."
+}
+```
+
+  </Tab>
+</Tabs>
+
+#### **Response Fields**
+
+| Field            | Type      | Description                                                     |
+| ---------------- | --------- | --------------------------------------------------------------- |
+| **`success`**    | `boolean` | Whether the request was successful (synchronous endpoint only). |
+| **`messageId`**  | `string`  | Unique identifier for the generation request.                   |
+| **`audio_url`**  | `string`  | Direct URL to download/stream the generated audio.              |
+| **`album_art`**  | `string`  | URL to the generated album artwork.                             |
+| **`song_name`**  | `string`  | Name/title of the generated music track.                        |
+| **`status`**     | `string`  | Status of the generation (e.g., "COMPLETED", "PROCESSING").     |
+| **`content`**    | `string`  | Progress message (streaming endpoint only).                     |
+| **`isComplete`** | `boolean` | Whether generation is complete (streaming endpoint only).       |
+| **`chunkIndex`** | `integer` | Current chunk index (streaming endpoint only).                  |
+| **`task_id`**    | `string`  | Task ID from the generation service (streaming endpoint only).  |
+
+#### **Sample Output**
+
+**Synchronous Response:**
+
+```json
+{
+  "success": true,
+  "messageId": "6937bbb3d86e0fd7b969dbf1",
+  "audio_url": "https://storage.soundverse.ai/x-one/69344de79f665b78cb97f347/userData/audios/music_1765054186.mp3",
+  "album_art": "https://storage.soundverse.ai/x-one/69344de79f665b78cb97f347/userData/album-arts/album_art_1765054186.webp",
+  "song_name": "Electronic Dreams",
+  "status": "COMPLETED"
+}
+```
+
+**Streaming Response (Final Chunk):**
+
+```json
+{
+  "content": "✅ Music generation completed successfully!",
+  "isComplete": true,
+  "chunkIndex": 5,
+  "tokens": 150,
+  "totalTokens": 500,
+  "task_id": "123456789",
+  "status": "COMPLETED",
+  "album_art": "https://storage.soundverse.ai/x-one/69344de79f665b78cb97f347/userData/album-arts/album_art_1765054186.webp",
+  "song_name": "Electronic Dreams",
+  "audio_url": "https://storage.soundverse.ai/x-one/69344de79f665b78cb97f347/userData/audios/music_1765054186.mp3",
+  "error": false
+}
+```
+
+#### **Possible Errors**
+
+- **Rate Limit Exceeded:**
+
+```json
+{
+  "success": false,
+  "message": "Rate limits have been passed for the user."
+}
+```
+
+- **Insufficient Balance:**
+
+```json
+{
+  "success": false,
+  "message": "Insufficient balance for this operation."
+}
+```
+
+- **Invalid Prompt:**
+
+```json
+{
+  "detail": "Invalid or empty prompt provided"
+}
+```
+
+#### **Notes**
+
+- **Streaming vs Synchronous:** Use the streaming endpoint (`/music-gen`) for real-time progress updates, or the synchronous endpoint (`/music-gen/sync`) for a simple request-response pattern.
+- **Instrumental Only:** This endpoint generates instrumental music without vocals. For songs with vocals, use `/v5/generate/song-gen`.
+- **Duration:** The `duration` parameter controls the target length of the generated music in seconds.
+- **Style:** The `style` parameter helps guide the musical direction (e.g., "electronic", "jazz", "rock", "ambient").
+- **Billing:** This endpoint uses enterprise billing. Charges are deducted from your account balance based on the selected model and license type.
