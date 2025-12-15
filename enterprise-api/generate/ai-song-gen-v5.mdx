@@ -20,7 +20,6 @@ This endpoint generates **complete AI songs** with lyrics and audio using advanc
 | **`prompt`**     | `string`  | ✅ Required | Prompt describing the song you want to generate (e.g., "A happy upbeat pop song about summer"). |
 | **`lyrics`**     | `string`  | ⚠️ Optional | Lyrics for the song. If not provided, lyrics will be automatically generated from the prompt.   |
 | **`duration`**   | `integer` | ⚠️ Optional | Duration in seconds. Default: `30`.                                                             |
-| **`model`**      | `string`  | ⚠️ Optional | AI model to use. Default: `mureka-7.5`.                                                         |
 | **`parameters`** | `object`  | ⚠️ Optional | Additional parameters for advanced customization.                                               |
 
 > **Note:** If `lyrics` is not provided, the system will automatically generate lyrics based on your `prompt`. Providing both `prompt` and `lyrics` gives you more control over the final output.
@@ -47,7 +46,6 @@ This API provides two endpoints:
   "prompt": "string",
   "lyrics": "string",
   "duration": 30,
-  "model": "mureka-7.5",
   "parameters": {}
 }
 ```
@@ -72,8 +70,7 @@ payload = {
     "projectId": "your_project_id",
     "prompt": "A happy upbeat pop song about summer days",
     "lyrics": "Verse 1: Walking down the beach, feeling the sun...",
-    "duration": 30,
-    "model": "mureka-7.5"
+    "duration": 30
 }
 
 response = requests.post(url, json=payload, headers=headers, stream=True)
