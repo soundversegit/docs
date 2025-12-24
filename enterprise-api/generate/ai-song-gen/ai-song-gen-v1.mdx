@@ -1,0 +1,158 @@
+---
+title: "Generate AI Song - v1"
+description: "For quick, standard song generation. Provides a single song output."
+---
+
+##  Generate AI Song from Lyrics
+This endpoint generates songs from **provided lyrics** using AI models.
+
+#### **Core Parameters**
+
+> 🛈 The parameters below define the request body for this API.
+
+| Parameter          | Type     | Required?                                                     | Description                                                     |
+| ------------------ | -------- | ------------------------------------------------------------- | --------------------------------------------------------------- |
+| **`styleOfMusic`** | `string` | ⚠️ Optional (Either styleOfMusic or audioUrl must be present) | Preferred style. Select one from supported styles listed above. |
+| **`lyrics`**       | `string` | ✅ Required                                                   | Lyrics to be converted into a song.                             |
+| **`audioUrl`**     | `string` | ⚠️ Optional (Either styleOfMusic or audioUrl must be present) | URL to a reference audio file for influence.                    |
+
+---
+
+#### Request Body
+
+<div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md">
+```json
+{
+  "styleOfMusic": "string",
+  "lyrics": "string",
+  "audioUrl": "string"
+}
+```
+</div>
+
+#### Code Samples
+
+<Tabs>
+  <Tab title="Python">
+  
+  ```python
+    import requests
+
+    url = "https://api.soundverse.ai/v1/generate/song-from-lyrics"
+    headers = {
+        "Authorization": "Bearer your_api_key_here",
+        "Content-Type": "application/json"
+    }
+    payload = {
+      "styleOfMusic": "string",
+      "lyrics": "string",
+      "audioUrl": "string"
+    }
+
+
+    response = requests.post(url, json=payload, headers=headers)
+    print(response.json())
+    ```
+
+   </Tab>
+
+   <Tab title="cURL">
+  
+  ```sh
+    curl -X POST "https://api.soundverse.ai/v1/generate/song-from-lyrics" \
+    -H "Authorization: Bearer your_api_key_here" \
+    -H "Content-Type: application/json" \
+    -d '{
+    "styleOfMusic": "string",
+    "lyrics": "string",
+    "audioUrl": "string"
+    }'
+
+    ```
+
+   </Tab>
+   
+</Tabs>
+
+#### Response
+
+<Tabs>
+   <Tab title="200 OK">
+  
+  ```sh
+
+      {
+        "prompt":"str",
+        "albumArt":"str",
+        "aiReply":"str",
+        "audioData":[
+          {
+            "audioUrl":"str",
+            "songName":"str",
+            "licenses":"str"
+          }
+        ]
+      }
+
+    ```
+
+   </Tab>
+
+   <Tab title="400 Bad Request">
+  
+  ```sh
+      
+    {
+      “Detail”: “str”
+    }
+
+    ```
+
+   </Tab>
+</Tabs>
+
+#### Sample Output
+
+```python
+{
+  "prompt":"A hopeful melody with rising strings and ambient piano, like the end of a movie when the hero finds peace.",
+  "albumArt":"https://storage.googleapis.com/soundverse-album-art/67b9ca2f20e711017fc1b6c5/67b9ca2f20e711017fc1b6c5/20250413130229_00000_album_cover_art_for_A_hopeful_melody_with_rising_strings_and_ambient_piano_like_the_end_of_a_movie_when_the_hero_finds_peace.png",
+  "aiReply":"Your audio jewel is polished and gleaming, a testament to your artistic prowess. Unleash its melodies and watch the world listen in awe.",
+  "audioData":[
+    {
+      "audioUrl":"https://storage.googleapis.com/x-one/67b9ca2f20e711017fc1b6c5/67b9ca2f20e711017fc1b6c5/xone20250413130323ltyxhk5r.wav",
+      "songName":"A hopeful melody with ris...",
+      "licenses":"Sync"
+    }
+  ]
+}
+```
+
+#### Possible Errors :
+
+- If Rate Limits have been passed for User.
+
+```
+{
+"success": False,
+"message": "Rate limits have been passed for the user.",
+}
+```
+
+- If NSFW words are detected
+
+```
+{
+"success": False,
+"message": "NSFW words detected. Please try again with a different prompt.",
+}
+```
+
+- If Artist name is detected
+
+```
+{
+"success": False,
+"message": "Artist name detected. Please try again with a different prompt.",
+}
+```

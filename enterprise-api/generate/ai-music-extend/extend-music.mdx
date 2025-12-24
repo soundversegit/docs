@@ -1,14 +1,21 @@
 ---
-title: "Text to Music"
+title: "Extend Music - v1"
 ---
 
-## Generate Music from Text
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
 
-This API allows you to generate **AI-powered music** based on a text description.  
+---
+
+## Extend Music using Audio URL
+
+> This API allows you to **extend an existing song** by providing a **publicly accessible URL** of the original audio.  
 Choose between:
 
-- 🎧 **HD Quality** → `sansaar_1` (Higher fidelity)
-- ⚡ **Fast Mode** → `sansaar_1_lite` (Quicker processing)
+
+- 🎧 **HD Quality** → `sansaar_1` (Higher fidelity, slower processing)
+- ⚡ **Fast Mode** → `sansaar_1_lite` (Quicker processing, lower fidelity)
+
 
 ---
 
@@ -16,70 +23,65 @@ Choose between:
 
 > 🛈 The parameters below define the request body for this API.
 
-| Parameter      | Type      | Required?   | Description                                                      |
-| -------------- | --------- | ----------- | ---------------------------------------------------------------- |
-| **`prompt`**   | `string`  | ✅ Required | &#x2003;&emsp;&emsp;Text description of the music.               |
-| **`duration`** | `integer` | ⚠️ Optional | &#x2003;&emsp;&emsp;Track length (`15s`, `30s`, `60s`, `180s`).  |
-| **`model`**    | `string`  | ⚠️ Optional | &#x2003;&emsp;`"sansaar_1"` (HQ) or `"sansaar_1_lite"` (Faster). |
-| **`loop`**     | `boolean` | ⚠️ Optional | &#x2003;&emsp;&emsp;Whether the music should loop.               |
+| Parameter      | Type     | Required?   | Description                                                                    |
+| -------------- | -------- | ----------- | ------------------------------------------------------------------------------ |
+| **`audioUrl`** | `string` | ✅ Required | &#x2003;&emsp;&emsp;Publicly available URL of the audio file to extend.        |
 
 ---
 
 #### **Request Body**
 
 <div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md">
-  
-```json
-{
-  "prompt": "A futuristic electronic track with deep bass and synths.",
-  "duration": 15,
-  "model": "sansaar_1_lite",
-  "loop": false
-}
+
 ```
+Request body:
+{
+  "audioUrl": "string"
+}
+
+```
+
 </div>
 
 #### Code Samples
 
 <Tabs>
-  <Tab title="python" >
+  <Tab title="Python">
   
   ```python
     import requests
 
-    url = "https://api.soundverse.ai/v1/generate/text-to-music"
+    url = "https://api.soundverse.ai/v1/generate/extend"
     headers = {
         "Authorization": "Bearer your_api_key_here",
         "Content-Type": "application/json"
     }
     payload = {
-    "prompt": "Compose a futuristic electronic track with cutting-edge synth sounds and pulsing beats.",
-    "duration": 15,
-    "model": "sansaar_1_lite",
-    "loop": false
+        "audio_url": "
+    https://storage.googleapis.com/x-one/67b9ca2f20e711017fc1b6c5/67b9ca2f20e711017fc1b6c5/xone20250312100522scsuxkec.wav
     }
 
     response = requests.post(url, json=payload, headers=headers)
     print(response.json())
+
     ```
 
    </Tab>
 
-   <Tab title="curl">
+   <Tab title="cURL">
   
   ```sh
-    curl -X POST "https://api.soundverse.ai/v1/generate/text-to-music" \
+    curl -X POST "https://api.soundverse.ai/v1/generate/extend" \
     -H "Authorization: Bearer your_api_key_here" \
     -H "Content-Type: application/json" \
     -d '{
-    "prompt": "Compose a futuristic electronic track with cutting-edge synth sounds and pulsing beats.",
-    "duration": 15,
-    "model": "sansaar_1_lite",
-    "loop": false
+      "audio_url":"https://storage.googleapis.com/x-one/67b9ca2f20e711017fc1b6c5/67b9ca2f20e711017fc1b6c5/xone20250312100522scsuxkec.wav,
     }'
+
     ```
+
    </Tab>
-   
+
 </Tabs>
 
 #### Response
