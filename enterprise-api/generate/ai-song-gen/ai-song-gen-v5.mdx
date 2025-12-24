@@ -226,6 +226,7 @@ curl -X POST "https://api.soundverse.ai/v5/generate/song/sync" \
 | **`song_name`**    | `string`  | Name of the generated song.                                     |
 | **`progress`**     | `integer` | Progress percentage of the generation process. `0-100`          |
 | **`lyrics_sections`** | `array` | Detailed sections of lyrics with timing information.           |
+| **`audio_url`**      | `string` | URL of the generated audio file.                     |
 
 
 #### **Stages of Streaming Response**
@@ -296,12 +297,12 @@ fields sent:
 ##### **Completed Generation**
 indicates that the generation is complete
 ```json
-data: {"message_id": "...", "isComplete": false, "chunkIndex": 10, "status": "completed", "album_art": "https://storage.soundverse.ai/...", "song_name": "Song Title", "progress": 100}
+data: {"message_id": "...", "isComplete": false, "chunkIndex": 10, "status": "completed", "album_art": "https://storage.soundverse.ai/...", "audio_url": "https://storage.soundverse.ai/...", "song_name": "Song Title", "progress": 100}
 ```
 
 fields sent:
 
-`message_id`, `isComplete`, `chunkIndex`, `status`, `album_art`, `song_name`, `progress`
+`message_id`, `isComplete`, `chunkIndex`, `status`, `album_art`, `song_name`, `progress`, `audio_url`
 
 ---
 

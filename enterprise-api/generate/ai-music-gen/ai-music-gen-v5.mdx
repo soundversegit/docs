@@ -58,7 +58,6 @@ export const Method = ({ type, children }) => {
 | Parameter       | Type    | Description                                                                                     | Required | Default Value |
 | --------------- | ------- | ----------------------------------------------------------------------------------------------- | -------- | -------------- |
 | `prompt`        | string  | Text prompt describing the desired music.                                                       | Yes      | N/A            |
-| `duration`      | integer | Duration of the generated music in seconds.                                                     | No       | 30             |
 | `style`         | string  | Musical style or genre (e.g., jazz, classical, rock).                                   | No       | N/A            |
 {/* | `parameters`    | object  | Additional generation parameters (e.g., tempo, mood).                                           |                                                | No       | {}             | */}
 
@@ -67,7 +66,6 @@ export const Method = ({ type, children }) => {
 ```json
 {
   "prompt": "upbeat jazz music with saxophone",
-  "duration": 45,
   "style": "jazz"
 }
 ```
@@ -87,7 +85,6 @@ headers = {
 }
 payload = {
     "prompt": "upbeat jazz music with saxophone",
-    "duration": 45,
     "style": "jazz"
 }
 
@@ -110,7 +107,6 @@ const headers = {
 };
 const payload = {
   prompt: "upbeat jazz music with saxophone",
-  duration: 45,
   style: "jazz",
 };
 
@@ -145,7 +141,6 @@ curl -X POST "https://api.soundverse.ai/v5/generate/music/streaming" \
   -H "Content-Type: application/json" \
   -d '{
     "prompt": "upbeat jazz music with saxophone",
-    "duration": 45,
     "style": "jazz"
   }' --no-buffer
 ```
@@ -166,7 +161,6 @@ headers = {
 }
 payload = {
     "prompt": "upbeat jazz music with saxophone",
-    "duration": 45,
     "style": "jazz"
 }
 
@@ -182,7 +176,6 @@ const headers = {
 };
 const payload = {
   prompt: "upbeat jazz music with saxophone",
-  duration: 45,
   style: "jazz",
 };
 
@@ -202,7 +195,6 @@ curl -X POST "https://api.soundverse.ai/v5/generate/music/sync" \
   -H "Content-Type: application/json" \
   -d '{
     "prompt": "upbeat jazz music with saxophone",
-    "duration": 45,
     "style": "jazz"
   }'
 ```
@@ -227,6 +219,7 @@ curl -X POST "https://api.soundverse.ai/v5/generate/music/sync" \
 | **`song_name`**      | `string` |  Name of the generated song.                     |
 | **`progress`**      | `integer` | Progress percentage of the generation process.   `0-100`                  |
 | **`lyrics_sections`** | `array` |  Detailed sections of lyrics with timing information.                     | 
+| **`audio_url`**      | `string` | URL of the generated audio file.                     |
 
 - please check [Streaming Responses](../ai-song-gen/ai-song-gen-v5#streaming-response) for more details
 
@@ -236,26 +229,16 @@ curl -X POST "https://api.soundverse.ai/v5/generate/music/sync" \
 
 ```json
 {
-  "messageId": "...",
-  "prompt": "make rainy lofi",
-  "albumArt": "https://storage.soundverse.ai/soundverse-album-art/...album_art.png",
-  "aiReply": "🎵 Ta-da! Your sound adventure awaits. Press play and let the symphony of your creativity fill the air. Feel the rhythm! 💃",
-  "audioData": [
-    {
-      "audioUrl": "https://storage.soundverse.ai/x-one/.../.../tmpc1lpmj4p.mp3",
-      "songName": "Midnight Drizzle Beats",
-      "licenses": {
-        "licenses": "Royalty Free"
-      }
-    },
-    {
-      "audioUrl": "https://storage.soundverse.ai/x-one/.../.../tmpbsa3hgjd.mp3",
-      "songName": "Midnight Drizzle Beats",
-      "licenses": {
-        "licenses": "Royalty Free"
-      }
+  "success": true,
+  "data": {
+    "message_id": "...",
+    "album_art": "https://storage.soundverse.ai/x-one/.../userData/album-arts/album_art_1766599034.webp",
+    "song_name": "Midnight Drizzle Beats",
+    "audio_urls": {
+      "1": "https://storage.soundverse.ai/audios/streaming/.../instrumental_generate/....mp3",
+      "2": "https://storage.soundverse.ai/audios/streaming/.../instrumental_generate/....mp3"
     }
-  ]
+  }
 }
 ```
 
