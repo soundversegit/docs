@@ -27,16 +27,6 @@
   },
   "tabs": [],
   "anchors": [
-    {
-      "name": "Documentation",
-      "icon": "book-open-cover",
-      "url": "https://help.soundverse.ai"
-    },
-    {
-      "name": "Community",
-      "icon": "discord",
-      "url": "https://discord.com/channels/1100588489319399564/1100588489768177684"
-    }
   ],
   "navigation": [
     {
@@ -79,25 +69,65 @@
     {
       "group": "API Documentation",
       "pages": [
-        "enterprise-api/faqs",
-        "enterprise-api/generate/ai-song-gen-v1",
-        "enterprise-api/generate/ai-song-gen-v4",
-        "enterprise-api/generate/ai-song-gen-v5",
-        "enterprise-api/generate/ai-music-gen-v5",
-        "enterprise-api/generate/ai-singing-gen-v2",
-        "enterprise-api/generate/text-to-music",
-        "enterprise-api/generate/extend-music",
-        "enterprise-api/generate/generate-lyrics",
-        "enterprise-api/generate/stem-separtion",
-        "enterprise-api/generate/loop-and-trim",
-        "enterprise-api/generate/gen_loop_and_trim"
-      ]
-    },
-    {
-      "group": "Assistant Endpoints",
-      "pages": [
-        "enterprise-api/assistant/chat",
-        "enterprise-api/assistant/voice"
+        {
+          "group": "AI Song Generation",
+          "pages": [
+            "enterprise-api/generate/ai-song-gen/ai-song-gen-v5",
+            "enterprise-api/generate/ai-song-gen/ai-song-gen-v4",
+            "enterprise-api/generate/ai-song-gen/ai-song-gen-v1"          
+          ]
+        },
+        {
+          "group": "AI Music (Instrumental) Generation",
+          "pages": [
+            "enterprise-api/generate/ai-music-gen/ai-music-gen-v5",
+            "enterprise-api/generate/ai-music-gen/ai-music-gen-v4",
+            "enterprise-api/generate/ai-music-gen/ai-music-gen-v1",
+            "enterprise-api/generate/ai-music-gen/text-to-music"
+          ]
+        },
+        {
+          "group": "AI Extend",
+          "pages": [
+            "enterprise-api/generate/ai-music-extend/extend-song-v5",
+            "enterprise-api/generate/ai-music-extend/extend-music-v5",
+            "enterprise-api/generate/ai-music-extend/extend-music"
+          ]
+        },
+        {
+          "group": "AI Lyric Generation",
+          "pages": [
+            "enterprise-api/generate/ai-lyric-gen/generate-lyrics"
+          ]
+        },
+        {
+          "group": "AI Singing",
+          "pages": [
+            "enterprise-api/generate/ai-singing-gen/ai-singing-gen-v2"
+          ]
+        },
+        {
+          "group": "AI Stem Separation",
+          "pages": [
+            "enterprise-api/generate/ai-stem-separation/stem-separation"
+          ]
+        },
+        {
+          "group": "Loop And Trim",
+          "pages": [
+            "enterprise-api/generate/loop-trim/loop-and-trim",
+            "enterprise-api/generate/loop-trim/gen_loop_and_trim"
+
+          ]
+        },
+        {
+          "group": "AI Chat (Beta)",
+          "pages": [
+            "enterprise-api/assistant/chat",
+            "enterprise-api/assistant/voice"
+          ]
+        },
+        "enterprise-api/faqs"
       ]
     }
   ],

@@ -1,0 +1,161 @@
+---
+title: "Generate AI Music - v4"
+description: "For enhanced audio quality and higher fidelity. Provides two song outputs."
+---
+
+## Generate AI Music from Prompt
+- This endpoint generates music from a **text-based prompt** using AI models.
+
+---
+
+#### **Core Parameters**
+
+> 🛈 The parameters below define the request body for this API.
+
+| Parameter          | Type     | Required?   | Description                       |
+| ------------------ | -------- | ----------- | --------------------------------- |
+| **`prompt`**       | `string` | ✅ Required  | Text description of the music.  |
+| **`styleOfMusic`** | `string` | ⚠️ Optional | Preferred style.                 |
+| **`audioUrl`**     | `string` | ⚠️ Optional | URL to a reference audio file for influence.|
+> 🛈 Reference audio duration should be atleast `30s` and the audioUrl should be public.
+
+---
+
+#### Request Body
+
+<div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md">
+```json
+{
+  "prompt": "string",
+  "styleOfMusic": "string",
+  "audioUrl": "string"
+}
+```
+
+</div>
+
+#### Code Samples
+
+<Tabs>
+  <Tab title="Python">
+    ```python
+      import requests
+    
+      url = "https://api.soundverse.ai/v4/generate/song-from-prompt"
+      headers = {
+          "Authorization": "Bearer your_api_key_here",
+          "Content-Type": "application/json"
+      }
+      payload = {
+      "prompt": "string",
+      "styleOfMusic": "optional",
+      "audioUrl": "optional"
+      }
+    
+      response = requests.post(url, json=payload, headers=headers)
+      print(response.json())
+    ```
+  </Tab>
+  <Tab title="cURL">
+    ```sh
+    curl -X POST "https://api.soundverse.ai/v4/generate/song-from-prompt" \
+    -H "Authorization: Bearer your_api_key_here" \
+    -H "Content-Type: application/json" \
+    -d '{
+    "prompt": "string",
+    "styleOfMusic": "string",
+    "audioUrl": "string"
+    }'
+    
+    ```
+  </Tab>
+</Tabs>
+
+#### Response
+
+<Tabs>
+  <Tab title="200 OK">
+    ```sh
+    {
+      "messageId":"str"
+      "prompt":"str",
+      "albumArt":"str",
+      "aiReply":"str",
+      "audioData":[
+        {
+          "audioUrl":"str",
+          "songName":"str",
+          "licenses":"str"
+        },
+        {
+          "audioUrl":"str",
+          "songName":"str",
+          "licenses":"str"
+        }
+      ]
+    }
+    
+    ```
+  </Tab>
+  <Tab title="400 Bad Request">
+    ```sh
+        
+      {
+        "Detail": “str”
+      }
+    
+    ```
+  </Tab>
+</Tabs>
+
+#### Sample Output
+
+```
+{
+  "messageId": "68b7079d56bb5b8b8ff8f4fb",
+  "prompt": "A hopeful melody with rising strings and ambient piano, like the end of a movie when the hero finds peace.",
+  "albumArt": "https://storage.soundverse.ai/soundverse-album-art/681babcdc9b9a92b09132ff5/681babcdc9b9a92b09132ff5/0ed32dce-8771-4c1a-8584-b77024c8ff9f.webp",
+  "aiReply": "Your audio creation has sprouted wings and is ready to soar. Press play and let it take flight into the realm of music.",
+  "audioData": [
+    {
+      "audioUrl": "https://storage.soundverse.ai/x-one/681babcdc9b9a92b09132ff5/681babcdc9b9a92b09132ff5/tmpzrx5d0ps.mp3",
+      "songName": "Serene Horizon: A Heros Journey",
+      "licenses": "Sample"
+    },
+    {
+      "audioUrl": "https://storage.soundverse.ai/x-one/681babcdc9b9a92b09132ff5/681babcdc9b9a92b09132ff5/tmpq0ocmr8o.mp3",
+      "songName": "Serene Horizon: A Heros Journey",
+      "licenses": "Sample"
+    }
+  ]
+}
+```
+
+#### Possible Errors :
+
+- If Rate Limits have been passed for User.
+
+```
+{
+"success": False,
+"message": "Rate limits have been passed for the user.",
+}
+```
+
+- If NSFW words are detected
+
+```
+{
+"success": False,
+"message": "NSFW words detected. Please try again with a different prompt.",
+}
+```
+
+- If Artist name is detected
+
+```
+{
+"success": False,
+"message": "Artist name detected. Please try again with a different prompt.",
+}
+```
