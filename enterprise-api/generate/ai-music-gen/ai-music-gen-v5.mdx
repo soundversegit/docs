@@ -78,7 +78,7 @@ export const Method = ({ type, children }) => {
 import requests
 import json
 
-url = "https://api.soundverse.ai/v5/generate/music/streaming"
+url = "https://api.soundverse.ai/v5/generate/music"
 headers = {
     "Authorization": "Bearer your_api_key_here",
     "Content-Type": "application/json"
@@ -100,7 +100,7 @@ for line in response.iter_lines():
 ```
 
 ```javascript ⚡ JavaScript
-const url = "https://api.soundverse.ai/v5/generate/music/streaming";
+const url = "https://api.soundverse.ai/v5/generate/music";
 const headers = {
   Authorization: "Bearer your_api_key_here",
   "Content-Type": "application/json",
@@ -136,7 +136,7 @@ while (true) {
 ```
 
 ```bash 💻 cURL
-curl -X POST "https://api.soundverse.ai/v5/generate/music/streaming" \
+curl -X POST "https://api.soundverse.ai/v5/generate/music" \
   -H "Authorization: Bearer your_api_key_here" \
   -H "Content-Type: application/json" \
   -d '{
@@ -208,18 +208,21 @@ curl -X POST "https://api.soundverse.ai/v5/generate/music/sync" \
 > 🛈 The fields below are used in the chunks sent by SSE during the streaming process.
 
 | Parameter          | Type      | Description                                                     |
-| ------------------ | -------- |--------------------------------------------------------------- |
-| **`isComplete`**       | `bool` | Indicates if the streaming response is complete.                |
-| **`status`**          | `string` | Current status of the generation process (e.g., initializing, streaming, completed). |
-| **`chunkIndex`**      | `integer` |  Index of the current chunk in the streaming sequence.                |
-| **`message_id`**      | `string` |  Unique identifier for the generated message.                     |
-| **`stream_url`**     | `string` | URL to access the generated audio stream when ready.                    |
-| **`version`**        | `integer` |  Version of the generated content. (2 versions are generated per request)                               |
-| **`album_art`**      | `string` | URL of the album art associated with the generated content.                     |
-| **`song_name`**      | `string` |  Name of the generated song.                     |
-| **`progress`**      | `integer` | Progress percentage of the generation process.   `0-100`                  |
-| **`lyrics_sections`** | `array` |  Detailed sections of lyrics with timing information.                     | 
-| **`audio_url`**      | `string` | URL of the generated audio file.                     |
+| ------------------ | -------- | --------------------------------------------------------------- |
+| **`isComplete`**   | `bool`    | Indicates if the streaming response is complete.                |
+| **`status`**       | `string`  | Current status of the extension process.                        |
+| **`chunkIndex`**   | `integer` | Index of the current chunk in the streaming sequence.           |
+| **`message_id`**   | `string`  | Unique identifier for the extension request.                    |
+| **`stream_url`**   | `string`  | URL to access the generated audio stream when ready.            |
+| **`version`**      | `integer` | Version of the generated content.                               |
+| **`album_art`**    | `string`  | URL of the album art associated with the generated content.     |
+| **`song_name`**    | `string`  | Name of the generated track.                                    |
+| **`progress`**     | `integer` | Progress percentage of the generation process. `0-100`          |
+| **`streaming_ready`** | `bool` | Indicates if audio is ready for streaming.                      |
+| **`version`**       | `integer` | Version number of the generated audio.                         |
+| **`audio_url`**     | `string`  | URL of the generated audio file.                               |
+| **`error`**        | `string`  | Error message if any issues occurred during processing.         |
+| **`operation`**    | `string`  | Type of operation being performed (e.g., "extend_song").        |
 
 - please check [Streaming Responses](../ai-song-gen/ai-song-gen-v5#streaming-response) for more details
 
@@ -229,16 +232,19 @@ curl -X POST "https://api.soundverse.ai/v5/generate/music/sync" \
 
 ```json
 {
-  "success": true,
-  "data": {
-    "message_id": "...",
-    "album_art": "https://storage.soundverse.ai/x-one/.../userData/album-arts/album_art_1766599034.webp",
-    "song_name": "Midnight Drizzle Beats",
-    "audio_urls": {
-      "1": "https://storage.soundverse.ai/audios/streaming/.../instrumental_generate/....mp3",
-      "2": "https://storage.soundverse.ai/audios/streaming/.../instrumental_generate/....mp3"
+  "message_id": "...",
+  "album_art": "https://storage.soundverse.ai/x-one/.../userData/album-arts/album_art_1766599034.webp",
+  "song_name": "Midnight Drizzle Beats",
+  "audio_data": [
+    {
+      "audio_url": "https://storage.soundverse.ai/x-one/.../userData/generated-audio/midnight_drizzle_beats_v1.mp3",
+      "song_name": "Midnight Drizzle Beats",
+    },
+    {
+      "audio_url": "https://storage.soundverse.ai/x-one/.../userData/generated-audio/midnight_drizzle_beats_v2.mp3",
+      "song_name": "Midnight Drizzle Beats",
     }
-  }
+  ] 
 }
 ```
 

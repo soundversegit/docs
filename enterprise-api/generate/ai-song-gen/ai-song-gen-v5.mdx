@@ -79,7 +79,7 @@ class V5SongGenRequest(BaseModel):
 import requests
 import json
 
-url = "https://api.soundverse.ai/v5/generate/song/streaming"
+url = "https://api.soundverse.ai/v5/generate/song"
 headers = {
     "Authorization": "Bearer your_api_key_here",
     "Content-Type": "application/json"
@@ -102,7 +102,7 @@ for line in response.iter_lines():
 ```
 
 ```javascript ⚡ JavaScript
-const url = "https://api.soundverse.ai/v5/generate/song/streaming";
+const url = "https://api.soundverse.ai/v5/generate/song";
 const headers = {
   Authorization: "Bearer your_api_key_here",
   "Content-Type": "application/json",
@@ -139,7 +139,7 @@ while (true) {
 ```
 
 ```bash 💻 cURL
-curl -X POST "https://api.soundverse.ai/v5/generate/song/streaming" \
+curl -X POST "https://api.soundverse.ai/v5/generate/song" \
   -H "Authorization: Bearer your_api_key_here" \
   -H "Content-Type: application/json" \
   -d '{
@@ -214,19 +214,23 @@ curl -X POST "https://api.soundverse.ai/v5/generate/song/sync" \
 
 > 🛈 The fields below are used in the chunks sent by SSE during the streaming process.
 
+
 | Parameter          | Type      | Description                                                     |
 | ------------------ | -------- | --------------------------------------------------------------- |
 | **`isComplete`**   | `bool`    | Indicates if the streaming response is complete.                |
-| **`status`**       | `string`  | Current status of the generation process (e.g., initializing, streaming, completed). |
+| **`status`**       | `string`  | Current status of the extension process.                        |
 | **`chunkIndex`**   | `integer` | Index of the current chunk in the streaming sequence.           |
-| **`message_id`**   | `string`  | Unique identifier for the generated message.                    |
+| **`message_id`**   | `string`  | Unique identifier for the extension request.                    |
 | **`stream_url`**   | `string`  | URL to access the generated audio stream when ready.            |
-| **`version`**      | `integer` | Version of the generated content. (2 versions are generated per request) |
+| **`version`**      | `integer` | Version of the generated content.                               |
 | **`album_art`**    | `string`  | URL of the album art associated with the generated content.     |
-| **`song_name`**    | `string`  | Name of the generated song.                                     |
+| **`song_name`**    | `string`  | Name of the generated track.                                    |
 | **`progress`**     | `integer` | Progress percentage of the generation process. `0-100`          |
-| **`lyrics_sections`** | `array` | Detailed sections of lyrics with timing information.           |
-| **`audio_url`**      | `string` | URL of the generated audio file.                     |
+| **`streaming_ready`** | `bool` | Indicates if audio is ready for streaming.                      |
+| **`version`**       | `integer` | Version number of the generated audio.                         |
+| **`audio_url`**     | `string`  | URL of the generated audio file.                               |
+| **`error`**        | `string`  | Error message if any issues occurred during processing.         |
+| **`operation`**    | `string`  | Type of operation being performed (e.g., "extend_song").        |
 
 
 #### **Stages of Streaming Response**
@@ -336,27 +340,19 @@ fields sent:
 
 ```json
 {
-  "messageId": "...",
-  "prompt": "A cheerful pop song about friendship and adventure.",
-  "albumArt": "https://storage.soundverse.ai/soundverse-album-art/...album_art.png",
-  "aiReply": "🎵 Your song is ready! Enjoy the melody and the lyrics you imagined.",
-  "lyrics": "Through every road we roam, together we are home",
-  "audioData": [
+  "message_id": "...",
+  "album_art": "https://storage.soundverse.ai/x-one/.../userData/album-arts/album_art_1766599034.webp",
+  "song_name": "Midnight Drizzle Beats",
+  "audio_data": [
     {
-      "audioUrl": "https://storage.soundverse.ai/x-one/.../.../tmpsong1.mp3",
-      "songName": "Friendship Roads",
-      "licenses": {
-        "licenses": "Royalty Free"
-      }
+      "audio_url": "https://storage.soundverse.ai/x-one/.../userData/generated-audio/midnight_drizzle_beats_v1.mp3",
+      "song_name": "Midnight Drizzle Beats",
     },
     {
-      "audioUrl": "https://storage.soundverse.ai/x-one/.../.../tmpsong2.mp3",
-      "songName": "Friendship Roads",
-      "licenses": {
-        "licenses": "Royalty Free"
-      }
+      "audio_url": "https://storage.soundverse.ai/x-one/.../userData/generated-audio/midnight_drizzle_beats_v2.mp3",
+      "song_name": "Midnight Drizzle Beats",
     }
-  ]
+  ] 
 }
 ```
 
