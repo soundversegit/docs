@@ -45,9 +45,8 @@ export const Method = ({ type, children }) => {
 | ---------------- | -------- | --------------------------------------------------------------------------- | -------- | -------------- |
 | `audio_url`      | string   | URL of the audio file to extend      | Yes | N/A          |
 | `lyrics`        | string   | Lyrics to guide the extension style and mood.                   | Yes       | N/A            |
-| `duration`       | integer  | Duration to extend in seconds.                                              | No       | 30             |
-| `side`           | string   | Which side to extend: `left` or `right`.                                    | No       | right          |
 | `prompt`         | string   | Prompt to guide the extension style and mood.                               | No       | N/A            |
+| `extend_at`     | integer  | Position (in ms) to extend the song at [8000,420000]                                   | Yes      | N/A            |
 {/* | `parameters`     | object   | Additional advanced parameters for customization.                           | No       | {}             | */}
 
 ### **Example Request**
@@ -56,9 +55,6 @@ export const Method = ({ type, children }) => {
 {
   "audio_url": "https://storage.soundverse.ai/.../original_song.mp3",
   "lyrics": "These are the song lyrics to guide the extension",
-  "duration": 30,
-  "side": "right",
-  "prompt": "Continue with an uplifting bridge section"
 }
 ```
 
@@ -78,9 +74,6 @@ headers = {
 payload = {
     "audio_url": "https://storage.soundverse.ai/.../original_song.mp3",
     "lyrics": "These are the song lyrics to guide the extension",
-    "duration": 30,
-    "side": "right",
-    "prompt": "Continue with an uplifting bridge section"
 }
 
 response = requests.post(url, json=payload, headers=headers, stream=True)
@@ -103,9 +96,6 @@ const headers = {
 const payload = {
   audio_url: "https://storage.soundverse.ai/.../original_song.mp3",
   lyrics: "These are the song lyrics to guide the extension",
-  duration: 30,
-  side: "right",
-  prompt: "Continue with an uplifting bridge section",
 };
 
 const response = await fetch(url, {
@@ -140,9 +130,6 @@ curl -X POST "https://api.soundverse.ai/v5/extend/song" \
   -d '{
     "audio_url": "https://storage.soundverse.ai/.../original_song.mp3",
     "lyrics": "These are the song lyrics to guide the extension",
-    "duration": 30,
-    "side": "right",
-    "prompt": "Continue with an uplifting bridge section"
   }' --no-buffer
 ```
 
@@ -163,9 +150,6 @@ headers = {
 payload = {
     "audio_url": "https://storage.soundverse.ai/.../original_song.mp3",
     "lyrics": "These are the song lyrics to guide the extension",
-    "duration": 30,
-    "side": "right",
-    "prompt": "Continue with an uplifting bridge section"
 }
 
 response = requests.post(url, json=payload, headers=headers)
@@ -181,9 +165,6 @@ const headers = {
 const payload = {
   audio_url: "https://storage.soundverse.ai/.../original_song.mp3",
   lyrics: "These are the song lyrics to guide the extension",
-  duration: 30,
-  side: "right",
-  prompt: "Continue with an uplifting bridge section",
 };
 
 fetch(url, {
@@ -203,9 +184,6 @@ curl -X POST "https://api.soundverse.ai/v5/extend/song/sync" \
   -d '{
     "audio_url": "https://storage.soundverse.ai/.../original_song.mp3",
     "lyrics": "These are the song lyrics to guide the extension",
-    "duration": 30,
-    "side": "right",
-    "prompt": "Continue with an uplifting bridge section"
   }'
 ```
 
