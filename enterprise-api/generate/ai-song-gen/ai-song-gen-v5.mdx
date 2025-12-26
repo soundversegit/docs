@@ -58,7 +58,6 @@ class V5SongGenRequest(BaseModel):
 | ------------ | -------- | ---------------------------------------------------------------------- | -------- | -------------- |
 | `prompt`     | string   | Text prompt describing the desired song.                               | Yes      | N/A            |
 | `lyrics`     | string   | Lyrics for the song (generated if not provided).                       | No       | N/A            |
-| `duration`   | integer  | Duration of the generated song in seconds.                             | No       | 30             |
 {/* | `parameters` | object   | Additional generation parameters (e.g., tempo, mood).                  | No       | {}             | */}
 
 ### **Example Request**
@@ -66,7 +65,6 @@ class V5SongGenRequest(BaseModel):
 ```json
 {
   "prompt": "A cheerful pop song about friendship and adventure.",
-  "duration": 45,
   "lyrics": "Through every road we roam, together we are home"
 }
 ```
@@ -86,7 +84,6 @@ headers = {
 }
 payload = {
     "prompt": "A cheerful pop song about friendship and adventure.",
-    "duration": 45,
     "lyrics": "Through every road we roam, together we are home"
 }
 
@@ -144,7 +141,6 @@ curl -X POST "https://api.soundverse.ai/v5/generate/song" \
   -H "Content-Type: application/json" \
   -d '{
     "prompt": "A cheerful pop song about friendship and adventure.",
-    "duration": 45,
     "lyrics": "Through every road we roam, together we are home"
   }' --no-buffer
 ```
@@ -165,7 +161,6 @@ headers = {
 }
 payload = {
     "prompt": "A cheerful pop song about friendship and adventure.",
-    "duration": 45,
     "lyrics": "Through every road we roam, together we are home"
 }
 
@@ -181,7 +176,6 @@ const headers = {
 };
 const payload = {
   prompt: "A cheerful pop song about friendship and adventure.",
-  duration: 45,
   lyrics: "Through every road we roam, together we are home",
 };
 
@@ -201,7 +195,6 @@ curl -X POST "https://api.soundverse.ai/v5/generate/song/sync" \
   -H "Content-Type: application/json" \
   -d '{
     "prompt": "A cheerful pop song about friendship and adventure.",
-    "duration": 45,
     "lyrics": "Through every road we roam, together we are home"
   }'
 ```
