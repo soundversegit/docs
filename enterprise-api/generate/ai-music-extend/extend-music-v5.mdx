@@ -33,9 +33,8 @@ export const Method = ({ type, children }) => {
 
 - The API supports only synchronous responses
 
-### **Endpoints**
-- <Method type="POST">POST</Method> `/v5/extend/music` **- streaming**
-- <Method type="POST">POST</Method> `/v5/extend/music/sync` **- synchronous**
+### **Endpoint**
+- <Method type="POST">POST</Method> `/v5/extend/music`
 
 ---
 
@@ -140,21 +139,18 @@ curl -X POST "https://api.soundverse.ai/v5/extend/music/sync" \
 
 ```json
 {
-  "messageId": "...",
-  "prompt": "Add a climactic orchestral section",
-  "albumArt": "https://storage.soundverse.ai/soundverse-album-art/...album_art.png",
-  "songName": "Extended Music Track",
-  "status": "COMPLETED",
-  "audioData": [
+  "message_id": "...",
+  "album_art": "https://storage.soundverse.ai/soundverse-album-art/...album_art.png",
+  "audio_data": [
     {
-      "audioUrl": "https://storage.soundverse.ai/x-one/.../.../extended_music.mp3",
-      "songName": "Extended Music Track",
+      "audio_url": "https://storage.soundverse.ai/x-one/.../.../extended_music.mp3",
+      "song_name": "Extended Music Track",
       "licenses": {
         "licenses": "Royalty Free"
       }
     }
   ],
-  "aiReply": "Your music has been extended successfully."
+  "ai_reply": "Your music has been extended successfully."
 }
 ```
 

@@ -43,18 +43,19 @@ export const Method = ({ type, children }) => {
 
 | Parameter        | Type     | Description                                                                 | Required | Default Value |
 | ---------------- | -------- | --------------------------------------------------------------------------- | -------- | -------------- |
-| `audio_url`      | string   | URL of the audio file to extend (required if `file_url` not provided).      | Conditional | N/A          |
-| `file_url`       | string   | Alternative file URL to extend (required if `audio_url` not provided).      | Conditional | N/A         |
+| `audio_url`      | string   | URL of the audio file to extend      | Yes | N/A          |
+| `lyrics`        | string   | Lyrics to guide the extension style and mood.                   | Yes       | N/A            |
 | `duration`       | integer  | Duration to extend in seconds.                                              | No       | 30             |
 | `side`           | string   | Which side to extend: `left` or `right`.                                    | No       | right          |
 | `prompt`         | string   | Prompt to guide the extension style and mood.                               | No       | N/A            |
-| `parameters`     | object   | Additional advanced parameters for customization.                           | No       | {}             |
+{/* | `parameters`     | object   | Additional advanced parameters for customization.                           | No       | {}             | */}
 
 ### **Example Request**
 
 ```json
 {
   "audio_url": "https://storage.soundverse.ai/.../original_song.mp3",
+  "lyrics": "These are the song lyrics to guide the extension",
   "duration": 30,
   "side": "right",
   "prompt": "Continue with an uplifting bridge section"
@@ -76,6 +77,7 @@ headers = {
 }
 payload = {
     "audio_url": "https://storage.soundverse.ai/.../original_song.mp3",
+    "lyrics": "These are the song lyrics to guide the extension",
     "duration": 30,
     "side": "right",
     "prompt": "Continue with an uplifting bridge section"
@@ -100,6 +102,7 @@ const headers = {
 };
 const payload = {
   audio_url: "https://storage.soundverse.ai/.../original_song.mp3",
+  lyrics: "These are the song lyrics to guide the extension",
   duration: 30,
   side: "right",
   prompt: "Continue with an uplifting bridge section",
@@ -136,6 +139,7 @@ curl -X POST "https://api.soundverse.ai/v5/extend/song" \
   -H "Content-Type": "application/json" \
   -d '{
     "audio_url": "https://storage.soundverse.ai/.../original_song.mp3",
+    "lyrics": "These are the song lyrics to guide the extension",
     "duration": 30,
     "side": "right",
     "prompt": "Continue with an uplifting bridge section"
@@ -158,6 +162,7 @@ headers = {
 }
 payload = {
     "audio_url": "https://storage.soundverse.ai/.../original_song.mp3",
+    "lyrics": "These are the song lyrics to guide the extension",
     "duration": 30,
     "side": "right",
     "prompt": "Continue with an uplifting bridge section"
@@ -175,6 +180,7 @@ const headers = {
 };
 const payload = {
   audio_url: "https://storage.soundverse.ai/.../original_song.mp3",
+  lyrics: "These are the song lyrics to guide the extension",
   duration: 30,
   side: "right",
   prompt: "Continue with an uplifting bridge section",
@@ -196,6 +202,7 @@ curl -X POST "https://api.soundverse.ai/v5/extend/song/sync" \
   -H "Content-Type": "application/json" \
   -d '{
     "audio_url": "https://storage.soundverse.ai/.../original_song.mp3",
+    "lyrics": "These are the song lyrics to guide the extension",
     "duration": 30,
     "side": "right",
     "prompt": "Continue with an uplifting bridge section"
@@ -210,6 +217,24 @@ curl -X POST "https://api.soundverse.ai/v5/extend/song/sync" \
 
 > 🛈 The fields below are used in the chunks sent by SSE during the streaming process.
 
+{/* allowed = {
+        "message_id", -
+        "album_art", -
+        "song_name", -
+        "stream_url", -
+        "streaming_ready", -
+        "audio_url", -
+        "version", -
+        "status", -
+        "progress", -
+        "streaming", 
+        "isComplete",
+        "chunkIndex",
+        # "lyrics_sections",
+        "error",
+        "operation",
+    } */}
+
 | Parameter          | Type      | Description                                                     |
 | ------------------ | -------- | --------------------------------------------------------------- |
 | **`isComplete`**   | `bool`    | Indicates if the streaming response is complete.                |
@@ -222,7 +247,12 @@ curl -X POST "https://api.soundverse.ai/v5/extend/song/sync" \
 | **`song_name`**    | `string`  | Name of the generated track.                                    |
 | **`progress`**     | `integer` | Progress percentage of the generation process. `0-100`          |
 | **`streaming_ready`** | `bool` | Indicates if audio is ready for streaming.                      |
-| **`lyrics_sections`** | `array` | Detailed sections of lyrics with timing information.           |
+| **`version`**       | `integer` | Version number of the generated audio.                         |
+| **`audio_url`**     | `string`  | URL of the generated audio file.                               |
+| **`error`**        | `string`  | Error message if any issues occurred during processing.         |
+| **`operation`**    | `string`  | Type of operation being performed (e.g., "extend_song").        |
+
+{/* | **`lyrics_sections`** | `array` | Detailed sections of lyrics with timing information.           | */}
 
 - please check [Streaming Responses](../ai-song-gen/ai-song-gen-v5#streaming-response) for more details
 
@@ -232,28 +262,25 @@ curl -X POST "https://api.soundverse.ai/v5/extend/song/sync" \
 
 ```json
 {
-  "messageId": "...",
-  "prompt": "Extend this audio track by 30 seconds while following these instructions: Continue with an uplifting bridge section",
-  "albumArt": "https://storage.soundverse.ai/soundverse-album-art/...album_art.png",
-  "songName": "Extended Song",
-  "status": "COMPLETED",
-  "audioData": [
+  "message_id": "...",
+  "album_art": "https://storage.soundverse.ai/soundverse-album-art/...album_art.png",
+  "audio_data": [
     {
-      "audioUrl": "https://storage.soundverse.ai/x-one/.../.../extended_song_v1.mp3",
-      "songName": "Extended Song",
+      "audio_url": "https://storage.soundverse.ai/x-one/.../.../extended_song_v1.mp3",
+      "song_name": "Extended Song",
       "licenses": {
         "licenses": "Royalty Free"
       }
     },
     {
-      "audioUrl": "https://storage.soundverse.ai/x-one/.../.../extended_song_v2.mp3",
-      "songName": "Extended Song",
+      "audio_url": "https://storage.soundverse.ai/x-one/.../.../extended_song_v2.mp3",
+      "song_name": "Extended Song",
       "licenses": {
         "licenses": "Royalty Free"
       }
     }
   ],
-  "aiReply": "Your song has been extended successfully."
+  "ai_reply": "Your song has been extended successfully."
 }
 ```
 
