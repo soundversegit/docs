@@ -68,7 +68,8 @@ class V5SongGenRequest(BaseModel):
 | `lyrics`     | string   | Lyrics for the song (generated if not provided).                       | No       | N/A            |
 |  `reference_url` | string   | URL of reference audio to guide the generation (optional).             | No       | N/A            |
 | `instrumental_url` | string   | URL of instrumental audio to incorporate (optional).                     | No       | N/A            |
-| `vocal_url`  | string   |   | URL of vocal audio to incorporate (optional).                           | No       | N/A            |
+| `vocal_url`  | string   |  URL of vocal audio to incorporate (optional).                           | No       | N/A            |
+| `melody_url`  | string   |  URL of melody audio to guide the generation (optional).                 | No       | N/A            |
 {/* | `parameters` | object   | Additional generation parameters (e.g., tempo, mood).                  | No       | {}             | */}
 
 ### **Example Request**
@@ -255,7 +256,7 @@ validates the request and bills the user
 ```json
 data: {"message_id": "...", "isComplete": false, "status": "validated", "album_art": "https://storage.soundverse.ai/...", "song_name": "Song Title", "chunkIndex": 1}
 ``` 
-> message_id can be used to track the request using the [/status/generation/{message_id}](../../../api_documentation.mdx#-generation-status-endpoints) endpoint
+> message_id can be used to track the request using the [/status/generation/{message_id}](/api_documentation.mdx#-generation-status-endpoints) endpoint
 
 fields sent: 
 
