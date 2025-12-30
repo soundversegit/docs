@@ -73,21 +73,25 @@
           "group": "AI Song Generation",
           "pages": [
             "enterprise-api/generate/ai-song-gen/ai-song-gen-v5",
-            "enterprise-api/generate/ai-song-gen/ai-song-gen-v4"
+            "enterprise-api/generate/ai-song-gen/ai-song-gen-v4",
+            "enterprise-api/generate/ai-song-gen/ai-song-gen-v1"          
           ]
         },
         {
           "group": "AI Music (Instrumental) Generation",
           "pages": [
             "enterprise-api/generate/ai-music-gen/ai-music-gen-v5",
-            "enterprise-api/generate/ai-music-gen/ai-music-gen-v4"
+            "enterprise-api/generate/ai-music-gen/ai-music-gen-v4",
+            "enterprise-api/generate/ai-music-gen/ai-music-gen-v1",
+            "enterprise-api/generate/ai-music-gen/text-to-music"
           ]
         },
         {
           "group": "AI Extend",
           "pages": [
             "enterprise-api/generate/ai-music-extend/extend-song-v5",
-            "enterprise-api/generate/ai-music-extend/extend-music-v5"
+            "enterprise-api/generate/ai-music-extend/extend-music-v5",
+            "enterprise-api/generate/ai-music-extend/extend-music"
           ]
         },
         {
