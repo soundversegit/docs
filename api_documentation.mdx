@@ -5,47 +5,11 @@ description: 'Welcome to Soundverse API. Our API domain is https://api.soundvers
 
 import React from 'react';
 
-export const Highlight = ({ children }) => (
-  <span style={{ backgroundColor:'#EDE9FE', padding: '0.1rem 0.275rem', borderRadius: '0.25rem', color: '#4C1D95' }}>
-    {children}
-  </span>
-);
 
-export const Note = ({ children }) => (
-  <div style={{ backgroundColor: '#FAF5FF', borderLeft: '0.25rem solid #7C3AED', padding: '0.25rem', margin: '0.5rem 0', color: '#5B21B6' }}>
-    {children}
-  </div>
-);
-
-export const Method = ({ type, children }) => {
-  const styles = {
-    GET: {
-      backgroundColor: "#2563eb",
-      color: "white",
-      padding: "6px 12px",
-      borderRadius: "6px",
-      fontSize: "1.1rem",
-      fontWeight: "bold",
-      display: "inline-block",
-    },
-    POST: {
-      backgroundColor: "#16a34a",
-      color: "white",
-      padding: "6px 12px",
-      borderRadius: "6px",
-      fontSize: "1.1rem",
-      fontWeight: "bold",
-      display: "inline-block",
-    },
-  };
-
-  return <span style={styles[type] || styles.GET}>{children || type}</span>;
-};
-
-<Note>
+<Info>
   🔗 <a href="https://platform.soundverse.ai/" target="_blank" rel="noopener">Soundverse Platform</a> &nbsp;|&nbsp;
   <a href="https://www.soundverse.ai/ai-music-generation-api" target="_blank" rel="noopener">API Dashboard</a>
-</Note>
+</Info>
 
 ## Available API Endpoints
 
