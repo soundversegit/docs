@@ -62,8 +62,11 @@
       "pages": ["account/manage-your-account", "account/user-settings"]
     },
     {
-      "group": "Developer APIs",
-      "pages": ["api_documentation"]
+      "group": " Enterprise Platform",
+      "pages": ["api_documentation",
+        "enterprise-api/faqs"
+    
+    ]
     },
     {
       "group": "API Documentation",
@@ -125,8 +128,7 @@
             "enterprise-api/assistant/chat",
             "enterprise-api/assistant/voice"
           ]
-        },
-        "enterprise-api/faqs"
+        }
       ]
     }
   ],

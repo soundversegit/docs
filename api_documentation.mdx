@@ -1,6 +1,6 @@
 ---
 title: 'API Documentation'
-description: 'Welcome to SoundVerse API. Our API domain is https://api.soundverse.ai/'
+description: 'Welcome to Soundverse API. Our API domain is https://api.soundverse.ai/'
 ---
 
 import React from 'react';
@@ -42,61 +42,45 @@ export const Method = ({ type, children }) => {
   return <span style={styles[type] || styles.GET}>{children || type}</span>;
 };
 
-<Warning>
-  <strong>Deprecated:</strong> As of 30/12/2025 this has been deprecated and will be removed soon. Please migrate to a newer version.
-</Warning>
-
-
 <Note>
-   📌 Explore this guide to understand how to integrate and utilize our APIs efficiently.
+  🔗 <a href="https://platform.soundverse.ai/" target="_blank" rel="noopener">Soundverse Platform</a> &nbsp;|&nbsp;
+  <a href="https://www.soundverse.ai/ai-music-generation-api" target="_blank" rel="noopener">API Dashboard</a>
 </Note>
 
+## Available API Endpoints
 
-## 🔐Authentication
+### AI Song Generation
+- [AI Song Gen v5](enterprise-api/generate/ai-song-gen/ai-song-gen-v5.mdx)
+- [AI Song Gen v4](enterprise-api/generate/ai-song-gen/ai-song-gen-v4.mdx)
+- [AI Song Gen v1](enterprise-api/generate/ai-song-gen/ai-song-gen-v1.mdx)
 
-All API requests require authentication using Bearer tokens. Please ensure your API key is included in the Authorization header:
-```json
-Authorization: Bearer your_api_key_here
-```
+### AI Music (Instrumental) Generation
+- [AI Music Gen v5](enterprise-api/generate/ai-music-gen/ai-music-gen-v5.mdx)
+- [AI Music Gen v4](enterprise-api/generate/ai-music-gen/ai-music-gen-v4.mdx)
+- [AI Music Gen v1](enterprise-api/generate/ai-music-gen/ai-music-gen-v1.mdx)
+- [Text to Music](enterprise-api/generate/ai-music-gen/text-to-music.mdx)
 
-## 🚀 Available API Endpoints
+### AI Extend
+- [Extend Song v5](enterprise-api/generate/ai-music-extend/extend-song-v5.mdx)
+- [Extend Music v5](enterprise-api/generate/ai-music-extend/extend-music-v5.mdx)
+- [Extend Music](enterprise-api/generate/ai-music-extend/extend-music.mdx)
 
-To generate content, you must provide either ```audioUrl``` or ```prompt``` as input.
+### AI Lyric Generation
+- [Generate Lyrics](enterprise-api/generate/ai-lyric-gen/generate-lyrics.mdx)
 
-### 🎵 Generation Endpoints
+### AI Singing
+- [AI Singing Gen v2](enterprise-api/generate/ai-singing-gen/ai-singing-gen-v2.mdx)
 
-- **Text to Music&nbsp;&nbsp;&nbsp;** → <Method type="POST" /> `/api/generate/text-to-music`
-- **AI Song Gen&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** → <Method type="POST" /> `/api/generate/ai-song-gen`
-- **Generate Lyrics** → <Method type="POST" /> `/api/generate/generate-lyrics`
-- **Extend Music&nbsp;&nbsp;&nbsp;&nbsp;** → <Method type="POST" /> `/api/generate/extend-music`
+### AI Stem Separation
+- [Stem Separation](enterprise-api/generate/ai-stem-separation/stem-separation.mdx)
 
-### 🤖 Assistant Endpoints
+### Loop And Trim
+- [Loop and Trim](enterprise-api/generate/loop-trim/loop-and-trim.mdx)
+- [Gen Loop and Trim](enterprise-api/generate/loop-trim/gen_loop_and_trim.mdx)
 
-- **Chat Assistant**     → <Method type="POST" /> `/api/assistant/chat`
-- **Voice Assistant**    → <Method type="POST" /> `/api/assistant/voice`
+### AI Chat (Beta)
+- [Chat Assistant](enterprise-api/assistant/chat.mdx)
+- [Voice Assistant](enterprise-api/assistant/voice.mdx)
 
-### 📊 Generation Status Endpoints
-
-- **Generation Status**  → <Method type="GET">GET</Method> `/status/generations/{message_id}`
-- **Generated Result**   → <Method type="GET">GET</Method> `/generation/{userId}/{messageId}`
-
-
-### 🔄 Checking Generation Status
-You can track the status of your generation request using the following endpoint:
-
-```GET /status/generations/{message_id}```
-
-This will return the current processing status of the given message_id.
-
-### 📥 Retrieving Generated Content
-
-Once a generation request is successfully completed, you can fetch the generated data using:
-
-```GET /generations/{userId}/{messageId}```
-
-Replace ```{userId}``` and ```{messageId}``` with the appropriate values to retrieve your generated content.
-
----
-<Note >
-   📘 For more details, refer to our full API reference documentation.
-</ Note>
+### General API FAQ
+- [API FAQ](enterprise-api/faqs.mdx)
