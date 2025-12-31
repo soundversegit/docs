@@ -11,6 +11,49 @@ import React from 'react';
   <a href="https://www.soundverse.ai/ai-music-generation-api" target="_blank" rel="noopener">API Dashboard</a>
 </Info>
 
+---
+
+Soundverse’s **Enterprise API** lets you generate and edit music programmatically covering **AI song generation (with lyrics + vocals)**, instrumental music generation, extend, lyrics, singing, stem separation, and loop/trim, with both **streaming (SSE)** and **synchronous** workflows depending on the endpoint. Soundverse is constantly adding new endpoints to make it an extensive platform with all potential Audio AI usecases.
+
+Base domain (you’ll hit different paths depending on the endpoint/version): [https://help.soundverse.ai/api_documentation](https://help.soundverse.ai/api_documentation)
+
+**Pick your API plan based on expected usage:**
+- **Starter** (includes Royalty-Free)
+- **Growth** (includes Sample)
+- **Scale** (includes Distribution)
+- **Pay as you go** (Choose any License)
+
+Soundverse’s API licensing is **plan-based by default** and you can **upgrade licenses via dashboard, or contact the Soundverse Support**.
+
+### How to get an API key
+1. Purchase a plan
+2. Open [API Dashboard](https://www.soundverse.ai/ai-music-generation-api) (there’s a direct “API Dashboard” link on the docs page).
+3. Generate/copy your key, then send it on every request using a Bearer header (example shown in the [v5 Song endpoint docs](https://help.soundverse.ai/enterprise-api/generate/ai-song-gen/ai-song-gen-v5)).
+
+**Example header:**
+
+```http
+Authorization: Bearer your_api_key_here
+Content-Type: application/json
+```
+
+### How to choose the right license
+Here’s the simplest way to decide (you can also show this as a tooltip / helper in your onboarding):
+- **Royalty-Free** (default on many plans): broad commercial use for exported tracks, but _no reselling raw/unmodified exports as libraries/sample packs_. [help.soundverse.ai](https://help.soundverse.ai)
+- **Sample**: you can sample/chop/transform exports inside a new work, but still not resell raw exports “as is.” [help.soundverse.ai](https://help.soundverse.ai)
+- **Distribution**: use when you want explicit rights to release to DSPs/social platforms (Spotify/Apple/YouTube/TikTok, etc.). [help.soundverse.ai](https://help.soundverse.ai)
+- **Sync**: use when pairing music to picture (film/TV/ads/games/apps/campaigns), typically project/campaign scoped. [help.soundverse.ai](https://help.soundverse.ai)
+- **Full Ownership**: exclusive buy-out of the master for that track—best for high-stakes brand work / catalogs / label deals, with broad exploitation rights. [help.soundverse.ai](https://help.soundverse.ai)
+
+**Plan mapping:**
+- Starter includes Royalty-Free
+- Growth includes Sample
+- Scale includes Distribution, with upgrades optional
+- Pay as you go has All Licenses, but costs more
+
+**FAQ links (recommended to surface in your docs)**
+- [Enterprise API FAQs (license definitions, FAQs, ownership, sublicensing etc.)](https://help.soundverse.ai/enterprise-api/faqs)
+
 ## Available API Endpoints
 
 ### AI Song Generation
