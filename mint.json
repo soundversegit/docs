@@ -71,6 +71,7 @@
     {
       "group": "API Documentation",
       "pages": [
+        
         {
           "group": "AI Song Generation",
           "pages": [
@@ -120,6 +121,12 @@
             "enterprise-api/generate/loop-trim/loop-and-trim",
             "enterprise-api/generate/loop-trim/gen_loop_and_trim"
 
+          ]
+        },
+        {
+          "group": "AI Image Generation",
+          "pages": [
+            "enterprise-api/generate/ai-image-gen/ai-image-gen-v5"
           ]
         },
         {

@@ -1,0 +1,207 @@
+---
+title: "Recognize Song - v5"
+description: "Identify a song from an audio URL, uploaded file, or raw audio bytes using Shazam."
+---
+
+import React from 'react';
+
+export const Method = ({ type, children }) => {
+  const styles = {
+    GET: {
+      backgroundColor: "#2563eb",
+      color: "white",
+      padding: "3px 6px",
+      borderRadius: "6px",
+      fontSize: "1rem",
+      fontWeight: "bold",
+      display: "inline-block",
+    },
+    POST: {
+      backgroundColor: "#16a34a",
+      color: "white",
+      padding: "3px 6px",
+      borderRadius: "6px",
+      fontSize: "1rem",
+      fontWeight: "bold",
+      display: "inline-block",
+    },
+  };
+
+  return <span style={styles[type] || styles.GET}>{children || type}</span>;
+};
+
+## **Recognize Song (v5)**
+
+### **Endpoint**
+- <Method type="GET">GET</Method> `/v5/recognize`
+
+### **Behavior & Priority**
+The endpoint accepts **one** of the following inputs (priority order):
+1. `file` (multipart upload)
+2. `audio_url` (query string)
+3. raw audio bytes in the request body
+
+If none are provided, the API returns a `400` error.
+
+---
+
+### **Request Parameters**
+
+| Parameter   | Type   | Location | Description                          | Required | Default |
+| ----------- | ------ | -------- | ------------------------------------ | -------- | ------- |
+| `audio_url` | string | query    | Remote audio file URL                | No       | N/A     |
+| `file`      | file   | multipart/form-data | Audio file upload         | No       | N/A     |
+| (raw body)  | bytes  | body     | Raw audio bytes (e.g., `audio/mpeg`) | No       | N/A     |
+
+> 🛈 For `audio_url`, the server downloads up to 25 MB and may wait up to 120 seconds for slow sources.
+
+---
+
+### **Response**
+
+**Shape**
+```json
+{
+  "recognized": true,
+  "data": {
+    "artist": "ROMA",
+    "title": "POTETO CHIP",
+    "album_art": "https://api.soundverse.ai/blob/...",
+    "album_name": "POTETO CHIP - Single",
+    "label": "Doodoo Records",
+    "released": "2025",
+    "albumadamid": "1846981767",
+    "isrc": "QT3FE2571493"
+  }
+}
+```
+
+**Fields**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `recognized` | bool | `true` if a match was found |
+| `data` | `ShazamResponse` \| null | Recognized track data (null if no match) |
+
+**`ShazamResponse`**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `artist` | string \| null | Artist name |
+| `title` | string \| null | Track title |
+| `album_art` | string \| null | Album art URL |
+| `album_name` | string \| null | Album name |
+| `label` | string \| null | Label name |
+| `released` | string \| null | Release year |
+| `albumadamid` | string \| null | Shazam album ID |
+| `isrc` | string \| null | ISRC code |
+
+---
+
+### **Example Requests**
+
+<CodeGroup>
+
+```python 🐍 Python (audio_url)
+import requests
+
+url = "https://api.soundverse.ai/v5/recognize"
+headers = {"Authorization": "Bearer your_api_key_here"}
+params = {"audio_url": "https://storage.soundverse.ai/.../audio.mp3"}
+
+response = requests.get(url, headers=headers, params=params)
+print(response.json())
+```
+
+```python 🐍 Python (file upload)
+import requests
+
+url = "https://api.soundverse.ai/v5/recognize"
+headers = {"Authorization": "Bearer your_api_key_here"}
+files = {"file": ("audio.mp3", open("audio.mp3", "rb"), "audio/mpeg")}
+
+response = requests.get(url, headers=headers, files=files)
+print(response.json())
+```
+
+```javascript ⚡ JavaScript (audio_url)
+const url = new URL("https://api.soundverse.ai/v5/recognize");
+url.searchParams.set("audio_url", "https://storage.soundverse.ai/.../audio.mp3");
+
+const response = await fetch(url, {
+  method: "GET",
+  headers: { Authorization: "Bearer your_api_key_here" },
+});
+
+console.log(await response.json());
+```
+
+```javascript ⚡ JavaScript (file upload)
+const form = new FormData();
+form.append("file", fileInput.files[0]);
+
+const response = await fetch("https://api.soundverse.ai/v5/recognize", {
+  method: "GET",
+  headers: { Authorization: "Bearer your_api_key_here" },
+  body: form,
+});
+
+console.log(await response.json());
+```
+
+```bash 💻 cURL (audio_url)
+curl -G "https://api.soundverse.ai/v5/recognize" \
+  -H "Authorization: Bearer your_api_key_here" \
+  --data-urlencode "audio_url=https://storage.soundverse.ai/.../audio.mp3"
+```
+
+```bash 💻 cURL (file upload)
+curl -X GET "https://api.soundverse.ai/v5/recognize" \
+  -H "Authorization: Bearer your_api_key_here" \
+  -F "file=@audio.mp3;type=audio/mpeg"
+```
+
+```bash 💻 cURL (raw bytes)
+curl -X GET "https://api.soundverse.ai/v5/recognize" \
+  -H "Authorization: Bearer your_api_key_here" \
+  -H "Content-Type: audio/mpeg" \
+  --data-binary "@audio.mp3"
+```
+
+</CodeGroup>
+
+---
+
+### **No Match Example**
+
+```json
+{
+  "recognized": false,
+  "data": null
+}
+```
+
+---
+
+### **Possible Errors**
+
+**Missing Input (400)**  
+```json
+{
+  "detail": "Provide audio_url, file, or raw body bytes"
+}
+```
+
+**Client Disconnected (499)**  
+```json
+{
+  "detail": "Client disconnected"
+}
+```
+
+**Server Error (500)**  
+```json
+{
+  "detail": "Unexpected error message"
+}
+```
