@@ -124,9 +124,9 @@
           ]
         },
         {
-          "group": "AI Image Generation",
+          "group": "AI Song Recognition",
           "pages": [
-            "enterprise-api/generate/ai-image-gen/ai-image-gen-v5"
+            "enterprise-api/generate/ai-song-recog/ai-song-recog-v5"
           ]
         },
         {
