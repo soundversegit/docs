@@ -1,6 +1,6 @@
 ---
 title: "Recognize Song - v5"
-description: "Identify a song from an audio URL, uploaded file, or raw audio bytes using Shazam."
+description: "Identify a song from an audio URL, uploaded file, or raw audio bytes using ."
 ---
 
 import React from 'react';
@@ -81,9 +81,9 @@ If none are provided, the API returns a `400` error.
 | Field | Type | Description |
 | --- | --- | --- |
 | `recognized` | bool | `true` if a match was found |
-| `data` | `ShazamResponse` \| null | Recognized track data (null if no match) |
+| `data` | `Response` \| null | Recognized track data (null if no match) |
 
-**`ShazamResponse`**
+**`Response`**
 
 | Field | Type | Description |
 | --- | --- | --- |
@@ -93,7 +93,7 @@ If none are provided, the API returns a `400` error.
 | `album_name` | string \| null | Album name |
 | `label` | string \| null | Label name |
 | `released` | string \| null | Release year |
-| `albumadamid` | string \| null | Shazam album ID |
+| `albumadamid` | string \| null |  album ID |
 | `isrc` | string \| null | ISRC code |
 
 ---
