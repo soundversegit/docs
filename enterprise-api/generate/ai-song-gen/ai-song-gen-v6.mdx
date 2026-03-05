@@ -1,0 +1,409 @@
+---
+title: "Generate AI Song - v6"
+description: "Generate complete AI songs with lyrics and audio using advanced AI models."
+---
+
+import React from 'react';
+
+export const Method = ({ type, children }) => {
+  const styles = {
+    GET: {
+      backgroundColor: "#2563eb",
+      color: "white",
+      padding: "3px 6px",
+      borderRadius: "6px",
+      fontSize: "1rem",
+      fontWeight: "bold",
+      display: "inline-block",
+    },
+    POST: {
+      backgroundColor: "#16a34a",
+      color: "white",
+      padding: "3px 6px",
+      borderRadius: "6px",
+      fontSize: "1rem",
+      fontWeight: "bold",
+      display: "inline-block",
+    },
+  };
+
+  return <span style={styles[type] || styles.GET}>{children || type}</span>;
+};
+
+## **Generate Song (v6)**
+
+- The API supports both [streaming](../ai-song-gen/ai-song-gen-v5#streaming-response) and synchronous responses
+
+### **Endpoints**
+- <Method type="POST">POST</Method> `/v6/generate/song` **- streaming**
+- <Method type="POST">POST</Method> `/v6/generate/song/sync` **- synchronous**
+
+---
+{/* 
+class v6SongGenRequest(BaseModel):
+    """Request model for v6 Song Generation."""
+    prompt: Optional[str] = Field(None, description="Prompt for song generation")
+    reference_url: Optional[str] = Field(
+        None, description="URL of the reference audio (if any)"
+    )
+    instrumental_url: Optional[str] = Field(
+        None, description="URL of the instrumental audio (if any)"
+    )
+    vocal_url: Optional[str] = Field(
+        None, description="URL of the vocal audio (if any)"
+    )
+    lyrics: Optional[str] = Field(
+        None, description="Lyrics for the song (will be generated if not provided)"
+    )
+    # model: Optional[str] = Field("mureka-7.5", description="Model to use")
+    parameters: Optional[Dict[str, Any]] = Field(
+        default_factory=dict, description="Additional parameters"
+    ) */}
+
+### **Request Parameters**
+
+| Parameter    | Type     | Description                                                            | Required | Default Value |
+| ------------ | -------- | ---------------------------------------------------------------------- | -------- | -------------- |
+| `prompt`     | string   | Text prompt describing the desired song.                               | Yes      | N/A            |
+| `lyrics`     | string   | Lyrics for the song (generated if not provided).                       | No       | N/A            |
+|  `reference_url` | string   | URL of reference audio to guide the generation (optional).             | No       | N/A            |
+| `instrumental_url` | string   | URL of instrumental audio to incorporate (optional).                     | No       | N/A            |
+| `vocal_url`  | string   |  URL of vocal audio to incorporate (optional).                           | No       | N/A            |
+| `melody_url`  | string   |  URL of melody audio to guide the generation (optional).                 | No       | N/A            |
+{/* | `parameters` | object   | Additional generation parameters (e.g., tempo, mood).                  | No       | {}             | */}
+
+### **Example Request**
+
+```json
+{
+  "prompt": "A cheerful pop song about friendship and adventure.",
+  "lyrics": "Through every road we roam, together we are home"
+}
+```
+
+### **Code Examples - Streaming**
+
+<CodeGroup>
+
+```python 🐍 Python
+import requests
+import json
+
+url = "https://api.soundverse.ai/v6/generate/song"
+headers = {
+    "Authorization": "Bearer your_api_key_here",
+    "Content-Type": "application/json"
+}
+payload = {
+    "prompt": "A cheerful pop song about friendship and adventure.",
+    "lyrics": "Through every road we roam, together we are home"
+}
+
+response = requests.post(url, json=payload, headers=headers, stream=True)
+
+# Process streaming response
+for line in response.iter_lines():
+    if line:
+        text = line.decode('utf-8')
+        if text.startswith('data: '):
+            data = json.loads(text[6:])
+            print(data)
+```
+
+```javascript ⚡ JavaScript
+const url = "https://api.soundverse.ai/v6/generate/song";
+const headers = {
+  Authorization: "Bearer your_api_key_here",
+  "Content-Type": "application/json",
+};
+const payload = {
+  prompt: "A cheerful pop song about friendship and adventure.",
+  lyrics: "Through every road we roam, together we are home",
+};
+
+const response = await fetch(url, {
+  method: "POST",
+  headers: headers,
+  body: JSON.stringify(payload),
+});
+
+const reader = response.body.getReader();
+const decoder = new TextDecoder();
+
+while (true) {
+  const { done, value } = await reader.read();
+  if (done) break;
+  
+  const chunk = decoder.decode(value);
+  const lines = chunk.split('\n');
+  
+  lines.forEach(line => {
+    if (line.startsWith('data: ')) {
+      const data = JSON.parse(line.slice(6));
+      console.log(data);
+    }
+  });
+}
+```
+
+```bash 💻 cURL
+curl -X POST "https://api.soundverse.ai/v6/generate/song" \
+  -H "Authorization: Bearer your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "prompt": "A cheerful pop song about friendship and adventure.",
+    "lyrics": "Through every road we roam, together we are home"
+  }' --no-buffer
+```
+
+</CodeGroup>
+
+### **Code Examples - Synchronous**
+
+<CodeGroup>
+
+```python 🐍 Python
+import requests
+
+url = "https://api.soundverse.ai/v6/generate/song/sync"
+headers = {
+    "Authorization": "Bearer your_api_key_here",
+    "Content-Type": "application/json"
+}
+payload = {
+    "prompt": "A cheerful pop song about friendship and adventure.",
+    "lyrics": "Through every road we roam, together we are home"
+}
+
+response = requests.post(url, json=payload, headers=headers)
+print(response.json())
+```
+
+```javascript ⚡ JavaScript
+const url = "https://api.soundverse.ai/v6/generate/song/sync";
+const headers = {
+  Authorization: "Bearer your_api_key_here",
+  "Content-Type": "application/json",
+};
+const payload = {
+  prompt: "A cheerful pop song about friendship and adventure.",
+  lyrics: "Through every road we roam, together we are home",
+};
+
+fetch(url, {
+  method: "POST",
+  headers: headers,
+  body: JSON.stringify(payload),
+})
+  .then((response) => response.json())
+  .then((data) => console.log(data))
+  .catch((error) => console.error("Error:", error));
+```
+
+```bash 💻 cURL
+curl -X POST "https://api.soundverse.ai/v6/generate/song/sync" \
+  -H "Authorization: Bearer your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "prompt": "A cheerful pop song about friendship and adventure.",
+    "lyrics": "Through every road we roam, together we are home"
+  }'
+```
+
+</CodeGroup>
+
+### **Streaming Response**
+
+#### **Fields**
+
+> 🛈 The fields below are used in the chunks sent by SSE during the streaming process.
+
+
+| Parameter          | Type      | Description                                                     |
+| ------------------ | -------- | --------------------------------------------------------------- |
+| **`isComplete`**   | `bool`    | Indicates if the streaming response is complete.                |
+| **`status`**       | `string`  | Current status of the extension process.                        |
+| **`chunkIndex`**   | `integer` | Index of the current chunk in the streaming sequence.           |
+| **`message_id`**   | `string`  | Unique identifier for the extension request.                    |
+| **`stream_url`**   | `string`  | URL to access the generated audio stream when ready.            |
+| **`version`**      | `integer` | Version of the generated content.                               |
+| **`album_art`**    | `string`  | URL of the album art associated with the generated content.     |
+| **`song_name`**    | `string`  | Name of the generated track.                                    |
+| **`progress`**     | `integer` | Progress percentage of the generation process. `0-100`          |
+| **`streaming_ready`** | `bool` | Indicates if audio is ready for streaming.                      |
+| **`version`**       | `integer` | Version number of the generated audio.                         |
+| **`audio_url`**     | `string`  | URL of the generated audio file.                               |
+| **`error`**        | `string`  | Error message if any issues occurred during processing.         |
+| **`operation`**    | `string`  | Type of operation being performed (e.g., "extend_song").        |
+
+
+#### **Stages of Streaming Response**
+
+##### **Initialization**
+sent immediately after the request is received
+```json
+data: {"isComplete": false, "status": "initializing", "chunkIndex": 0}
+```
+
+fields sent:
+
+`isComplete`, `status`, `chunkIndex`
+
+---
+
+##### **Validation**
+validates the request and bills the user
+```json
+data: {"message_id": "...", "isComplete": false, "status": "validated", "album_art": "https://storage.soundverse.ai/...", "song_name": "Song Title", "chunkIndex": 1}
+``` 
+> message_id can be used to track the request using the [/status/generation/{message_id}](/api_documentation.mdx#-generation-status-endpoints) endpoint
+
+fields sent: 
+
+`message_id`, `isComplete`, `status`, `album_art`, `song_name`, `chunkIndex`
+
+---
+
+##### **Streaming**
+begins generating the content and streams updates
+```json
+data: {"message_id": "...", "isComplete": false, "status": "streaming", "album_art": "https://storage.soundverse.ai/...", "song_name": "Song Title", "chunkIndex": 2}
+``` 
+
+fields sent: 
+
+`message_id`, `isComplete`, `status`, `album_art`, `song_name`, `chunkIndex`
+
+---
+
+##### **Processing & Running**
+provides progress updates during generation
+```json
+data: {"message_id": "...", "isComplete": false, "chunkIndex": 3, "status": "processing", "album_art": "https://storage.soundverse.ai/...", "song_name": "Song Title"}
+data: {"message_id": "...", "isComplete": false, "chunkIndex": 4, "status": "running", "album_art": "https://storage.soundverse.ai/...", "song_name": "Song Title", "progress": 2}
+```
+
+fields sent:
+
+`message_id`, `isComplete`, `chunkIndex`, `status`, `album_art`, `song_name`, `progress`
+
+---
+
+##### **Streaming Ready**
+indicates that the stream url is ready and can be used for playback
+```json
+data: {"message_id": "...", "isComplete": false, "status": "streaming", "chunkIndex": 8, "stream_url": "https://api.soundverse.ai/...", "version": 1, "streaming_ready": true, "album_art": "https://storage.soundverse.ai/...", "song_name": "Song Title"}
+```
+
+fields sent:
+
+`message_id`, `isComplete`, `status`, `chunkIndex`, `stream_url`, `version`, `streaming_ready`, `album_art`, `song_name`
+
+> 🛈 Note: Two versions of the generated content are created per request (version 1 and version 2).
+
+---
+
+##### **Completed Generation**
+indicates that the generation is complete
+```json
+data: {"message_id": "...", "isComplete": false, "chunkIndex": 10, "status": "completed", "album_art": "https://storage.soundverse.ai/...", "audio_url": "https://storage.soundverse.ai/...", "song_name": "Song Title", "progress": 100}
+```
+
+fields sent:
+
+`message_id`, `isComplete`, `chunkIndex`, `status`, `album_art`, `song_name`, `progress`, `audio_url`
+
+---
+
+##### **Uploading**
+indicates that the generated content is being uploaded for further processing
+```json
+data: {"message_id": "...", "isComplete": false, "status": "uploading", "version": 1, "chunkIndex": 11}
+```
+
+fields sent:
+
+`message_id`, `isComplete`, `status`, `version`, `chunkIndex`
+
+---
+
+##### **Final Completed Response**
+provides the final details of the generated content including lyrics sections
+```json
+data: {"message_id": "...", "isComplete": false, "status": "completed", "version": 1, "lyrics_sections": [...], "chunkIndex": 12}
+```
+
+fields sent:
+
+`message_id`, `isComplete`, `status`, `version`, `lyrics_sections`, `chunkIndex`
+
+---
+
+### **Synchronous Response**
+
+#### **Sample Synchronous Output**
+
+```json
+{
+  "message_id": "...",
+  "album_art": "https://storage.soundverse.ai/x-one/.../userData/album-arts/album_art_1766599034.webp",
+  "song_name": "Midnight Drizzle Beats",
+  "audio_data": [
+    {
+      "audio_url": "https://storage.soundverse.ai/x-one/.../userData/generated-audio/midnight_drizzle_beats_v1.mp3",
+      "song_name": "Midnight Drizzle Beats",
+    },
+    {
+      "audio_url": "https://storage.soundverse.ai/x-one/.../userData/generated-audio/midnight_drizzle_beats_v2.mp3",
+      "song_name": "Midnight Drizzle Beats",
+    }
+  ] 
+}
+```
+
+### **Possible Errors**
+
+**Rate Limit Exceeded:**
+
+```json
+{
+  "success": false,
+  "message": "Rate limits have been passed for the user."
+}
+```
+
+**Insufficient Balance:**
+
+```json
+{
+  "success": false,
+  "message": "Insufficient balance for this operation."
+}
+```
+
+**Invalid Prompt:**
+
+```json
+{
+  "detail": "Invalid or empty prompt provided"
+}
+```
+
+**NSFW Content Detected:**
+
+```json
+{
+  "success": false,
+  "message": "NSFW words detected. Please try again with different lyrics."
+}
+```
+
+**Service Unavailable:**
+
+```json
+{
+  "success": false,
+  "message": "Service temporarily unavailable. Please try again in a moment.",
+  "error": "Database connection pool exhausted"
+}
+```

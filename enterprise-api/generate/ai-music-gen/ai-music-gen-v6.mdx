@@ -1,0 +1,297 @@
+---
+title: "Generate AI Music - v6"
+description: "Generate complete AI instrumental music with advanced AI models."
+---
+
+import React from 'react';
+
+export const Method = ({ type, children }) => {
+  const styles = {
+    GET: {
+      backgroundColor: "#2563eb",
+      color: "white",
+      padding: "3px 6px",
+      borderRadius: "6px",
+      fontSize: "1rem",
+      fontWeight: "bold",
+      display: "inline-block",
+    },
+    POST: {
+      backgroundColor: "#16a34a",
+      color: "white",
+      padding: "3px 6px",
+      borderRadius: "6px",
+      fontSize: "1rem",
+      fontWeight: "bold",
+      display: "inline-block",
+    },
+  };
+
+  return <span style={styles[type] || styles.GET}>{children || type}</span>;
+};
+
+
+
+## **Generate Instrumental Music (v6)**
+
+- The API supports both [streaming](../ai-song-gen/ai-song-gen-v5#streaming-response) and synchronous responses
+
+### **Endpoints**
+- <Method type="POST">POST</Method> `/v6/generate/music` **- streaming**
+- <Method type="POST">POST</Method> `/v6/generate/music/sync` **- synchronous**
+
+---
+
+{/* class v6MusicGenRequest(BaseModel):
+    """Request model for v6 Music Generation."""
+    # userId: str = Field(..., description="User ID requesting the operation")
+    prompt: str = Field(..., description="Prompt for music generation")
+    duration: Optional[int] = Field(30, description="Duration in seconds")
+    style: Optional[str] = Field(None, description="Musical style")
+    # model: Optional[str] = Field("mureka-7.5", description="Model to use")
+    parameters: Optional[Dict[str, Any]] = Field(
+        default_factory=dict, description="Additional parameters"
+    ) */}
+
+### **Request Parameters**
+
+| Parameter       | Type    | Description                                                                                     | Required | Default Value |
+| --------------- | ------- | ----------------------------------------------------------------------------------------------- | -------- | -------------- |
+| `prompt`        | string  | Text prompt describing the desired music.                                                       | Yes      | N/A            |
+| `style`         | string  | Musical style or genre (e.g., jazz, classical, rock).                                   | No       | N/A            |
+{/* | `parameters`    | object  | Additional generation parameters (e.g., tempo, mood).                                           |                                                | No       | {}             | */}
+
+### **Example Request**
+
+```json
+{
+  "prompt": "upbeat jazz music with saxophone",
+  "style": "jazz"
+}
+```
+
+### **Code Examples - Streaming**
+
+<CodeGroup>
+
+```python 🐍 Python
+import requests
+import json
+
+url = "https://api.soundverse.ai/v6/generate/music"
+headers = {
+    "Authorization": "Bearer your_api_key_here",
+    "Content-Type": "application/json"
+}
+payload = {
+    "prompt": "upbeat jazz music with saxophone",
+    "style": "jazz"
+}
+
+response = requests.post(url, json=payload, headers=headers, stream=True)
+
+# Process streaming response
+for line in response.iter_lines():
+    if line:
+        text = line.decode('utf-8')
+        if text.startswith('data: '):
+            data = json.loads(text[6:])
+            print(data)
+```
+
+```javascript ⚡ JavaScript
+const url = "https://api.soundverse.ai/v6/generate/music";
+const headers = {
+  Authorization: "Bearer your_api_key_here",
+  "Content-Type": "application/json",
+};
+const payload = {
+  prompt: "upbeat jazz music with saxophone",
+  style: "jazz",
+};
+
+const response = await fetch(url, {
+  method: "POST",
+  headers: headers,
+  body: JSON.stringify(payload),
+});
+
+const reader = response.body.getReader();
+const decoder = new TextDecoder();
+
+while (true) {
+  const { done, value } = await reader.read();
+  if (done) break;
+  
+  const chunk = decoder.decode(value);
+  const lines = chunk.split('\n');
+  
+  lines.forEach(line => {
+    if (line.startsWith('data: ')) {
+      const data = JSON.parse(line.slice(6));
+      console.log(data);
+    }
+  });
+}
+```
+
+```bash 💻 cURL
+curl -X POST "https://api.soundverse.ai/v6/generate/music" \
+  -H "Authorization: Bearer your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "prompt": "upbeat jazz music with saxophone",
+    "style": "jazz"
+  }' --no-buffer
+```
+
+</CodeGroup>
+
+### **Code Examples - Synchronous**
+
+<CodeGroup>
+
+```python 🐍 Python
+import requests
+
+url = "https://api.soundverse.ai/v6/generate/music/sync"
+headers = {
+    "Authorization": "Bearer your_api_key_here",
+    "Content-Type": "application/json"
+}
+payload = {
+    "prompt": "upbeat jazz music with saxophone",
+    "style": "jazz"
+}
+
+response = requests.post(url, json=payload, headers=headers)
+print(response.json())
+```
+
+```javascript ⚡ JavaScript
+const url = "https://api.soundverse.ai/v6/generate/music/sync";
+const headers = {
+  Authorization: "Bearer your_api_key_here",
+  "Content-Type": "application/json",
+};
+const payload = {
+  prompt: "upbeat jazz music with saxophone",
+  style: "jazz",
+};
+
+fetch(url, {
+  method: "POST",
+  headers: headers,
+  body: JSON.stringify(payload),
+})
+  .then((response) => response.json())
+  .then((data) => console.log(data))
+  .catch((error) => console.error("Error:", error));
+```
+
+```bash 💻 cURL
+curl -X POST "https://api.soundverse.ai/v6/generate/music/sync" \
+  -H "Authorization: Bearer your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "prompt": "upbeat jazz music with saxophone",
+    "style": "jazz"
+  }'
+```
+
+</CodeGroup>
+
+### **Streaming Response**
+
+#### **Fields**
+
+> 🛈 The fields below are used in the chunks sent by SSE during the streaming process.
+
+| Parameter          | Type      | Description                                                     |
+| ------------------ | -------- | --------------------------------------------------------------- |
+| **`isComplete`**   | `bool`    | Indicates if the streaming response is complete.                |
+| **`status`**       | `string`  | Current status of the extension process.                        |
+| **`chunkIndex`**   | `integer` | Index of the current chunk in the streaming sequence.           |
+| **`message_id`**   | `string`  | Unique identifier for the extension request.                    |
+| **`stream_url`**   | `string`  | URL to access the generated audio stream when ready.            |
+| **`version`**      | `integer` | Version of the generated content.                               |
+| **`album_art`**    | `string`  | URL of the album art associated with the generated content.     |
+| **`song_name`**    | `string`  | Name of the generated track.                                    |
+| **`progress`**     | `integer` | Progress percentage of the generation process. `0-100`          |
+| **`streaming_ready`** | `bool` | Indicates if audio is ready for streaming.                      |
+| **`version`**       | `integer` | Version number of the generated audio.                         |
+| **`audio_url`**     | `string`  | URL of the generated audio file.                               |
+| **`error`**        | `string`  | Error message if any issues occurred during processing.         |
+| **`operation`**    | `string`  | Type of operation being performed (e.g., "extend_song").        |
+
+- please check [Streaming Responses](../ai-song-gen/ai-song-gen-v6#streaming-response) for more details
+
+### **Synchronous Response**
+
+#### **Sample Synchronous Output**
+
+```json
+{
+  "message_id": "...",
+  "album_art": "https://storage.soundverse.ai/x-one/.../userData/album-arts/album_art_1766599034.webp",
+  "song_name": "Midnight Drizzle Beats",
+  "audio_data": [
+    {
+      "audio_url": "https://storage.soundverse.ai/x-one/.../userData/generated-audio/midnight_drizzle_beats_v1.mp3",
+      "song_name": "Midnight Drizzle Beats",
+    },
+    {
+      "audio_url": "https://storage.soundverse.ai/x-one/.../userData/generated-audio/midnight_drizzle_beats_v2.mp3",
+      "song_name": "Midnight Drizzle Beats",
+    }
+  ] 
+}
+```
+
+
+### **Possible Errors**
+
+**Rate Limit Exceeded:**
+
+```json
+{
+  "success": false,
+  "message": "Rate limits have been passed for the user."
+}
+```
+
+**Insufficient Balance:**
+
+```json
+{
+  "success": false,
+  "message": "Insufficient balance for this operation."
+}
+```
+
+**Invalid Prompt:**
+
+```json
+{
+  "detail": "Invalid or empty prompt provided"
+}
+```
+
+**NSFW Content Detected:**
+
+```json
+{
+  "success": false,
+  "message": "NSFW words detected. Please try again with different lyrics."
+}
+```
+
+**Service Unavailable:**
+
+```json
+{
+  "success": false,
+  "message": "Service temporarily unavailable. Please try again in a moment.",
+  "error": "Database connection pool exhausted"
+}
+```
