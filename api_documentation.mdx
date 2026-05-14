@@ -56,6 +56,8 @@ Here’s the simplest way to decide (you can also show this as a tooltip / helpe
 
 ## Available API Endpoints
 
+
+
 ### AI Song Generation
 - [AI Song Gen v5](enterprise-api/generate/ai-song-gen/ai-song-gen-v5)
 - [AI Song Gen v4](enterprise-api/generate/ai-song-gen/ai-song-gen-v4)
@@ -88,3 +90,39 @@ Here’s the simplest way to decide (you can also show this as a tooltip / helpe
 ### AI Chat (Beta)
 - [Chat Assistant](enterprise-api/assistant/chat)
 - [Voice Assistant](enterprise-api/assistant/voice)
+
+### Check Status (`/v5/status`)
+
+- Method: `GET`
+- Path: `/v5/status`
+- Query parameters:
+  - `message_id` *(required)* — string ID of the request to check
+
+**Example Request**
+
+```bash
+curl -X 'GET' \
+  'https://api.soundverse.ai/v5/status?message_id=6a05ae81e622f4000cb9d988' \
+  -H 'accept: application/json' \
+  -H 'Authorization: Bearer your_api_key_here'
+```
+
+**Successful Response (200)**
+
+```json
+{
+  "status": "string",
+  "message_id": "string",
+  "audio_data": {
+    "additionalProp1": {}
+  },
+  "album_art": "string",
+  "song_name": "string",
+  "progress": 0
+}
+```
+
+**Errors**
+
+- `401` — Invalid API key format. Use `Bearer <your_api_key>`.
+- `422` — Validation Error (invalid or missing `message_id`).
