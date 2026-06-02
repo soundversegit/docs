@@ -1,0 +1,261 @@
+---
+title: "AI Remix - v7"
+description: "Remix an existing song into a new style or genre using AI."
+---
+
+import React from 'react';
+
+export const Method = ({ type, children }) => {
+  const styles = {
+    GET: {
+      backgroundColor: "#2563eb",
+      color: "white",
+      padding: "3px 6px",
+      borderRadius: "6px",
+      fontSize: "1rem",
+      fontWeight: "bold",
+      display: "inline-block",
+    },
+    POST: {
+      backgroundColor: "#16a34a",
+      color: "white",
+      padding: "3px 6px",
+      borderRadius: "6px",
+      fontSize: "1rem",
+      fontWeight: "bold",
+      display: "inline-block",
+    },
+  };
+
+  return <span style={styles[type] || styles.GET}>{children || type}</span>;
+};
+
+## **AI Remix (v7)**
+
+- The API supports streaming responses only.
+- Provide an existing song as a reference URL and a style prompt to generate a remixed version.
+
+### **Endpoint**
+- <Method type="POST">POST</Method> `/v7/generate/remix` **- streaming**
+
+---
+
+### **Request Parameters**
+
+| Parameter            | Type   | Description                                                                 | Required | Default Value |
+| -------------------- | ------ | --------------------------------------------------------------------------- | -------- | ------------- |
+| `song_reference_url` | string | Publicly accessible URL of the source audio file to remix (max 10 MB, 10–350 s). | Yes | N/A |
+| `prompt`             | string | Style or genre prompt for the remix (e.g. `"jazz remix with horns"`). At least one of `prompt` or `lyrics` is required. | Conditional | N/A |
+| `lyrics`             | string | New lyrics for the remixed track. Falls back to `prompt` if omitted. At least one of `prompt` or `lyrics` is required. | Conditional | N/A |
+| `parameters`         | object | Additional generation parameters passed through to the model.               | No | `{}` |
+
+### **Example Request**
+
+```json
+{
+  "song_reference_url": "https://storage.soundverse.ai/.../original_song.mp3",
+  "prompt": "upbeat jazz remix with brass horns"
+}
+```
+
+### **Code Examples**
+
+<CodeGroup>
+
+```python 🐍 Python
+import requests
+import json
+
+url = "https://api.soundverse.ai/v7/generate/remix"
+headers = {
+    "Authorization": "Bearer your_api_key_here",
+    "Content-Type": "application/json"
+}
+payload = {
+    "song_reference_url": "https://storage.soundverse.ai/.../original_song.mp3",
+    "prompt": "upbeat jazz remix with brass horns"
+}
+
+response = requests.post(url, json=payload, headers=headers, stream=True)
+
+for line in response.iter_lines():
+    if line:
+        text = line.decode('utf-8')
+        if text.startswith('data: '):
+            data = json.loads(text[6:])
+            print(data)
+```
+
+```javascript ⚡ JavaScript
+const url = "https://api.soundverse.ai/v7/generate/remix";
+const headers = {
+  Authorization: "Bearer your_api_key_here",
+  "Content-Type": "application/json",
+};
+const payload = {
+  song_reference_url: "https://storage.soundverse.ai/.../original_song.mp3",
+  prompt: "upbeat jazz remix with brass horns",
+};
+
+const response = await fetch(url, {
+  method: "POST",
+  headers: headers,
+  body: JSON.stringify(payload),
+});
+
+const reader = response.body.getReader();
+const decoder = new TextDecoder();
+
+while (true) {
+  const { done, value } = await reader.read();
+  if (done) break;
+
+  const chunk = decoder.decode(value);
+  const lines = chunk.split('\n');
+
+  lines.forEach(line => {
+    if (line.startsWith('data: ')) {
+      const data = JSON.parse(line.slice(6));
+      console.log(data);
+    }
+  });
+}
+```
+
+```bash 💻 cURL
+curl -X POST "https://api.soundverse.ai/v7/generate/remix" \
+  -H "Authorization: Bearer your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "song_reference_url": "https://storage.soundverse.ai/.../original_song.mp3",
+    "prompt": "upbeat jazz remix with brass horns"
+  }' --no-buffer
+```
+
+</CodeGroup>
+
+### **Streaming Response**
+
+#### **Fields**
+
+> 🛈 The fields below are used in the chunks sent by SSE during the streaming process.
+
+| Parameter             | Type      | Description                                                      |
+| --------------------- | --------- | ---------------------------------------------------------------- |
+| **`isComplete`**      | `bool`    | Indicates if the streaming response is complete.                 |
+| **`status`**          | `string`  | Current status of the remix process.                             |
+| **`chunkIndex`**      | `integer` | Index of the current chunk in the streaming sequence.            |
+| **`message_id`**      | `string`  | Unique identifier for the remix request.                         |
+| **`stream_url`**      | `string`  | URL to access the generated audio stream when ready.             |
+| **`version`**         | `integer` | Version of the generated content.                                |
+| **`album_art`**       | `string`  | URL of the album art associated with the generated content.      |
+| **`song_name`**       | `string`  | Name of the generated track.                                     |
+| **`progress`**        | `integer` | Progress percentage of the generation process (`0–100`).         |
+| **`streaming_ready`** | `bool`    | Indicates if audio is ready for streaming.                       |
+| **`audio_url`**       | `string`  | URL of the final generated audio file.                           |
+| **`error`**           | `string`  | Error message if any issues occurred during processing.          |
+| **`operation`**       | `string`  | Type of operation being performed (`"remix_song"`).              |
+
+#### **Stages of Streaming Response**
+
+##### **Validating**
+sent immediately after the request is received and validated
+```json
+data: {"isComplete": false, "status": "validating", "chunkIndex": 0}
+```
+
+---
+
+##### **Queued**
+request has been accepted and is waiting to be processed
+```json
+data: {"message_id": "...", "isComplete": false, "status": "queued", "album_art": "https://storage.soundverse.ai/...", "song_name": "Remix Title", "chunkIndex": 1}
+```
+
+> `message_id` can be used to track the request using the [/status/generation/{message_id}](/api_documentation.mdx#-generation-status-endpoints) endpoint
+
+---
+
+##### **Starting / Initializing**
+the remix job is being prepared
+```json
+data: {"message_id": "...", "isComplete": false, "status": "starting", "chunkIndex": 2}
+data: {"message_id": "...", "isComplete": false, "status": "initializing", "chunkIndex": 3}
+```
+
+---
+
+##### **Uploading**
+the reference audio is being uploaded to the model
+```json
+data: {"message_id": "...", "isComplete": false, "status": "uploading", "chunkIndex": 4}
+```
+
+---
+
+##### **Streaming (with progress)**
+remix is generating; `progress` increments from `0` to `100`
+```json
+data: {"message_id": "...", "isComplete": false, "status": "streaming", "progress": 0, "chunkIndex": 5}
+data: {"message_id": "...", "isComplete": false, "status": "streaming", "progress": 50, "chunkIndex": 6}
+data: {"message_id": "...", "isComplete": false, "status": "streaming", "progress": 100, "stream_url": "https://api.soundverse.ai/...", "streaming_ready": true, "version": 1, "chunkIndex": 7}
+```
+
+> **Note:** `progress` may hold at `90` for several minutes while the model finalizes and uploads the output audio. This is expected. The SSE connection remains open and active during this time. The stream will resume with a `completed` chunk and `audio_url` once the file is ready.
+
+---
+
+##### **Completed**
+remix is finished and the final audio is available
+```json
+data: {"message_id": "...", "isComplete": true, "status": "completed", "audio_url": "https://storage.soundverse.ai/...", "album_art": "https://storage.soundverse.ai/...", "song_name": "Remix Title", "progress": 100, "chunkIndex": 8}
+```
+
+---
+
+### **Possible Errors**
+
+**Missing prompt and lyrics:**
+
+```json
+{
+  "detail": "Either prompt or lyrics must be provided"
+}
+```
+
+**Reference audio too large (> 10 MB):**
+
+```json
+{
+  "success": false,
+  "message": "Reference audio error: File too large: 12657318 bytes (max: 10485760)"
+}
+```
+
+**Rate Limit Exceeded:**
+
+```json
+{
+  "success": false,
+  "message": "Rate limits have been passed for the user."
+}
+```
+
+**Insufficient Balance:**
+
+```json
+{
+  "success": false,
+  "message": "Insufficient balance for this operation."
+}
+```
+
+**Service Unavailable:**
+
+```json
+{
+  "success": false,
+  "message": "Service temporarily unavailable. Please try again in a moment.",
+  "error": "Database connection pool exhausted"
+}
+```

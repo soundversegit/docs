@@ -102,6 +102,12 @@
           ]
         },
         {
+          "group": "AI Remix",
+          "pages": [
+            "enterprise-api/generate/ai-remix/ai-remix-v7"
+          ]
+        },
+        {
           "group": "AI Lyric Generation",
           "pages": [
             "enterprise-api/generate/ai-lyric-gen/generate-lyrics"
