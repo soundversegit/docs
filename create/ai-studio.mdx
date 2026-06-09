@@ -1,18 +1,18 @@
 ---
-title: "Collab Studio"
-description: "A collaborative, browser-based music production studio with multi-track editing, AI tools, and real-time collaboration."
+title: "AI Studio"
+description: "A Collaborative Audio Visual Environment (CAVE) with generative capabilities, multi-track editing, and real-time collaboration."
 ---
 
-## What is Collab Studio?
+## What is AI Studio?
 
-Collab Studio is Soundverse's built-in Digital Audio Workstation (DAW) — think of it as a fully-featured recording and mixing studio that runs entirely in your browser. No downloads, no installations.
+AI Studio is Soundverse's built-in Collaborative Audio Visual Environment (CAVE) with generative capabilities. Think of it as a fully-featured recording and mixing environment that runs entirely in your browser. No downloads, no installations.
 
-Whether you're a first-time creator or a seasoned producer, Collab Studio gives you everything you need to record vocals, layer music tracks, add a video score, or collaborate live with teammates — all in one place.
+Whether you're a first-time creator or a seasoned producer, AI Studio gives you everything you need to record vocals, layer music tracks, add a video score, or collaborate live with teammates — all in one place.
 
-### Key Capabilities
+### Features
 
 - **Browser-Based DAW:** No heavy installations required; everything runs in the cloud.
-- **AI Integration:** AI tools generate audio directly onto the grid of the timeline — your clips appear instantly in place, ready to arrange and mix.
+- **AI Integration:** AI tools generate audio, image, and video directly onto the grid of the timeline — your clips appear instantly in place, ready to arrange and mix.
 - **Multi-Track Editing:** Layer multiple audio, video, and image tracks simultaneously.
 - **Real-Time Collaboration:** Invite teammates to edit the same project at the same time.
 - **Cloud Asset Management:** All your recordings, AI-generated clips, and uploads are saved and accessible from one place.
@@ -33,8 +33,8 @@ Whether you're a first-time creator or a seasoned producer, Collab Studio gives 
 ### Create a Project
 
 <Steps>
-  <Step title="Find Collab Studio in the Sidebar">
-    In the left sidebar, look for the **Collab Studio** option and click it to open the studio.
+  <Step title="Find AI Studio in the Sidebar">
+    In the left sidebar, look for the **AI Studio** option and click it to open the studio.
   </Step>
   <Step title="Create a New Project">
     Once inside, click **New Project** to start a fresh, empty multi-track canvas.
@@ -51,7 +51,7 @@ Whether you're a first-time creator or a seasoned producer, Collab Studio gives 
     In the left sidebar, navigate to the **Library** panel.
   </Step>
   <Step title="Go to the Projects Tab">
-    Inside the Library panel, open the **Projects** tab to see all your saved Collab Studio projects.
+    Inside the Library panel, open the **Projects** tab to see all your saved AI Studio projects.
   </Step>
   <Step title="Click to Open">
     Click on any project to open it. The studio will restore all your tracks, assets, and the last saved state of your timeline automatically.
@@ -62,7 +62,7 @@ Whether you're a first-time creator or a seasoned producer, Collab Studio gives 
 
 ## Studio Interface Overview
 
-Here's what the Collab Studio interface looks like:
+Here's what the AI Studio interface looks like:
 
 <img
   className="block dark:hidden"
@@ -137,7 +137,7 @@ Used for vocals, instruments, sound effects, and AI-generated music stems. Each 
 #### Video Track
 A dedicated track for your reference video. It is helpful for scoring, dubbing, or sound design work. The video plays in sync with the playhead inside the **Preview Panel** on the right. You can import a video from your device or generate one using Soundverse's AI tools.
 
-> Collab Studio supports **one active video track** at a time.
+> AI Studio supports **one active video track** at a time.
 
 #### Image Track
 Place static images on the image track — great for podcast cover art, storyboarding, or visual context for your session. You can import images from your device or generate them using Soundverse's AI tools. Stretch image clips to define how long they stay on screen.
@@ -223,7 +223,7 @@ All images render in the **Preview Panel** on the right, respecting the timing y
 
 ## Recording
 
-You can record directly into Collab Studio from your microphone or any connected audio interface.
+You can record directly into AI Studio from your microphone or any connected audio interface.
 
 <img
   className="block dark:hidden"
@@ -249,7 +249,7 @@ You can record directly into Collab Studio from your microphone or any connected
     Move the playhead to your desired start point, then click the master **Record** button in the top navigation bar. A metronome count-in will play (if enabled) before recording begins.
   </Step>
   <Step title="Monitor Your Input">
-    Enable **input monitoring** to hear yourself through Collab Studio as you record.
+    Enable **input monitoring** to hear yourself through AI Studio as you record.
     <Warning>Always use headphones when input monitoring is on to avoid feedback (the screeching loop sound you get when a mic picks up its own output).</Warning>
   </Step>
 </Steps>
@@ -276,13 +276,33 @@ You can record directly into Collab Studio from your microphone or any connected
 
 ## Collaboration
 
-Collab Studio supports real-time multiplayer editing — multiple people can work on the same project at the same time.
+AI Studio supports real-time multiplayer editing — multiple people can work on the same project at the same time.
 
 ### Inviting Collaborators
 
-Click the **Share** button in the top right. You can:
-- Invite collaborators via **email**
-- Generate a **shareable link**
+You can easily invite others to your project to work together in real time. 
+
+<Steps>
+  <Step title="Open the Invite Modal">
+    Click the **Invite** button in the top right corner of AI Studio.
+    
+    <img
+      src="/images/create/collab-studio/Invite Button.png"
+      alt="Invite Button"
+    />
+  </Step>
+  <Step title="Send an Email Invite">
+    Type the email address of your collaborator, choose their access level (Editor, Viewer, or Admin) from the dropdown, and click **Invite**.
+    
+    <img
+      src="/images/create/collab-studio/Invite Modal Email Invite.png"
+      alt="Invite Modal Email Invite"
+    />
+  </Step>
+  <Step title="Share via Link (Optional)">
+    Alternatively, you can change the **General Access** from "Restricted" to "Anyone with link" and click **Copy link** to share it directly via chat or social media.
+  </Step>
+</Steps>
 
 ### Roles & Permissions
 
@@ -295,7 +315,7 @@ Click the **Share** button in the top right. You can:
 <Note>For Edu/Enterprise Workspaces: Sharing permissions may be governed by your Workspace Administrator's Walled Garden policies.</Note>
 
 ### Project History & Conflict Resolution
-Every action is tracked. You can undo and redo changes at any time. If two collaborators edit the same clip at the exact same moment, Collab Studio resolves the conflict automatically — no data loss.
+Every action is tracked. You can undo and redo changes at any time. If two collaborators edit the same clip at the exact same moment, AI Studio resolves the conflict automatically — no data loss.
 
 ---
 
@@ -307,7 +327,7 @@ Multi-Channel Input Support is an advanced feature for creators who use external
 
 ### Routing Complex Setups
 
-If you have a microphone or instrument plugged into a higher-numbered input on your mixer (like Channel 3, Channel 24, etc.), you can use **Virtual Audio Routing Software** to seamlessly bring those signals into Collab Studio. By using a virtual audio router, you can easily reroute the physical input of your interface into a clean, selectable audio source that Collab Studio can detect on Channel 1.
+If you have a microphone or instrument plugged into a higher-numbered input on your mixer (like Channel 3, Channel 24, etc.), you can use **Virtual Audio Routing Software** to seamlessly bring those signals into AI Studio. By using a virtual audio router, you can easily reroute the physical input of your interface into a clean, selectable audio source that AI Studio can detect on Channel 1.
 
 ### Supported Software
 
@@ -323,12 +343,12 @@ Based on your operating system, you can use the following virtual audio routing 
     Plug your multi-channel audio interface or mixer into your computer via USB.
   </Step>
   <Step title="Reroute via a Virtual Audio Interface">
-    If your external mixer doesn't appear as individual channels in the browser, use a virtual audio router (such as VB-Audio Matrix) to reroute your mixer's physical inputs to virtual output channels — for example, mapping your mixer's Channel 24 to Virtual Output 1, so Collab Studio can see it as a clean, selectable input.
+    If your external mixer doesn't appear as individual channels in the browser, use a virtual audio router (such as VB-Audio Matrix) to reroute your mixer's physical inputs to virtual output channels — for example, mapping your mixer's Channel 24 to Virtual Output 1, so AI Studio can see it as a clean, selectable input.
   </Step>
   <Step title="Set Browser Permissions">
     Select your interface (or virtual audio device) as the audio input when your browser asks for microphone permission.
   </Step>
-  <Step title="Assign Channels in Collab Studio">
+  <Step title="Assign Channels in AI Studio">
     Open the **Input Selection** menu on each track and assign the specific channel you want that track to capture.
   </Step>
 </Steps>
@@ -348,9 +368,9 @@ Based on your operating system, you can use the following virtual audio routing 
 
 | Setup | Best For |
 |---|---|
-| **Collab Studio + Headphones** | Best for music producers building tracks with AI and existing assets. |
-| **USB Mic + Collab Studio** | Great for both producers recording vocals and podcasters recording solo episodes. |
-| **Multi-input Mixer + Collab Studio** | Serious professional setup for recording multiple speakers or instruments simultaneously. |
+| **AI Studio + Headphones** | Best for music producers building tracks with AI and existing assets. |
+| **USB Mic + AI Studio** | Great for both producers recording vocals and podcasters recording solo episodes. |
+| **Multi-input Mixer + AI Studio** | Serious professional setup for recording multiple speakers or instruments simultaneously. |
 
 ---
 
@@ -363,13 +383,13 @@ Click **Export → Audio**. Choose your format:
 - **WAV** — Lossless, highest quality. Best for professional use or further editing.
 - **MP3** — Compressed, smaller file size. Good for sharing or uploading to streaming platforms.
 
-Collab Studio will render a mixdown of all active tracks, applying your volume, panning, and mute settings.
+AI Studio will render a mixdown of all active tracks, applying your volume, panning, and mute settings.
 
 ### Video Export
-If your session includes a Video Track, select **Export → Video**. Collab Studio renders an **MP4** file combining your original video with the newly mixed audio tracks.
+If your session includes a Video Track, select **Export → Video**. AI Studio renders an **MP4** file combining your original video with the newly mixed audio tracks.
 
 ### Project Export
-Download a **zip archive** containing the Collab Studio project file and all raw assets. Useful for opening stems in a local DAW or a different system.
+Download a **zip archive** containing the AI Studio project file and all raw assets. Useful for opening stems in a local DAW or a different system.
 
 ### Individual Clip Export
 Right-click any clip in the **Asset Library** (or on the timeline) and select **Download** to export just that one clip without rendering the entire project.
