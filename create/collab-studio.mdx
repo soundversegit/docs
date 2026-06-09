@@ -9,14 +9,12 @@ Collab Studio is Soundverse's built-in Digital Audio Workstation (DAW) — think
 
 Whether you're a first-time creator or a seasoned producer, Collab Studio gives you everything you need to record vocals, layer music tracks, add a video score, or collaborate live with teammates — all in one place.
 
-> **New to music production?** That's totally fine! Think of Collab Studio like a video editing app, but for sound. Instead of video clips on a timeline, you place audio clips, and instead of a preview window, you hear your mix play back in real-time.
-
 ### Key Capabilities
 
 - **Browser-Based DAW:** No heavy installations required; everything runs in the cloud.
 - **AI Integration:** AI tools generate audio directly onto the grid of the timeline — your clips appear instantly in place, ready to arrange and mix.
-- **Multi-Track Editing:** Layer multiple audio, video, and image tracks simultaneously — like building a layered cake of sound.
-- **Real-Time Collaboration:** Invite teammates to edit the same project at the same time, like Google Docs but for music.
+- **Multi-Track Editing:** Layer multiple audio, video, and image tracks simultaneously.
+- **Real-Time Collaboration:** Invite teammates to edit the same project at the same time.
 - **Cloud Asset Management:** All your recordings, AI-generated clips, and uploads are saved and accessible from one place.
 
 ### What Can You Make?
@@ -100,7 +98,7 @@ The studio also has two bars running across the top and bottom of the screen:
 A **project** is the container for everything in your session — your timeline, all tracks, and references to every asset you've used. Projects auto-save to the cloud and stay synced with all collaborators in real-time.
 
 You can adjust project-wide settings from the Top Bar:
-- **BPM (Beats Per Minute):** The tempo of your project. Think of BPM like the "speed" of a song — a typical pop song is around 120 BPM.
+- **BPM (Beats Per Minute):** The tempo of your project.
 - **Time Signature:** How beats are grouped (e.g., 4/4 is standard for most popular music).
 - **Sharing & Permissions:** Control who can view or edit your project.
 
@@ -132,8 +130,6 @@ The Timeline is your main working canvas. Time flows from left to right — the 
 ### Tracks
 
 Tracks run horizontally across the timeline. Each track holds one type of media. Think of each track as a separate "layer" of your final mix.
-
-> **Real-world analogy:** Imagine stacking transparent slides on an overhead projector. Each slide is a track — each one adds something new to the overall picture (or sound).
 
 #### Audio Tracks
 Used for vocals, instruments, sound effects, and AI-generated music stems. Each audio track has its own **volume**, **mute**, and **solo** controls in the track header on the left.
@@ -178,7 +174,6 @@ Right-click on any clip to select it, which reveals edit handles and opens the c
 
 #### Trimming & Splitting
 - **Trim:** Hover over the left or right edge of a clip. When the trim cursor appears, drag to shorten or extend the clip.
-  > Think of it like trimming a video clip — you're just removing the parts you don't want.
 - **Split:** Move the playhead to the exact moment you want to cut, right-click the clip, and select **Split**. This divides one clip into two independent pieces.
 
 #### Looping Clips
@@ -304,19 +299,22 @@ Every action is tracked. You can undo and redo changes at any time. If two colla
 
 ---
 
-## Multi-Channel Connect
+## Multi-Channel Input Support
 
-Multi-Channel Connect is an advanced feature for creators who use external audio interfaces, mixers, or virtual routing software.
+Multi-Channel Input Support is an advanced feature for creators who use external audio interfaces, digital mixers, or complex studio setups.
 
-> **Not sure if you need this?** If you're just recording with a standard USB microphone into your laptop, you don't need Multi-Channel Connect. This feature is for setups with multiple microphones, mixers, or virtual audio routing software.
+> **Not sure if you need this?** If you're just recording with a standard USB microphone into your laptop, you don't need this. This feature is meant for setups with multiple microphones, mixers, or situations where your instrument is plugged into a higher-numbered channel on your interface.
 
-### What It Enables
-- Record multiple microphones on separate tracks simultaneously (e.g., for a podcast with a host and a guest).
-- Route audio from a desktop DAW (like Ableton or Logic) into Collab Studio.
+### Routing Complex Setups
 
-### Supported Sources
-- USB Audio Interfaces (Focusrite Scarlett, Universal Audio Apollo, etc.)
-- Digital Mixers
+If you have a microphone or instrument plugged into a higher-numbered input on your mixer (like Channel 3, Channel 24, etc.), you can use **Virtual Audio Routing Software** to seamlessly bring those signals into Collab Studio. By using a virtual audio router, you can easily reroute the physical input of your interface into a clean, selectable audio source that Collab Studio can detect on Channel 1.
+
+### Supported Software
+
+Based on your operating system, you can use the following virtual audio routing tools to achieve this:
+
+- **Windows:** Voicemeeter Banana, Voicemeeter Potato, VB-Audio Matrix
+- **macOS:** Loopback, BlackHole
 
 ### How to Connect
 
@@ -331,7 +329,7 @@ Multi-Channel Connect is an advanced feature for creators who use external audio
     Select your interface (or virtual audio device) as the audio input when your browser asks for microphone permission.
   </Step>
   <Step title="Assign Channels in Collab Studio">
-    Open the **Input Selection** menu on each track and assign the specific channel you want that track to capture (e.g., Input 1 → Track 1, Input 2 → Track 2).
+    Open the **Input Selection** menu on each track and assign the specific channel you want that track to capture.
   </Step>
 </Steps>
 
