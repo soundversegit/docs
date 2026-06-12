@@ -1,0 +1,371 @@
+---
+title: "Generate AI Song - v7"
+description: "Generate complete AI songs with lyrics and audio using the latest AI models."
+---
+
+import React from 'react';
+
+export const Method = ({ type, children }) => {
+  const styles = {
+    GET: {
+      backgroundColor: "#2563eb",
+      color: "white",
+      padding: "3px 6px",
+      borderRadius: "6px",
+      fontSize: "1rem",
+      fontWeight: "bold",
+      display: "inline-block",
+    },
+    POST: {
+      backgroundColor: "#16a34a",
+      color: "white",
+      padding: "3px 6px",
+      borderRadius: "6px",
+      fontSize: "1rem",
+      fontWeight: "bold",
+      display: "inline-block",
+    },
+  };
+
+  return <span style={styles[type] || styles.GET}>{children || type}</span>;
+};
+
+## **Generate Song (v7)**
+
+- The API supports both streaming and synchronous responses.
+- Every streaming response begins with a `job_created` event containing a `job_id`, allowing you to safely disconnect and poll [`/v7/status`](/api_documentation.mdx#check-status-v5status) for the result.
+
+### **Endpoints**
+- <Method type="POST">POST</Method> `/v7/generate/song` **- streaming**
+- <Method type="POST">POST</Method> `/v7/generate/song/sync` **- synchronous**
+
+---
+
+### **Request Parameters**
+
+> At least one of `prompt` **or** an audio URL (`reference_url`, `instrumental_url`, `vocal_url`, `melody_url`) must be provided.
+
+| Parameter          | Type   | Description                                                                        | Required    | Constraints        |
+| ------------------ | ------ | ---------------------------------------------------------------------------------- | ----------- | ------------------ |
+| `prompt`           | string | Text prompt describing the desired song.                                           | Conditional | Max 1024 chars     |
+| `lyrics`           | string | Lyrics for the song. Generated automatically if not provided.                      | No          | —                  |
+| `reference_url`    | string | URL of reference audio to guide the style of the generation.                       | Conditional | Max 10 MB          |
+| `instrumental_url` | string | URL of instrumental audio to incorporate into the song.                            | Conditional | Max 10 MB          |
+| `vocal_url`        | string | URL of vocal audio to incorporate into the song.                                   | Conditional | Max 10 MB          |
+| `melody_url`       | string | URL of melody audio to guide the melodic direction of the generation.              | Conditional | Max 10 MB          |
+
+### **Example Request**
+
+```json
+{
+  "prompt": "A cheerful pop song about friendship and adventure.",
+  "lyrics": "Through every road we roam, together we are home"
+}
+```
+
+### **Code Examples - Streaming**
+
+<CodeGroup>
+
+```python 🐍 Python
+import requests
+import json
+
+url = "https://api.soundverse.ai/v7/generate/song"
+headers = {
+    "Authorization": "Bearer your_api_key_here",
+    "Content-Type": "application/json"
+}
+payload = {
+    "prompt": "A cheerful pop song about friendship and adventure.",
+    "lyrics": "Through every road we roam, together we are home"
+}
+
+response = requests.post(url, json=payload, headers=headers, stream=True)
+
+for line in response.iter_lines():
+    if line:
+        text = line.decode('utf-8')
+        if text.startswith('data: '):
+            data = json.loads(text[6:])
+            print(data)
+```
+
+```javascript ⚡ JavaScript
+const url = "https://api.soundverse.ai/v7/generate/song";
+const headers = {
+  Authorization: "Bearer your_api_key_here",
+  "Content-Type": "application/json",
+};
+const payload = {
+  prompt: "A cheerful pop song about friendship and adventure.",
+  lyrics: "Through every road we roam, together we are home",
+};
+
+const response = await fetch(url, {
+  method: "POST",
+  headers: headers,
+  body: JSON.stringify(payload),
+});
+
+const reader = response.body.getReader();
+const decoder = new TextDecoder();
+
+while (true) {
+  const { done, value } = await reader.read();
+  if (done) break;
+
+  const chunk = decoder.decode(value);
+  const lines = chunk.split('\n');
+
+  lines.forEach(line => {
+    if (line.startsWith('data: ')) {
+      const data = JSON.parse(line.slice(6));
+      console.log(data);
+    }
+  });
+}
+```
+
+```bash 💻 cURL
+curl -X POST "https://api.soundverse.ai/v7/generate/song" \
+  -H "Authorization: Bearer your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "prompt": "A cheerful pop song about friendship and adventure.",
+    "lyrics": "Through every road we roam, together we are home"
+  }' --no-buffer
+```
+
+</CodeGroup>
+
+### **Code Examples - Synchronous**
+
+<CodeGroup>
+
+```python 🐍 Python
+import requests
+
+url = "https://api.soundverse.ai/v7/generate/song/sync"
+headers = {
+    "Authorization": "Bearer your_api_key_here",
+    "Content-Type": "application/json"
+}
+payload = {
+    "prompt": "A cheerful pop song about friendship and adventure.",
+    "lyrics": "Through every road we roam, together we are home"
+}
+
+response = requests.post(url, json=payload, headers=headers)
+print(response.json())
+```
+
+```javascript ⚡ JavaScript
+const url = "https://api.soundverse.ai/v7/generate/song/sync";
+const headers = {
+  Authorization: "Bearer your_api_key_here",
+  "Content-Type": "application/json",
+};
+const payload = {
+  prompt: "A cheerful pop song about friendship and adventure.",
+  lyrics: "Through every road we roam, together we are home",
+};
+
+fetch(url, {
+  method: "POST",
+  headers: headers,
+  body: JSON.stringify(payload),
+})
+  .then((response) => response.json())
+  .then((data) => console.log(data))
+  .catch((error) => console.error("Error:", error));
+```
+
+```bash 💻 cURL
+curl -X POST "https://api.soundverse.ai/v7/generate/song/sync" \
+  -H "Authorization: Bearer your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "prompt": "A cheerful pop song about friendship and adventure.",
+    "lyrics": "Through every road we roam, together we are home"
+  }'
+```
+
+</CodeGroup>
+
+### **Streaming Response**
+
+#### **Fields**
+
+> 🛈 The fields below are used in the chunks sent by SSE during the streaming process. Not all fields appear in every chunk — see the stage breakdown below.
+
+| Parameter            | Type      | Description                                                                              |
+| -------------------- | --------- | ---------------------------------------------------------------------------------------- |
+| **`type`**           | `string`  | Event type. `"job_created"` on the first chunk only.                                     |
+| **`job_id`**         | `string`  | Persistent job identifier. Use this to poll `/v7/status` if you disconnect.              |
+| **`message_id`**     | `string`  | Unique identifier for the generation request.                                            |
+| **`isComplete`**     | `bool`    | `true` only on the final chunk of the stream.                                            |
+| **`status`**         | `string`  | Current status. One of: `validated`, `streaming`, `uploading`, `completed`, `failed`.    |
+| **`chunkIndex`**     | `integer` | Index of the current chunk in the streaming sequence.                                    |
+| **`operation`**      | `string`  | Operation type. `"song_generate"` (prompt only) or `"song_with_reference"` (audio URLs). |
+| **`content`**        | `string`  | Human-readable description of the current stage.                                         |
+| **`album_art`**      | `string`  | URL of the generated album art.                                                           |
+| **`song_name`**      | `string`  | Name of the generated track.                                                              |
+| **`version`**        | `integer` | Version number of the audio output (`1` or `2`).                                         |
+| **`task_id`**        | `string`  | Internal task identifier for the generation job.                                          |
+| **`stream_url`**     | `string`  | Proxy URL for previewing audio before the final upload is complete.                       |
+| **`streaming_ready`**| `bool`    | `true` when the preview stream URL is ready for playback.                                 |
+| **`audio_url`**      | `string`  | Final URL of the uploaded audio file.                                                     |
+| **`audio_id`**       | `string`  | Database ID of the generated audio asset.                                                 |
+| **`audio_ready`**    | `bool`    | `true` when the final audio file is available for download.                               |
+| **`duration`**       | `float`   | Duration of the generated audio in seconds.                                               |
+| **`bpm`**            | `integer` | Beats per minute of the generated track.                                                  |
+| **`lyrics_sections`**| `array`   | Structured lyrics broken into labelled sections with timestamps.                          |
+| **`tokens`**         | `integer` | Tokens consumed by this chunk.                                                            |
+| **`totalTokens`**    | `integer` | Total tokens consumed for the request so far.                                             |
+| **`total_versions`** | `integer` | Total number of audio versions generated. Sent in the final completed chunk.              |
+| **`error`**          | `bool`    | `true` if this chunk represents an error.                                                 |
+| **`detail`**         | `string`  | Error detail message when `error` is `true`.                                              |
+
+#### **Stages of Streaming Response**
+
+##### **Job Created**
+always the very first chunk; guarantees `job_id` is available before any processing begins
+```json
+data: {"type": "job_created", "job_id": "...", "message_id": "...", "status": "processing", "isComplete": false, "chunkIndex": 0}
+```
+
+> Save `job_id` immediately — if your connection drops, you can resume tracking via [`/v7/status`](/api_documentation.mdx#check-status-v5status).
+
+fields sent: `type`, `job_id`, `message_id`, `status`, `isComplete`, `chunkIndex`
+
+---
+
+##### **Validated**
+request has been validated and billing authorised; song name and album art are assigned
+```json
+data: {"message_id": "...", "status": "validated", "isComplete": false, "album_art": "https://storage.soundverse.ai/...", "song_name": "Song Title", "operation": "song_generate", "content": "Request validated", "chunkIndex": 1}
+```
+
+fields sent: `message_id`, `status`, `isComplete`, `album_art`, `song_name`, `operation`, `content`, `chunkIndex`
+
+---
+
+##### **Streaming**
+audio generation is in progress; sent once per version when the preview stream becomes available
+```json
+data: {"message_id": "...", "status": "streaming", "isComplete": false, "version": 1, "task_id": "...", "stream_url": "https://api.soundverse.ai/...", "streaming_ready": true, "content": "Streaming audio...", "chunkIndex": 2}
+```
+
+fields sent: `message_id`, `status`, `isComplete`, `version`, `task_id`, `stream_url`, `streaming_ready`, `content`, `chunkIndex`
+
+> 🛈 Two versions are generated per request (`version: 1` and `version: 2`). A separate streaming chunk is sent for each version.
+
+---
+
+##### **Uploading**
+generated audio is being uploaded to permanent storage
+```json
+data: {"message_id": "...", "status": "uploading", "isComplete": false, "version": 1, "content": "Uploading audio...", "chunkIndex": 3}
+```
+
+fields sent: `message_id`, `status`, `isComplete`, `version`, `content`, `chunkIndex`
+
+---
+
+##### **Completed (per version)**
+final audio file is ready; includes the permanent URL and metadata for that version
+```json
+data: {"message_id": "...", "status": "completed", "isComplete": false, "version": 1, "audio_url": "https://storage.soundverse.ai/...", "audio_id": "...", "audio_ready": true, "duration": 60.0, "bpm": 120, "lyrics_sections": [...], "tokens": 100, "totalTokens": 200, "content": "Audio ready", "chunkIndex": 4}
+```
+
+fields sent: `message_id`, `status`, `isComplete`, `version`, `audio_url`, `audio_id`, `audio_ready`, `duration`, `bpm`, `lyrics_sections`, `tokens`, `totalTokens`, `content`, `chunkIndex`
+
+---
+
+##### **Completed (final)**
+stream termination; confirms all versions are done
+```json
+data: {"message_id": "...", "status": "completed", "isComplete": true, "operation": "song_generate", "total_versions": 2, "album_art": "https://storage.soundverse.ai/...", "song_name": "Song Title", "content": "Generation complete", "chunkIndex": 5}
+```
+
+fields sent: `message_id`, `status`, `isComplete`, `operation`, `total_versions`, `album_art`, `song_name`, `content`, `chunkIndex`
+
+---
+
+### **Synchronous Response**
+
+#### **Sample Synchronous Output**
+
+```json
+{
+  "job_id": "...",
+  "message_id": "...",
+  "album_art": "https://storage.soundverse.ai/x-one/.../userData/album-arts/album_art_1766599034.webp",
+  "audio_data": [
+    {
+      "audio_url": "https://storage.soundverse.ai/x-one/.../userData/generated-audio/song_title_v1.mp3",
+      "song_name": "Song Title"
+    },
+    {
+      "audio_url": "https://storage.soundverse.ai/x-one/.../userData/generated-audio/song_title_v2.mp3",
+      "song_name": "Song Title"
+    }
+  ]
+}
+```
+
+### **Possible Errors**
+
+**Missing prompt and audio URL:**
+
+```json
+{
+  "detail": "Either prompt or at least one of reference_url, instrumental_url, vocal_url, or melody_url must be provided"
+}
+```
+
+**Prompt too long (> 1024 characters):**
+
+```json
+{
+  "detail": "Prompt exceeds maximum length of 1024 characters"
+}
+```
+
+**Audio file too large (> 10 MB):**
+
+```json
+{
+  "success": false,
+  "message": "Reference audio file error: File too large"
+}
+```
+
+**Rate Limit Exceeded:**
+
+```json
+{
+  "success": false,
+  "message": "Rate limits have been passed for the user."
+}
+```
+
+**Insufficient Balance:**
+
+```json
+{
+  "success": false,
+  "message": "Insufficient balance for this operation."
+}
+```
+
+**Service Unavailable:**
+
+```json
+{
+  "success": false,
+  "message": "Service temporarily unavailable. Please try again in a moment.",
+  "error": "Database connection pool exhausted"
+}
+```

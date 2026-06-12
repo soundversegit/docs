@@ -1,0 +1,164 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Soundverse",
+  "colors": {
+    "primary": "#9164ff",
+    "light": "#6E35EF",
+    "dark": "#6E35EF"
+  },
+  "favicon": "/favicon.png",
+  "navigation": {
+    "groups": [
+      {
+        "group": "Get Started",
+        "pages": [
+          "introduction"
+        ]
+      },
+      {
+        "group": "Frequently Asked Questions",
+        "pages": [
+          "faqs/content-and-generation",
+          "faqs/billing-and-payment",
+          "faqs/licensing-model",
+          "faqs/managing-your-account",
+          "faqs/limitations"
+        ]
+      },
+      {
+        "group": "Creating with Soundverse",
+        "pages": [
+          "create/studio-faq",
+          "create/ai-studio",
+          "create/ai-magic-tools",
+          "create/dna-faqs",
+          "create/dna-help-center"
+        ]
+      },
+      {
+        "group": "Exploring Soundverse",
+        "pages": [
+          "explore/explore",
+          "explore/my-library"
+        ]
+      },
+      {
+        "group": "Account Management",
+        "pages": [
+          "account/manage-your-account",
+          "account/user-settings"
+        ]
+      },
+      {
+        "group": " Enterprise Platform",
+        "pages": [
+          "api_documentation",
+          "enterprise-api/faqs"
+        ]
+      },
+      {
+        "group": "API Documentation",
+        "pages": [
+          {
+            "group": "AI Song Generation",
+            "pages": [
+              "enterprise-api/generate/ai-song-gen/ai-song-gen-v6",
+              "enterprise-api/generate/ai-song-gen/ai-song-gen-v5",
+              "enterprise-api/generate/ai-song-gen/ai-song-gen-v4",
+              "enterprise-api/generate/ai-song-gen/ai-song-gen-v1"
+            ]
+          },
+          {
+            "group": "AI Music (Instrumental) Generation",
+            "pages": [
+              "enterprise-api/generate/ai-music-gen/ai-music-gen-v6",
+              "enterprise-api/generate/ai-music-gen/ai-music-gen-v5",
+              "enterprise-api/generate/ai-music-gen/ai-music-gen-v4",
+              "enterprise-api/generate/ai-music-gen/ai-music-gen-v1",
+              "enterprise-api/generate/ai-music-gen/text-to-music"
+            ]
+          },
+          {
+            "group": "AI Extend",
+            "pages": [
+              "enterprise-api/generate/ai-music-extend/extend-song-v6",
+              "enterprise-api/generate/ai-music-extend/extend-music-v6",
+              "enterprise-api/generate/ai-music-extend/extend-song-v5",
+              "enterprise-api/generate/ai-music-extend/extend-music-v5",
+              "enterprise-api/generate/ai-music-extend/extend-music"
+            ]
+          },
+          {
+            "group": "AI Remix",
+            "pages": [
+              "enterprise-api/generate/ai-remix/ai-remix-v7"
+            ]
+          },
+          {
+            "group": "AI Lyric Generation",
+            "pages": [
+              "enterprise-api/generate/ai-lyric-gen/generate-lyrics"
+            ]
+          },
+          {
+            "group": "AI Singing",
+            "pages": [
+              "enterprise-api/generate/ai-singing-gen/ai-singing-gen-v2"
+            ]
+          },
+          {
+            "group": "AI Stem Separation",
+            "pages": [
+              "enterprise-api/generate/ai-stem-separation/stem-separation"
+            ]
+          },
+          {
+            "group": "Loop And Trim",
+            "pages": [
+              "enterprise-api/generate/loop-trim/loop-and-trim",
+              "enterprise-api/generate/loop-trim/gen_loop_and_trim"
+            ]
+          },
+          {
+            "group": "AI Song Recognition",
+            "pages": [
+              "enterprise-api/generate/ai-song-recog/ai-song-recog-v5"
+            ]
+          },
+          {
+            "group": "AI Chat (Beta)",
+            "pages": [
+              "enterprise-api/assistant/chat",
+              "enterprise-api/assistant/voice"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "logo": {
+    "light": "/logo/light.png",
+    "dark": "/logo/Logo.png"
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Support",
+        "href": "mailto:help@soundverse.ai"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Studio",
+      "href": "https://soundverse.ai/studio"
+    }
+  },
+  "footer": {
+    "socials": {
+      "twitter": "https://twitter.com/soundverse_ai",
+      "instagram": "https://www.instagram.com/soundverse.ai/",
+      "linkedin": "https://www.linkedin.com/company/soundverseai/"
+    }
+  }
+}
