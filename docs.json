@@ -62,6 +62,7 @@
           {
             "group": "AI Song Generation",
             "pages": [
+              "enterprise-api/generate/ai-song-gen/ai-song-gen-v7",
               "enterprise-api/generate/ai-song-gen/ai-song-gen-v6",
               "enterprise-api/generate/ai-song-gen/ai-song-gen-v5"
             ]
