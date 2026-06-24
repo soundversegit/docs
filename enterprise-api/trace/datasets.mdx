@@ -1,0 +1,143 @@
+---
+title: "Datasets"
+description: "Create, view, and list datasets for similarity indexing."
+---
+
+import React from 'react';
+
+export const Method = ({ type, children }) => {
+  const styles = {
+    GET: {
+      backgroundColor: "#2563eb",
+      color: "white",
+      padding: "3px 6px",
+      borderRadius: "6px",
+      fontSize: "0.85rem",
+      fontWeight: "bold",
+      display: "inline-block",
+      marginRight: "8px"
+    },
+    POST: {
+      backgroundColor: "#16a34a",
+      color: "white",
+      padding: "3px 6px",
+      borderRadius: "6px",
+      fontSize: "0.85rem",
+      fontWeight: "bold",
+      display: "inline-block",
+      marginRight: "8px"
+    },
+  };
+  return <span style={styles[type] || styles.GET}>{children || type}</span>;
+};
+
+## **Create Dataset**
+
+Create a named dataset to organize your candidate tracks.
+
+*   <Method type="POST">POST</Method> `/trace/v1/dataset`
+
+### **Request Body**
+
+| Field | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `name` | string | ✅ | Unique name for the dataset |
+| `description` | string | | Optional description for the dataset |
+
+```json Request Body Example
+{
+  "name": "my-reference-catalog",
+  "description": "Our main candidate lookup library"
+}
+```
+
+### **Response**
+
+**Status 201 Created**
+```json
+{
+  "dataset_id": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+  "user_id": "user_12345",
+  "name": "my-reference-catalog",
+  "description": "Our main candidate lookup library",
+  "created_at": "2026-06-19T12:00:00Z",
+  "ingested_tasks": [],
+  "encoder_types": []
+}
+```
+
+---
+
+## **List Datasets**
+
+List all datasets owned by the authenticated API key user.
+
+*   <Method type="GET">GET</Method> `/trace/v1/dataset`
+
+### **Response**
+
+**Status 200 OK**
+```json
+[
+  {
+    "dataset_id": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+    "user_id": "user_12345",
+    "name": "my-reference-catalog",
+    "description": "Our main candidate lookup library",
+    "created_at": "2026-06-19T12:00:00Z",
+    "ingested_tasks": [
+      "full_audio_latent",
+      "light_stem"
+    ],
+    "encoder_types": [
+      "type1"
+    ]
+  }
+]
+```
+
+---
+
+## **Get Dataset Details**
+
+Retrieve details for a specific dataset using its unique ID.
+
+*   <Method type="GET">GET</Method> `/trace/v1/dataset/{dataset_id}`
+
+### **Response**
+
+**Status 200 OK**
+```json
+{
+  "dataset_id": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+  "user_id": "user_12345",
+  "name": "my-reference-catalog",
+  "description": "Our main candidate lookup library",
+  "created_at": "2026-06-19T12:00:00Z",
+  "ingested_tasks": [
+    "full_audio_latent",
+    "light_stem"
+  ],
+  "encoder_types": [
+    "type1"
+  ]
+}
+```
+
+---
+
+## **Limits & Validation Errors**
+
+To prevent processing failures, datasets enforce the following system limits:
+
+*   **File Sizes**: Max 100 MB per file.
+*   **Track Duration**: Max 300 seconds (5 minutes) per track.
+*   **File Formats**: `.mp3`, `.wav`, `.flac`, `.m4a` files only.
+*   **Max Number of Files**: Max 10 blobs per `/trace/v1/ingest/type*` request.
+*   **Max Search Matrix (M×N)**: Max 100,000 comparison pairs per search job.
+
+### **Common Error Scenarios**
+
+*   `400 Bad Request`: Returned if a batch exceeds 10 files, the audio duration is longer than 5 minutes, or the file format is unsupported.
+*   `413 Payload Too Large`: Returned during upload if a file exceeds 100 MB.
+*   `404 Not Found`: Returned if the requested `dataset_name` does not exist in the database.

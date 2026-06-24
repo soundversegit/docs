@@ -1,0 +1,91 @@
+---
+title: "Ingest Audio"
+description: "Queue preprocessing for one or more uploaded audio blobs into a dataset."
+---
+
+import React from 'react';
+
+export const Method = ({ type, children }) => {
+  const styles = {
+    POST: {
+      backgroundColor: "#16a34a",
+      color: "white",
+      padding: "3px 6px",
+      borderRadius: "6px",
+      fontSize: "0.85rem",
+      fontWeight: "bold",
+      display: "inline-block",
+      marginRight: "8px"
+    }
+  };
+  return <span style={styles[type] || styles.POST}>{children || type}</span>;
+};
+
+## **Ingest Audio**
+
+Preprocess one or more uploaded raw audio blobs to compute acoustic features, split stems, extract motifs, and index them into your target dataset. This operation is idempotent.
+
+*   <Method type="POST">POST</Method> `/trace/v1/ingest/type1` (Forces the legacy model)
+*   <Method type="POST">POST</Method> `/trace/v1/ingest/type2` (Forces the new efficient model)
+
+### **Request Body Fields**
+
+| Field | Type | Required | Default | Description |
+| :--- | :--- | :--- | :--- | :--- |
+| `dataset_name` | string | ✅ | None | Name of your target dataset. |
+| `audio_blobs` | string[] | ✅ | None | Array of `blob_name` values. Max: 10 per request. |
+| `tasks` | string[] | | `["full_audio_latent"]` | List of features to compute. |
+| `webhook_url` | string | | | URL for completion callbacks. |
+
+#### **Valid `tasks` Options:**
+*   `full_audio_latent`: Encodes full audio sequence latents.
+*   `stem_vocals`: Splits vocals stem.
+*   `stem_bass`: Splits bass stem.
+*   `stem_drums`: Splits drums stem.
+*   `stem_other`: Splits accompaniment/other stem.
+*   `light_stem`: Splits 2 stems (vocals + accompaniment).
+*   `motif`: Computes melody contours / motif chroma.
+*   `section`: Runs structural section boundary segmentation.
+
+---
+
+### **Ingestion In-App Pricing**
+
+| Ingestion Profile | Enterprise Price |
+| :--- | :--- |
+| **Track Only** *(Full Audio Latents)* | **$0.0300** |
+| **Comprehensive Search Profile (New Efficient)** | **$0.0352** (3-min song) // **$0.0513** (5-min song) |
+| **Comprehensive Search Profile (Legacy)** | **$0.0388** (3-min song) // **$0.1554** (5-min song) |
+| **Heaviest Custom Ingest** | **$0.1628** (5-min song) |
+
+---
+
+### **Request Example**
+
+```json
+{
+  "dataset_name": "my-reference-catalog",
+  "audio_blobs": [
+    "dataset/123e4567-e89b-12d3-a456-426614174000_song_candidate_1.wav"
+  ],
+  "tasks": [
+    "full_audio_latent",
+    "light_stem",
+    "motif"
+  ],
+  "webhook_url": "https://my-service.com/webhooks/trace"
+}
+```
+
+### **Response**
+
+**Status 202 Accepted**
+```json
+{
+  "success": true,
+  "data": {
+    "job_id": "ingest_job_7e8f9a0b-c1d2-3e4f-5a6b-7c8d9e0f1a2b",
+    "cost_usd": 0.0513
+  }
+}
+```

@@ -1,0 +1,125 @@
+---
+title: "Search Similarity"
+description: "Queue a Trace similarity search job to find matches in your catalog."
+---
+
+import React from 'react';
+
+export const Method = ({ type, children }) => {
+  const styles = {
+    POST: {
+      backgroundColor: "#16a34a",
+      color: "white",
+      padding: "3px 6px",
+      borderRadius: "6px",
+      fontSize: "0.85rem",
+      fontWeight: "bold",
+      display: "inline-block",
+      marginRight: "8px"
+    }
+  };
+  return <span style={styles[type] || styles.POST}>{children || type}</span>;
+};
+
+## **Search Similarity**
+
+Execute a similarity search between a query audio track and your candidate dataset using either the legacy (`type1`) or new efficient (`type2`) model. These endpoints return a `job_id` immediately. You must poll `GET /trace/v1/jobs/{job_id}` to retrieve results.
+
+*   <Method type="POST">POST</Method> `/trace/v1/search/type1` (Legacy)
+*   <Method type="POST">POST</Method> `/trace/v1/search/type2` (New Efficient)
+
+### **Request Body Fields**
+
+| Field | Type | Required For | Description |
+| :--- | :--- | :--- | :--- |
+| `search_type` | string | ✅ all | "1:1", "1:n", or "m:n". |
+| `depth` | string | | Search resolution: "track", "stem", "light_stem", "section", "stem_section", or "motif". Defaults to "track". |
+| `stem_types` | string[] | | Stems to compare if depth is "stem" or "stem_section". Defaults to `["vocals"]`. Allowed values: `vocals`, `bass`, `drums`, `other`. |
+| `limit` | int | | Max number of matches to return (for 1:n or m:n). |
+| `query_url` | string | 1:1, 1:n | blob_name of the query track. |
+| `candidate_url` | string | 1:1 | blob_name of the candidate track. |
+| `candidate_dataset_name` | string | 1:n, m:n | Dataset name to search against. |
+| `query_dataset_name` | string | m:n | The query dataset name (for bulk matching). |
+
+---
+
+## **Search Topologies: 1:1, 1:N, and M:N**
+
+### **1. Single-Pair Search (1:1)**
+Compares one query track directly against one candidate track.
+* **Required Fields**: `search_type: "1:1"`, `query_url`, `candidate_url`, `depth`.
+
+### **2. One-to-Many Search (1:N)**
+Compares one query track against an entire dataset of candidate tracks.
+* **Required Fields**: `search_type: "1:n"`, `query_url`, `candidate_dataset_name`, `depth`.
+
+### **3. Bulk Matrix Search (M:N)**
+Think of an M:N search as a comparison grid. Instead of triggering multiple individual 1:N search jobs one-by-one for a folder of new submissions, an M:N search lets you package a batch of query tracks (M) and evaluate them against your reference catalog dataset (N) in one single operation.
+
+For example, if you have 3 new tracks and want to check them against a catalog of 500 reference tracks, the system runs all 1,500 comparisons in a single pass.
+
+* **Why Use It?**
+  * **Network Efficiency**: Reduces overhead by sending 1 consolidated API request.
+  * **Grouped Results**: The response maps matches directly to each query track in a structured array.
+
+* **How to Use It:**
+  1. Create a temporary query dataset (e.g., `incoming-batch-01`).
+  2. Upload and Ingest your M query tracks into `incoming-batch-01`.
+  3. POST a search to `/trace/v1/search/type1` (legacy model) or `/trace/v1/search/type2` (new efficient model) with `search_type: "m:n"`, setting `query_dataset_name` to your query dataset and `candidate_dataset_name` to your candidate library.
+
+---
+
+### **Examples**
+
+<CodeGroup>
+
+```json 1:1 Search
+{
+  "search_type": "1:1",
+  "query_url": "dataset/987f6543-e21b-12d3-a456-426614174000_query.wav",
+  "candidate_url": "dataset/123e4567-e89b-12d3-a456-426614174000_candidate.wav",
+  "depth": "track"
+}
+```
+
+```json 1:N Search
+{
+  "search_type": "1:n",
+  "query_url": "dataset/987f6543-e21b-12d3-a456-426614174000_query.wav",
+  "candidate_dataset_name": "my-reference-catalog",
+  "depth": "track",
+  "limit": 5
+}
+```
+
+```json M:N Search
+{
+  "search_type": "m:n",
+  "query_dataset_name": "my-query-catalog",
+  "candidate_dataset_name": "my-reference-catalog",
+  "depth": "track"
+}
+```
+
+</CodeGroup>
+
+
+---
+
+### **Response**
+
+**Status 202 Accepted**
+```json
+{
+  "success": true,
+  "data": {
+    "job_id": "search_job_a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+    "status": "pending",
+    "search_type": "1:n",
+    "depth": "track",
+    "n": 1,
+    "m": 120,
+    "cost_usd": 0.045
+  }
+}
+```

@@ -118,6 +118,21 @@
           "pages": [
             "enterprise-api/generate/ai-song-recog/ai-song-recog-v5"
           ]
+        },
+        {
+          "group": "Trace Audio Similarity",
+          "pages": [
+            "enterprise-api/trace/overview",
+            "enterprise-api/trace/datasets",
+            "enterprise-api/trace/library",
+            "enterprise-api/trace/upload",
+            "enterprise-api/trace/ingest",
+            "enterprise-api/trace/ingest-status",
+            "enterprise-api/trace/search",
+            "enterprise-api/trace/search-status",
+            "enterprise-api/trace/comprehensive-search",
+            "enterprise-api/trace/comprehensive-search-status"
+          ]
         }
       ]
     }

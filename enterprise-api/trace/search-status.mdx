@@ -1,0 +1,197 @@
+---
+title: "Search Job Status"
+description: "Poll the status and retrieve results of a similarity search job."
+---
+
+import React from 'react';
+
+export const Method = ({ type, children }) => {
+  const styles = {
+    GET: {
+      backgroundColor: "#2563eb",
+      color: "white",
+      padding: "3px 6px",
+      borderRadius: "6px",
+      fontSize: "0.85rem",
+      fontWeight: "bold",
+      display: "inline-block",
+      marginRight: "8px"
+    }
+  };
+  return <span style={styles[type] || styles.GET}>{children || type}</span>;
+};
+
+## **Get Search Status**
+
+Check the execution state of a similarity search query and retrieve matches. This endpoint is **completely free** to poll and does not deduct balance.
+
+*   <Method type="GET">GET</Method> `/trace/v1/jobs/{job_id}`
+
+### **Path Parameters**
+
+| Parameter | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `job_id` | string | ✅ | Unique job ID returned from `POST /trace/v1/search/type*`. |
+
+### **Response**
+
+**Status 200 OK (Completed 1:N Search)**
+```json
+{
+  "success": true,
+  "data": {
+    "job_id": "search_job_d8e9f0a1-b2c3-4d5e-6f7a-8b9c0d1e2f3a",
+    "status": "completed",
+    "search_type": "1:n",
+    "error": null,
+    "results": {
+      "status": "success",
+      "timestamp": "2026-06-19 22:45:00",
+      "search_type": "1:n",
+      "depth": "track",
+      "candidate_dataset_id": "ref-dataset-uuid",
+      "matches": [
+        {
+          "id": "dataset/candidate_song_1.wav",
+          "score": 0.892,
+          "percentage": 89.2,
+          "payload": {
+            "filename": "dataset/candidate_song_1.wav",
+            "dataset_id": "ref-dataset-uuid",
+            "metric": "pairwise_chunk_cosine"
+          },
+          "full_audio_latent_scores": {
+            "max": 0.912,
+            "max_then_mean": 0.892,
+            "hungarian_mean": 0.795,
+            "matched_windows": [
+              {
+                "query_index": 5,
+                "candidate_index": 8,
+                "similarity_score": 0.892,
+                "query_audio_timestamps": [[44.5], [52.5]],
+                "candidate_audio_timestamps": [[125.1], [133.1]]
+              }
+            ]
+          },
+          "summary": {
+            "full_audio_hungarian_mean": 0.795,
+            "full_audio_max_then_mean": 0.892,
+            "full_audio_max": 0.912
+          }
+        },
+        {
+          "id": "dataset/candidate_song_2.wav",
+          "score": 0.745,
+          "percentage": 74.5,
+          "payload": {
+            "filename": "dataset/candidate_song_2.wav",
+            "dataset_id": "ref-dataset-uuid",
+            "metric": "pairwise_chunk_cosine"
+          },
+          "full_audio_latent_scores": {
+            "max": 0.785,
+            "max_then_mean": 0.745,
+            "hungarian_mean": 0.680,
+            "matched_windows": []
+          },
+          "summary": {
+            "full_audio_hungarian_mean": 0.680,
+            "full_audio_max_then_mean": 0.745,
+            "full_audio_max": 0.785
+          }
+        }
+      ],
+      "full_audio_latent_scores": {
+        "best_song_by_max_per_query_then_avg": [
+          {
+            "song_id": "dataset/candidate_song_1.wav",
+            "max_then_mean_score": 0.892,
+            "hungarian_mean_score": 0.795,
+            "max_score": 0.912
+          },
+          {
+            "song_id": "dataset/candidate_song_2.wav",
+            "max_then_mean_score": 0.745,
+            "hungarian_mean_score": 0.680,
+            "max_score": 0.785
+          }
+        ]
+      },
+      "summary": {
+        "full_audio_max_then_mean": 0.892
+      }
+    }
+  }
+}
+```
+
+**Status 200 OK (Completed M:N Search)**
+```json
+{
+  "success": true,
+  "data": {
+    "job_id": "search_job_a1b2c3d4",
+    "status": "completed",
+    "search_type": "m:n",
+    "error": null,
+    "results": {
+      "search_type": "m:n",
+      "depth": "track",
+      "metric": "pairwise_chunk_cosine",
+      "query_dataset_id": "query-dataset-uuid",
+      "candidate_dataset_id": "ref-dataset-uuid",
+      "results": [
+        {
+          "query_audio_id": "dataset/incoming_track_1.wav",
+          "matches": [
+            {
+              "id": "dataset/catalog_reference_99.wav",
+              "score": 0.892,
+              "percentage": 89.2,
+              "payload": {
+                "filename": "dataset/catalog_reference_99.wav",
+                "dataset_id": "ref-dataset-uuid",
+                "metric": "pairwise_chunk_cosine"
+              },
+              "full_audio_latent_scores": {
+                "max": 0.912,
+                "max_then_mean": 0.892,
+                "hungarian_mean": 0.795,
+                "matched_windows": [
+                  {
+                    "query_index": 5,
+                    "candidate_index": 8,
+                    "similarity_score": 0.892,
+                    "query_audio_timestamps": [[44.5], [52.5]],
+                    "candidate_audio_timestamps": [[125.1], [133.1]]
+                  }
+                ]
+              },
+              "summary": {
+                "full_audio_hungarian_mean": 0.795,
+                "full_audio_max_then_mean": 0.892,
+                "full_audio_max": 0.912
+              }
+            }
+          ]
+        },
+        {
+          "query_audio_id": "dataset/incoming_track_2.wav",
+          "matches": []
+        }
+      ]
+    }
+  }
+}
+```
+
+
+---
+
+### **Job States**
+
+*   `pending`: Job is queued and waiting for an available worker thread on the VM.
+*   `processing`: Job is currently executing time-series alignment math.
+*   `completed`: Job completed successfully. Scored matches are returned in the `results` object.
+*   `failed`: An error occurred during matching. Details are available in the `error` field.

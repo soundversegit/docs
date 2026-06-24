@@ -1,0 +1,50 @@
+---
+title: "Library"
+description: "List all uploaded raw audio files in your library."
+---
+
+import React from 'react';
+
+export const Method = ({ type, children }) => {
+  const styles = {
+    GET: {
+      backgroundColor: "#2563eb",
+      color: "white",
+      padding: "3px 6px",
+      borderRadius: "6px",
+      fontSize: "0.85rem",
+      fontWeight: "bold",
+      display: "inline-block",
+      marginRight: "8px"
+    }
+  };
+  return <span style={styles[type] || styles.GET}>{children || type}</span>;
+};
+
+## **Get Library**
+
+List all audio tracks uploaded to your library.
+
+*   <Method type="GET">GET</Method> `/trace/v1/library`
+
+### **Query Parameters**
+
+None
+
+### **Response**
+
+**Status 200 OK**
+```json
+[
+  {
+    "id": 45,
+    "user_id": "user_12345",
+    "filename": "song_candidate_1.wav",
+    "blob_name": "dataset/123e4567-e89b-12d3-a456-426614174000_song_candidate_1.wav",
+    "file_size": 25165824,
+    "duration_seconds": 180.0,
+    "mime_type": "audio/wav",
+    "created_at": "2026-06-19T12:05:00Z"
+  }
+]
+```

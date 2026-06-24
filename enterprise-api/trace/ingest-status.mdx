@@ -1,0 +1,66 @@
+---
+title: "Ingestion Status"
+description: "Poll progress and verify completions of audio preprocessing."
+---
+
+import React from 'react';
+
+export const Method = ({ type, children }) => {
+  const styles = {
+    GET: {
+      backgroundColor: "#2563eb",
+      color: "white",
+      padding: "3px 6px",
+      borderRadius: "6px",
+      fontSize: "0.85rem",
+      fontWeight: "bold",
+      display: "inline-block",
+      marginRight: "8px"
+    }
+  };
+  return <span style={styles[type] || styles.GET}>{children || type}</span>;
+};
+
+## **Get Ingestion Status**
+
+Check the preprocessing and vector-indexing status of your audio uploads. This endpoint is **completely free** and does not deduct balance.
+
+*   <Method type="GET">GET</Method> `/trace/v1/ingest/{job_id}`
+
+### **Path Parameters**
+
+| Parameter | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `job_id` | string | ✅ | Unique job ID returned from `POST /trace/v1/ingest/type*`. |
+
+### **Response**
+
+**Status 200 OK**
+```json
+{
+
+  "success": true,
+  "data": {
+    "job_id": "ingest_job_7e8f9a0b-c1d2-3e4f-5a6b-7c8d9e0f1a2b",
+    "status": "completed",
+    "tasks_requested": ["full_audio_latent", "light_stem", "motif"],
+    "artifacts": [
+      {
+        "audio_id": "song_candidate_1.wav",
+        "artifact_type": "full_audio_latent",
+        "status": "complete"
+      }
+    ]
+  }
+}
+```
+
+
+---
+
+### **Job Status Values**
+
+*   `pending`: Audio files are queued and waiting to load onto the GPU worker.
+*   `running`: Preprocessing (stem splitting and audio latent encoding) is currently active.
+*   `completed`: Audio features have been successfully computed and indexed. Candidates are now searchable.
+*   `failed`: Processing failed. Refer to the `error` field for diagnosis.
