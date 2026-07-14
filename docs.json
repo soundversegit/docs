@@ -62,6 +62,7 @@
           {
             "group": "AI Song Generation",
             "pages": [
+              "enterprise-api/generate/ai-song-gen/ai-song-gen-v7",
               "enterprise-api/generate/ai-song-gen/ai-song-gen-v6",
               "enterprise-api/generate/ai-song-gen/ai-song-gen-v5"
             ]
@@ -104,6 +105,21 @@
             "group": "AI Song Recognition",
             "pages": [
               "enterprise-api/generate/ai-song-recog/ai-song-recog-v5"
+            ]
+          },
+          {
+            "group": "Trace Audio Similarity",
+            "pages": [
+              "enterprise-api/trace/overview",
+              "enterprise-api/trace/datasets",
+              "enterprise-api/trace/library",
+              "enterprise-api/trace/upload",
+              "enterprise-api/trace/ingest",
+              "enterprise-api/trace/ingest-status",
+              "enterprise-api/trace/search",
+              "enterprise-api/trace/search-status",
+              "enterprise-api/trace/comprehensive-search",
+              "enterprise-api/trace/comprehensive-search-status"
             ]
           }
         ]

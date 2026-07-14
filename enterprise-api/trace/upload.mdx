@@ -1,0 +1,77 @@
+---
+title: "Upload Audio"
+description: "Upload a raw audio file to cloud storage before ingestion or search."
+---
+
+import React from 'react';
+
+export const Method = ({ type, children }) => {
+  const styles = {
+    POST: {
+      backgroundColor: "#16a34a",
+      color: "white",
+      padding: "3px 6px",
+      borderRadius: "6px",
+      fontSize: "0.85rem",
+      fontWeight: "bold",
+      display: "inline-block",
+      marginRight: "8px"
+    }
+  };
+  return <span style={styles[type] || styles.POST}>{children || type}</span>;
+};
+
+## **Upload File**
+
+Upload a raw audio track (e.g. WAV, MP3, FLAC, M4A) to secure cloud storage. This endpoint is **completely free** and does not deduct from your plan balance.
+
+The returned `blob_name` must be used as the identifier in ingest and search requests.
+
+*   <Method type="POST">POST</Method> `/trace/v1/upload`
+
+### **Request Headers**
+
+```http
+Content-Type: multipart/form-data
+```
+
+### **Request Body**
+
+| Field | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `file` | file | ✅ | The raw audio file to upload. Max file size: **100 MB**. |
+
+### **Response**
+
+**Status 200 OK**
+```json
+{
+  "success": true,
+  "message": "Upload successful",
+  "data": {
+    "blob_name": "dataset/123e4567-e89b-12d3-a456-426614174000_song_candidate_1.wav"
+  }
+}
+```
+
+---
+
+### **Error Responses**
+
+**Payload Too Large (413)**
+Returned if the uploaded file exceeds the **100 MB** limit.
+```json
+{
+  "success": false,
+  "message": "Upload file size exceeds the maximum limit of 100 MB."
+}
+```
+
+**Unsupported Format (400)**
+Returned if the file format is not supported (only `.mp3`, `.wav`, `.flac`, `.m4a` are allowed).
+```json
+{
+  "success": false,
+  "message": "Unsupported audio format. Use .mp3, .wav, .flac, or .m4a"
+}
+```

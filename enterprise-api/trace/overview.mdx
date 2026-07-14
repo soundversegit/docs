@@ -1,0 +1,132 @@
+---
+title: "Overview"
+description: "Understand how Soundverse Trace works before calling the API."
+---
+
+## What is Trace?
+
+Soundverse Trace is an audio similarity engine built for large-scale music identification, copyright detection, and catalog matching. It takes audio files, extracts deep acoustic fingerprints from them, and lets you run fast, accurate similarity comparisons across millions of tracks.
+
+Unlike simple audio fingerprinting (which requires an exact or near-exact match), Trace finds musically similar content even when pitch, tempo, arrangement, or production style has changed. It operates across several levels of musical detail, from the full mix down to individual stems and melodic motifs.
+
+---
+
+## How It Works
+
+Trace processes audio in two stages: **Ingestion** and **Search**.
+
+### Stage 1: Ingestion
+
+Before you can search, every track must be preprocessed and indexed. During ingestion, Trace:
+
+1. **Encodes** the full audio into a sequence of latent vectors using a deep neural model.
+2. **Separates stems**: splitting the track into vocals, bass, drums, and accompaniment using our source-separation models.
+3. **Fingerprints vocals**: extracting vocal-specific identity vectors for precise vocal-level matching.
+4. **Extracts motifs**: short melodic contours (chroma-based) that capture repeating melodic patterns.
+5. **Detects sections**: structural boundaries like intro, verse, chorus.
+6. **Indexes and stores everything** securely in our high-performance vector index and cloud storage for fast retrieval.
+
+Ingestion is a one-time cost per track. Once a track is ingested into a dataset, it can be searched against indefinitely.
+
+### Stage 2: Search
+
+A search compares one or more query tracks against an indexed dataset. You choose the **search depth** which controls what acoustic features are compared:
+
+| Depth | What It Compares |
+| :--- | :--- |
+| `track` | Full audio latent sequence |
+| `light_stem` | Full audio + vocal stem latents |
+| `stem` | Full audio + all 4 individual stem latents |
+| `motif` | Short melodic contour matching |
+| `section` | Structural section-level alignment |
+| `stem_section` | Stems compared at the section level |
+
+Results are returned as normalized similarity scores mapped to a range of 0 to 1 (with 0 indicating no similarity and 1 indicating a perfect match).
+
+---
+
+## Comprehensive Search
+
+Comprehensive Search is a fixed, pre-tuned search profile that runs three types of comparisons simultaneously:
+
+1. **Track-level alignment** on the full audio latent sequence
+2. **Light Stem alignment** on separated vocals and accompaniment
+3. **Motif alignment** on melodic contours extracted from vocals and accompaniment
+
+It is designed for use cases requiring high-confidence similarity detection, such as copyright screening, where a single metric is not sufficient. All three metrics are run and returned together so you can make an informed decision based on multiple signals.
+
+---
+
+## Key Definitions
+
+**Stems**: Individual instrument/vocal components separated from the full mix. Stem-level comparison catches similarity that is masked in the full mix.
+
+**Motif**: A short repeating melodic fragment, captured as a chroma contour. Motif matching detects melodic plagiarism even when the instrumentation or key has changed.
+
+**Dataset**: A named collection of ingested tracks. All search queries run against a dataset. You manage datasets via the Datasets API.
+
+---
+
+## Workflow: Step by Step
+
+```
+1. Create a dataset
+   POST /trace/v1/dataset
+
+2. Upload your audio files
+   POST /trace/v1/upload  (one file at a time, returns blob_name)
+
+3. Ingest the uploaded files into your dataset
+   POST /trace/v1/ingest/type1  (up to 10 files per request, legacy model)
+   POST /trace/v1/ingest/type2  (up to 10 files per request, new efficient model)
+   GET  /trace/v1/ingest/{job_id}  (poll until complete)
+
+4. Run a similarity search
+   POST /trace/v1/search/type1    (similarity search with legacy model)
+   POST /trace/v1/search/type2    (similarity search with new efficient model)
+   POST /trace/v1/comprehensive1/type1  (Comprehensive Search: Legacy)
+   POST /trace/v1/comprehensive1/type2  (Comprehensive Search: New Efficient)
+
+5. Poll for results
+   GET /trace/v1/jobs/{job_id}              (general search results)
+   GET /trace/v1/comprehensive1/jobs/{job_id}   (Comprehensive Search results)
+```
+
+---
+
+## What to Expect from the APIs
+
+- **Ingestion and search are asynchronous.** Every `POST` returns a `job_id` immediately. You must poll the corresponding `GET` endpoint to retrieve results.
+- **Upload is free.** The `POST /trace/v1/upload` endpoint does not deduct from your balance.
+- **Polling is free.** Status check endpoints (`GET .../jobs/{job_id}` and `GET .../comprehensive1/jobs/{job_id}`) do not deduct balance.
+- **Costs are dynamic.** Ingestion cost is calculated based on track duration and tasks requested. Search cost is based on the number of comparison pairs (N × M).
+- **Idempotent ingestion.** Re-ingesting a file that already exists in a dataset is automatically skipped. You are not charged.
+- **Rate limits apply per API request**, not per track. Each ingest request can include up to 10 audio files.
+
+---
+
+## Frequently Asked Questions (FAQ)
+
+### What makes Trace different from standard audio fingerprinting (like Shazam)?
+Standard audio fingerprinting is designed to find exact or near-exact matches of a specific recording (same audio file, same mastering). Trace uses deep neural models to extract semantic embeddings (latents). This allows it to identify matches even if the tempo is changed, the pitch is shifted, a new instrument is used, or the song is re-arranged.
+
+### When should I use `type1` vs. `type2` models?
+- **`type1` (Legacy):** Legacy model.
+- **`type2` (New Efficient):** New efficient model.
+
+*Note: You must ingest your datasets using the corresponding model (`/ingest/type1` or `/ingest/type2`) before searching with that model.*
+
+### Why are ingestion and search asynchronous?
+Processing audio files and computing detailed similarity comparisons are complex computational tasks. To handle requests reliably and efficiently without blocking connection threads, these operations run in the background. They return a `job_id` instantly, allowing you to poll for completion.
+
+### Can I search an audio file directly without creating a dataset?
+Yes! A **1:1 Search** allows you to compare a query audio file directly against a candidate audio file by providing their uploaded blob names. However, for **1:N** or **M:N** searches, you must first ingest the candidate files into a dataset. This pre-computes and indexes their features, making future searches near-instantaneous.
+
+### How is billing calculated?
+- **Upload, listing, and polling status** are completely free.
+- **Ingestion** is billed dynamically based on the audio duration and the specific tasks requested (e.g. track-only vs. full stems).
+- **Search** is billed based on the number of comparison pairs (cardinality). For example, a 1:N search is billed for 1 query track × N candidate tracks.
+
+### Is my audio stored permanently?
+The audio files uploaded and their processing artifacts are saved, but will be automatically removed after 30 days.
+
