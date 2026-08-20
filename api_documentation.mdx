@@ -1,21 +1,28 @@
 ---
 title: 'API Documentation'
-description: 'Welcome to Soundverse API. Our API domain is https://api.soundverse.ai/'
+description: 'Welcome to Soundverse API. Our current API domain is https://apiv2.soundverse.ai/'
 ---
 
 import React from 'react';
 
+<Card title="🚀 apiv2 is live!" icon="rocket" href="https://platform.soundverse.ai/docs">
+  Soundverse's Enterprise API has moved to **apiv2.soundverse.ai**, with new self-serve account setup, API keys, and billing all managed at **platform.soundverse.ai**. Everything below this point documents the legacy `api.soundverse.ai` domain — if you're setting up a new integration, click through for current endpoints, request/response shapes, and auth.
+</Card>
 
 <Info>
   🔗 <a href="https://platform.soundverse.ai/" target="_blank" rel="noopener">Soundverse Platform</a> &nbsp;|&nbsp;
-  <a href="https://www.soundverse.ai/ai-music-generation-api" target="_blank" rel="noopener">API Dashboard</a>
+  <a href="https://platform.soundverse.ai/docs" target="_blank" rel="noopener">Current API Docs (apiv2)</a>
 </Info>
 
 ---
 
 Soundverse’s **Enterprise API** lets you generate and edit music programmatically covering **AI song generation (with lyrics + vocals)**, instrumental music generation, extend, lyrics, singing, stem separation, and loop/trim, with both **streaming (SSE)** and **synchronous** workflows depending on the endpoint. Soundverse is constantly adding new endpoints to make it an extensive platform with all potential Audio AI usecases.
 
-Base domain (you’ll hit different paths depending on the endpoint/version): [https://api.soundverse.ai](https://api.soundverse.ai)
+<Warning>
+  The endpoints, base domain, and key-issuance flow described on **this page** are for the legacy `api.soundverse.ai` API. Accounts and API keys created through the current self-serve platform (**platform.soundverse.ai**) are **not** recognized on this legacy domain and will return `403 Invalid API Key` there — use `apiv2.soundverse.ai` instead. See the [current docs](https://platform.soundverse.ai/docs) for up-to-date endpoints.
+</Warning>
+
+Base domain (legacy — you’ll hit different paths depending on the endpoint/version): [https://api.soundverse.ai](https://api.soundverse.ai). For new integrations, use `https://apiv2.soundverse.ai` instead — see the [current API docs](https://platform.soundverse.ai/docs).
 
 **Pick your API plan based on expected usage:**
 - **Starter** (includes Royalty-Free)
@@ -26,9 +33,13 @@ Base domain (you’ll hit different paths depending on the endpoint/version): [h
 Soundverse’s API licensing is **plan-based by default** and you can **upgrade licenses via dashboard, or contact the Soundverse Support**.
 
 ### How to get an API key
-1. Purchase a plan
-2. Open [API Dashboard](https://www.soundverse.ai/ai-music-generation-api) (there’s a direct “API Dashboard” link on the docs page).
-3. Generate/copy your key, then send it on every request using a Bearer header (example shown in the [v5 Song endpoint docs](https://help.soundverse.ai/enterprise-api/generate/ai-song-gen/ai-song-gen-v5)).
+1. Sign in at [platform.soundverse.ai](https://platform.soundverse.ai) and set up your enterprise account.
+2. Generate a key from the dashboard's API Keys page.
+3. Send it on every request using a Bearer header against `apiv2.soundverse.ai` (see the [current docs](https://platform.soundverse.ai/docs) for endpoint-specific examples).
+
+<Note>
+  Legacy flow (existing `api.soundverse.ai` integrations only): purchase a plan, open the [old API Dashboard](https://www.soundverse.ai/ai-music-generation-api), and generate a key from there. Keys from that flow are not valid on `apiv2.soundverse.ai`, and keys from the new platform dashboard are not valid on `api.soundverse.ai` — the two are separate systems.
+</Note>
 
 **Example header:**
 
@@ -54,9 +65,11 @@ Here’s the simplest way to decide (you can also show this as a tooltip / helpe
 **FAQ links (recommended to surface in your docs)**
 - [Enterprise API FAQs (license definitions, FAQs, ownership, sublicensing etc.)](https://help.soundverse.ai/enterprise-api/faqs)
 
-## Available API Endpoints
+## Available API Endpoints (legacy `api.soundverse.ai`)
 
-
+<Tip>
+  Building something new? Check [platform.soundverse.ai/docs](https://platform.soundverse.ai/docs) for the current endpoint list on `apiv2.soundverse.ai` first — not every legacy endpoint below has an `apiv2` equivalent yet.
+</Tip>
 
 ### AI Song Generation
 - [AI Song Gen v7](enterprise-api/generate/ai-song-gen/ai-song-gen-v7)
