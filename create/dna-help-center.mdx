@@ -2,678 +2,1470 @@
 title: "DNA - Help Center"
 ---
 
-## Part A – For Music Creators Using DNA
+## Guide scope
 
-### 1. What is DNA?
+This guide explains the current Soundverse DNA creation and use flows.
 
-**DNA** is your artist-trained AI music model on Soundverse.
+It covers:
 
-    - Each DNA is built from the music or vocals of a real creator.
+- Full Production DNA
 
-    - It learns that creator's **sound** – production style, harmonies, groove, textures, and (for voice models) vocal tone.
+- Voice DNA
 
-    - You can then generate new songs, instrumentals, or vocals that stay true to that DNA's vibe, while still being original.
+- DNA models and track references
 
-There are two main types:
+- Processing and training states
 
-1. **Full DNA**
+- Visibility and public discovery
 
-   - Trained on full songs / instrumentals / acapellas.
+- Earn and Stripe Connect boundaries
 
-   - Can generate **Song, Instrumental, **and sometimes **Singing** outputs depending on how it's trained.
+- Common troubleshooting steps
 
-2. **Voice DNA (Voice Model)**
+The guide describes the current product behavior.
 
-   - Trained only on a singer's voice.
+It does not replace Soundverse terms, license terms, or financial advice.
 
-   - Used to generate **vocals** or to **replace your own voice** with theirs in a new performance.
+## Quick decision
 
-### 2. The DNA Generation Panel
+Use **Full Production DNA** when you want to train from a catalog of songs, instrumentals, or acapellas.
 
-When you click **Create** on a DNA (or open DNA from within the agent / studio), you see the **DNA panel**.
+Use **Voice DNA** when you want to train from clean solo-vocal recordings.
 
-Main pieces:
+Do not use Voice DNA as a shortcut for a mixed music catalog.
 
-1. **Mode Toggle**
+Do not use Full Production DNA as a shortcut for cloning a particular person's voice.
 
-   - **Model Based** – use the **whole DNA model** as one big style generator.
+Only upload material that you own or are authorized to use.
 
-   - **Track Based** – use **Song Styles, Vocal Styles,** or **Instrumental Styles** as more granular starting points.
+For Voice DNA, you must also be the speaker or have the singer's consent.
 
-2. **Model Area**
+<img
+  src="/images/create/dna/01-train-model-menu.png"
+  alt="Soundverse DNA screen with the Train model menu showing Full Production DNA and Voice DNA"
+/>
 
-   - Shows the selected **DNA cover art** and **name** (e.g., Cyberpunk Synth).
+## Product map
 
-   - This tells you which DNA you're generating from.
+The DNA area contains several related surfaces.
 
-3. **Select the output**
+They have different purposes.
 
-   - Buttons: **Song · Instrumental · Singing**
+### My DNA
 
-   - This chooses what you want to generate (full track / instrumental only / vocals only).
+My DNA is the main management area for your own DNA work.
 
-4. **Prompt Type**
+Use it to inspect your primary DNA, models, tracks, and voice models.
 
-   - Toggle: **Describe your song / Lyrics**
+It is the place to return after a Full Production processing run or Voice DNA training run.
 
-   - **Describe your song** – write a vibe / scenario prompt
+Treat the current in-product state in My DNA as the source of truth for your result.
 
-   "Euphoric synthwave track for night driving, 120 BPM, big drums, emotional lead."
+### Discover
 
-   - Lyrics – paste your lyrics, and optionally add a short style line at the top
+Discover is for browsing DNA content that is eligible for public discovery.
 
-   "emotional cyberpunk ballad about distance and hope"
+Public visibility alone does not make a DNA discoverable.
 
-5. **Prompt Box**
+The current Full Production public path requires both Public visibility and Approved status.
 
-   - Large text field where you write your description or lyrics.
+### Earn
 
-6. **CREATE button**
+Earn contains the current Stripe Connect flow where creator earnings are available.
 
-   - Starts the generation with the selected DNA + mode + output + prompt.
+It can show a connection state and the DNA dashboard summary available for the connected account.
 
-### 3. Model Based vs Track Based
+It does not independently guarantee royalties, payout dates, eligibility, or commercial rights.
 
-**3.1 Model Based**
+### Generation
 
-- You're using the entire DNA model as your style.
+The DNA generation experience uses an available DNA model or track reference.
 
-- Best when you:
+The controls change according to the selected DNA, model, and reference.
 
-  - Want the DNA to decide structure and arrangement.
+Use the controls that the product enables for the current selection.
 
-  - Just care about "make this feel like [creator]" rather than micro-controlling sections.
+## Core concepts
 
-  - Steps:
+### DNA
 
-    1. Choose **Model Based**.
+DNA is a Soundverse creator profile built from audio.
 
-    2. Pick your **output** (Song / Instrumental / Singing – subject to what the DNA supports).
+It provides source material that Soundverse can process into DNA models and track references.
 
-    3. Choose **Describe your song** or **Lyrics**.
+The number and type of resulting assets vary with the supplied material and processing outcome.
 
-    4. Type your prompt and hit **CREATE**.
+### Primary DNA
 
-**3.2 Track Based**
+The current Full Production flow uses one primary DNA profile per owner.
 
-Track Based lets you choose specific style presets inside the DNA.
+That profile is the ongoing home for the creator's catalog-based DNA.
 
-At the top you'll see three columns:
+Later uploads and processing runs add to the same primary DNA.
 
-- **Song Styles** – full song presets (structure + groove + vibe).
+They do not create another primary Full Production DNA profile for the same owner.
 
-- **Vocal Styles** – vocal performance styles.
+### Full Production DNA
 
-- **Instrumental Styles** – instrument-only textures.
+Full Production DNA is the catalog-based flow.
 
-Each entry (e.g., Memories, Signal Drift, Synth.wav – Neon Ghosts) has:
+It accepts songs, instrumentals, and acapellas.
 
-- A name.
+It processes the catalog into available music-style models and track references.
 
-- A short tag line (mood, adjectives, influences).
+Use it when the goal is to represent a broader musical identity or catalog.
 
-You choose a track style, then set the output.
+### Voice DNA
 
-**Output availability logic (important):**
+Voice DNA is the voice-focused flow.
 
-- When you select a **Song Style** track → **All three outputs** are available: **Song, Instrumental, Singing** (because the preset contains full musical + vocal context).
+It accepts clean solo-vocal recordings and trains a voice model.
 
-- When you select an **Instrumental Style** track → Only **Instrumental** output is available. Song & Singing will be disabled, since there's no vocal context.
+In the current primary workflow, the trained voice model is added to the creator's primary DNA profile.
 
-- When you select a **Vocal Style** track → Only **Singing** output is available. You'll generate vocals in that style.
+It does not remove or replace existing Full Production catalog material.
 
-So the rule of thumb:
+### DNA model
 
-- **Song styles** = everything allowed
+A DNA model is an available processed model associated with a DNA.
 
-- **Instrumental styles** = instrumentals only
+When the product presents it, it can be selected as a broader starting point for generation.
 
-- **Vocal styles** = vocals only
+Model availability depends on processing and on the current DNA.
 
-Then, as with Model Based:
+### Track reference
 
-1. Pick **Describe your song** or **Lyrics**.
+A track reference is an available processed audio reference associated with a DNA.
 
-2. Write the prompt.
+The product can show song, vocal, or instrumental reference types.
 
-3. Hit **CREATE**.
+A track reference can narrow the starting point for available generation.
 
-### 4. Discover, Earn, and My DNA
+It does not guarantee that every generation control is supported.
 
-You'll see three main sections in the DNA experience:
+### Generation style
 
-**4.1 Discover**
+The current DNA generation contract supports two request styles:
 
-This is where you **browse** and **explore** existing DNAs.
+- Song
 
-1. **Top Creators**
+- Instrumental
 
-   - Carousel of featured artists (e.g., Ash Pournouri, BlueNucleus).
+The interface can show vocal references.
 
-   - Each card shows:
+That does not make vocal a separate universal generation style.
 
-     - Creator image.
+## Part 1: Prepare before creating DNA
 
-     - Name.
+### 1. Decide which flow you need
 
-     - A short description of their sound.
+Start by deciding what you want the DNA to represent.
 
-2. **Top DNAs**
+Choose Full Production DNA for a music catalog.
 
-   - Grid of individual DNA models (e.g., EDM, Piano House, Progressive House).
+Choose Voice DNA for one person's voice.
 
-   - Each DNA card shows:
+Do not mix the two goals together without understanding which flow owns the training request.
 
-     - Artwork.
+### 2. Confirm authorization
 
-     - DNA name.
+Before selecting any files, confirm that you have the necessary authority to upload them.
 
-     - "by [Creator Name]" + a short style description.
+For Full Production DNA, the current upload form asks you to confirm ownership and authority to upload the files.
 
-3. **Search**
+For Voice DNA, the form asks you to confirm that the voice is yours or that you have the singer's consent.
 
-   - Search bar (e.g., "Search creators…" or "Search DNA models…").
+Do not submit a confirmation you cannot truthfully make.
 
-   - Type an artist name, DNA name, or keyword to find a specific sound.
+### 3. Keep the original source files
 
-Use Discover when you want to:
+Keep a local copy of every selected audio file until the upload and processing state are clear.
 
-    - Find a new style to write in.
+This makes retrying an upload easier if a transfer is interrupted.
 
-    - See what's trending or featured.
+It also helps you identify exactly which material was included when you contact support.
 
-    - Explore artists who've trained their own DNA.
+### 4. Prepare a focused Full Production catalog
 
-**4.2 Earn**
+Use songs, instrumentals, or acapellas that represent the sound you want the DNA to learn.
 
-The Earn tab is primarily for DNA creators, but it's useful context as a user to understand how the ecosystem works.
+The source collection does not need to be enormous to be useful.
 
-Here's what you see:
+It should be intentional.
 
-1. **Step 1 – Link Stripe Connect Account**
+A coherent catalog is generally easier to reason about than unrelated audio selected only to raise the file count.
 
-   - Button: **Connect Stripe**.
+### 5. Prepare clean Voice DNA recordings
 
-   - Creators link a Stripe account to receive royalties from their DNAs.
+Aim for at least 10 minutes of clean solo-vocal audio.
 
-2. **Step 2 – Build Your DNA, Expand Your Reach**
+Use one speaker or singer only.
 
-- Short explanation of the creation process:
+Avoid background music and heavy effects.
 
-  - **Train Your DNA** – upload catalog and train a custom AI model.
+The voice trainer can re-slice recordings.
 
-  - **Set Your Price** – choose how much to charge per export (e.g., $0.99–$9.99).
+You do not need to pre-cut every source recording into small clips before upload.
 
-  - **Our Team Reviews** – Soundverse reviews each DNA for quality and ethics.
+### 6. Choose a clear name
 
-**Step 3 – Get Paid, Transparently**
+Give the primary DNA or voice profile a name you can recognize later.
 
-- Creators can track:
+The name should help distinguish the creator or voice model in My DNA.
 
-  - How often their DNA is used.
+Avoid relying on a vague temporary name when you expect to create several models or return later for follow-up training.
 
-  - How much they've earned.
+### 7. Prepare short profile copy
 
-  - When payouts are scheduled.
+The current profile-description inputs are limited to 300 characters.
 
-As a **user**, the takeaway is simple:
+Prepare a concise description that helps identify the DNA.
 
-When you use a DNA, you're supporting the artist behind it. Revenue goes back to the creator based on the license and price they've chosen.
+Use tags to summarize the musical identity or profile context.
 
-**4.3 My DNA**
+Tags help organize the product experience but do not guarantee a specific generated result.
 
-This is your **personal library** of DNA assets.
+### 8. Choose an initial visibility intentionally
 
-- Title: **MY DNA – Your personal AI music models for creating unique sounds.**
+Full Production DNA and Voice DNA do not present exactly the same visibility controls.
 
-- **Tabs:**
+For Full Production DNA, the current choices are Public, Private, and Personal.
 
-  - **DNAs** – your full DNA models.
+For Voice DNA, the current form presents private and public.
 
-  - **Voice Models** – your voice-only DNAs.
+Use a non-public setting while you are training or testing if you do not want the DNA considered for public visibility.
 
-  - **Dreampacks** – curated packs/bundles (if available to you).
+## Part 2: Full Production DNA
 
-**Search bar:**
+### Overview
 
-    - "Search DNA by name, description, or status…"
+Full Production DNA is the primary catalog-based flow.
 
-Each DNA card shows:
+It has five current steps:
 
-- Cover image.
+1. Profile Settings
 
-- DNA name.
+2. Upload Section
 
-- Short description.
+3. Process DNA
 
-- A status label (e.g., **Public** or **Private**).
+4. Advanced
 
-Use **My DNA** to:
+5. Finalize
 
-- Generate quickly from your own models.
+The primary DNA relationship is important.
 
-- Check which DNAs are public vs private.
+The current flow starts from your one primary DNA profile.
 
-- Manage your personal artist AI presence on Soundverse.
+New catalog audio and newly processed results are added to that profile over time.
 
-### 5. Models, Tracks, Voice Models (Conceptual Overview)
+### Step 1: Open the primary profile
 
-You'll see these three concepts across the product:
+Open the Full Production DNA flow from the DNA area.
 
-1. **Models**
+The app retrieves or creates the canonical primary DNA profile for the current owner.
 
-- These are **full DNAs** (artist-trained AI models).
+This is why the flow does not create a second primary profile for the same owner.
 
-- Used in **Model Based** mode.
+Existing legacy DNA entries can still be visible for some accounts.
 
-- Think "whole artist brain in a box" – sound, structure, feel.
+The current Full Production creation path remains focused on the primary DNA.
 
-2. **Tracks**
+### Step 1: Complete Profile Settings
 
-These are **style presets extracted from DNAs**:
+The first Full Production panel is the profile area.
 
-    - **Song Styles** – preconfigured full-song feels.
+Use it to identify the primary DNA before uploading more source material.
 
-    - **Vocal Styles** – types of vocal performances.
+The current fields include creator name, description, tags, and cover art.
 
-    - **Instrumental Styles** – instrument-only moods/textures.
+<img
+  src="/images/create/dna/02-full-production-profile-settings.png"
+  alt="Full Production DNA Profile Settings step with the five-step rail, profile fields, tags, and cover controls"
+/>
 
-Used in **Track Based** mode to give you more control over which part of the DNA you use.
+### Creator name
 
-3. **Voice Models**
+Enter a name that clearly identifies the profile.
 
-These are **voice-only DNAs**.
+This is the name you will see again when managing the DNA.
 
-Used when:
+Use a stable creator or project name rather than an ambiguous file label.
 
-    - You want the DNA to sing your lyrics.
+### Description
 
-    - You want to replace your voice with a specific artist's voice (where allowed).
+The Full Production description is limited to 300 characters in the current form.
 
-Typically mapped to the **Singing** output.
+Use it to explain the DNA in a compact way.
 
-## Part B – For DNA Creators (Artists & Producers)
+It is better to describe the broad musical purpose than to promise a result that processing cannot guarantee.
 
-This section explains how to **build and monetize your own DNA** on Soundverse.
+### Tags
 
-### Overview of the Creation Flow
+The profile area offers suggested tags and a tag input.
 
-Creating a DNA is a **6-step process**:
+Use tags to describe the catalog or creative direction.
 
-1. Profile Creation
+Examples of useful tag themes include genre, mood, instrumentation, era, or production character when they are actually relevant to the uploaded work.
 
-2. Upload
+Tags are metadata.
 
-3. DNA Sensitivity / Voice Model Quality
+They are not a promise that a corresponding model or output style will be created.
 
-4. Tagging & Categorisation
+### Cover art
 
-5. Review
+The Full Production profile includes cover-art controls.
 
-6. Finalise & Publish
+Use a cover image when you want to make the primary DNA easier to recognize.
 
-There are two creation paths:
+The cover art does not replace the audio catalog.
 
-- **Full DNA** – trains a full music model (and its track presets: song, instrumental, singing).
+Full Production processing uses the uploaded music files rather than the cover image.
 
-- **Voice DNA (Vocal Model only)** – trains only the voice, for singing / voice replacement.
+### Check the profile before continuing
 
-### Step 1 – Profile Creation
+Before moving to Upload Section, confirm:
 
-From the DNA interface, choose **Build DNA by uploading audio tracks**.
+- The creator name is recognizable
 
-You'll see the **Profile Creation** screen.
+- The description is concise and accurate
 
-**1.1 Creator Profile**
+- The tags make sense for the catalog
 
-- **Creator Name**
+- The cover image is appropriate if you chose one
 
-  - **Dropdown + text input**:
+This keeps the ongoing primary profile easier to manage after future uploads.
 
-    - "Name such as Coldplay or type your own"
+### Step 2: Upload Section
 
-  - **Option A – Select existing profile**:
+Use Upload Section to add audio for Full Production DNA processing.
 
-    - If you've created a profile before, choose it from the dropdown.
+The current flow accepts at least one audio file.
 
-    - Your existing info (description, picture, etc.) is automatically filled.
+The current maximum is 1,000 audio files.
 
-  - **Option B – Create a new profile**:
+The upload text does not require a minimum duration for Full Production audio.
 
-    - Type a new artist/creator name.
+<img
+  src="/images/create/dna/03-full-production-upload-section.png"
+  alt="Full Production DNA Upload Section showing accepted catalog guidance, a selected audio file, and the step rail"
+/>
 
-- **Description**
+### Full Production accepted formats
 
-  - Short description of the creator (up to 300 characters).
+The current Full Production file input accepts:
 
-  - Example: "EDM artist blending melodic house with cinematic textures."
+- .mp3
 
-- **Upload Picture**
+- .wav
 
-  - Add a square creator image (photo, logo, or illustration) that will show on Discover & My DNA.
+- .aac
 
-**1.2 DNA Settings**
+- .ogg
 
-These settings belong to this DNA instance:
+- .flac
 
-- **Tags**
+- .m4a
 
-  - Free-text tags (type and press comma/Enter).
+Select actual audio files in one of those formats.
 
-  - Use genres, moods, instruments, and use-cases:
+Do not attempt to upload a document, image, archive, or video file through this audio input.
 
-  - "electronic, EDM, chill, dark, cinematic"
+### Full Production source categories
 
-- **DNA Visibility**
+You can use:
 
-  - At least Public is available; typically:
+- Songs
 
-    - Public – visible on Discover & usable by others.
+- Instrumentals
 
-    - Private – only visible in your My DNA.
+- Acapellas
 
-  - Use Public if you plan to monetize and let others generate with it.
+These are catalog source categories.
 
-- **Price**
+They are not the same thing as the two DNA generation request styles.
 
-  - Dropdown with price points (e.g., $0.99–$9.99).
+The generation request contract later supports Song and Instrumental.
 
-  - This is the price per export or per defined unit, depending on the product setup.
+### Ownership confirmation
 
-  - You can start lower to encourage adoption and raise later.
+The Full Production upload step includes an ownership-and-authority confirmation.
 
-**License**
+Read it before continuing.
 
-This dropdown controls what users are allowed to do with tracks generated using your DNA.
+Confirm it only when you have the authority to include every selected file.
 
-Options: Royalty free, Sample, Distribution, Sync, Full ownership.
+If even one file is unclear, remove it until you resolve the rights question.
 
-Pick the minimum level you're comfortable granting to people who use your DNA.
+### Choose a useful catalog
 
-1. Royalty Free
+Choose files that represent the intended DNA sound.
 
-   - One-time fee; no recurring royalties to you or other rights-holders each time the track is used.
+The product can process varied catalog material, but results can vary when source audio has no clear connection.
 
-   - Great for background/underscore in YouTube videos, streams, social clips, podcasts, web & mobile apps, internal company videos, presentations, etc.
+Do not expect a guaranteed number of models or track references from a particular file count.
 
-2. Sample
+The collection's relevance matters more than a raw file total.
 
-   - Includes everything in Royalty Free, plus the right for users to sample, loop, chop and layer the AI audio inside a larger track they create and distribute to DSPs, as long as the AI portion is not 100% of the final song.
+### Watch upload progress
 
-   - Ideal for beatmakers, game/film composers, meditation music, producers adding their own vocals/instruments.
+The current Full Production uploader reports progress as it transfers the selected files.
 
-   - Users cannot resell the raw AI file on its own, create sample packs from it, or market it as a standalone asset.
+Wait for the upload flow to confirm that the selected audio is ready before trying to process it.
 
-3. Distribution
+Do not treat a file-selection action as proof that the file is fully uploaded.
 
-   - Builds on Sample rights and explicitly allows users to release finished songs (with some human accompaniment) to Spotify, Apple Music, TikTok, etc. under their artist name.
+<img
+  src="/images/create/dna/04-full-production-upload-progress.png"
+  alt="Full Production DNA upload progress for a selected audio file"
+/>
 
-   - Aimed at creators who want to publish tracks publicly without worrying about recurring royalties to Soundverse, provided they follow the licence rules.
+### Temporary interruption and retry
 
-4. Sync
+The current Full Production uploader uses an upload session and local checkpoints.
 
-   - Covers using the music in film, TV, streaming shows, games, adverts, trailers, branded content and other "music-to-picture" uses, with sync + mechanical rights included.
+When the session remains valid, it can reuse confirmed chunks instead of blindly restarting every file transfer.
 
-   - Best suited when your DNA is likely to be used by agencies, production houses, or SaaS video tools.
+If a temporary network problem appears, retry with the same files.
 
-5. Full Ownership
+Keep the source files in place until the product confirms completion.
 
-   - The strongest licence: the user gets exclusive ownership of the generated audio. They can perform it live, resell it, press vinyl/CD, add it to stock libraries, or use it across any media without needing further clearance from Soundverse.
+### When a session cannot resume
 
-   - Soundverse does not claim royalties later on tracks properly covered by a Full Ownership licence.
+An upload session can expire or become invalid.
 
-- **Tracks Visibility**
+In that case, the uploader can request a new server-issued session.
 
-  - Example value: Visible.
+This is expected recovery behavior.
 
-  - Controls whether the uploaded Track (Song Styles / Vocal Styles / Instrumental Styles) are visible to users in Track Based mode. If this is hidden, users can't see the tracks that were used in making the DNA.
+It does not mean that the previous session should be treated as a completed upload.
 
-7. **Become Partner**
+### When the upload reports an error
 
-   - Yes/No.
+Read the error message before taking the next action.
 
-   - "Yes" typically opts you into the Soundverse Partner / Revenue-share program, where you can earn from users who generate via your DNA.
+Check that the selected files are accepted audio formats.
 
-Once everything looks correct, click Done.
+Keep the file list available.
 
-You'll move to Step 2 – Upload Audio.
+Retry the same selection once the product allows it.
 
-### Step 2 – Upload Audio (Build Full DNA or Voice DNA)
+If the failure persists, capture the error text, time, and number of files for support.
 
-On this step, you choose **what kind of DNA** you want to build.
+### Do not process incomplete uploads
 
-**2.1 Build Full DNA**
+Processing requires audio that is ready to process.
 
-Use this to create a **Full DNA** (music style + structure + optionally vocal feel).
+Do not click Process DNA as soon as files are selected if the uploader is still transferring them.
 
-Panel shows:
+Wait until the upload UI indicates that the source material has completed its upload path.
 
-- Button: **Build Full DNA**
+### Step 3: Process DNA
 
-- Instructions (visible in the UI), summarised:
+Process DNA is the step that starts Full Production model processing.
 
-  - Upload **songs**, **instrumentals**, or **acapellas** to create a complete DNA model.
+It is not merely a review screen.
 
-  - Minimum: 3 audio files (any duration).
+The primary flow supplies the selected sensitivity and the newly uploaded audio to the processing request.
 
-  - Maximum: 1000 files.
+Use this step only after the upload is ready.
 
-  - More files ⇒ better results, but longer training.
+### Full Production sensitivity
 
-  - Supported formats: .mp3, .wav
+The current sensitivity slider ranges from 0 to 10.
 
-**Best practices:**
+The default value is 5.
 
-- Upload tracks that **represent your real sound** today.
+The UI describes lower sensitivity as creating broader genre DNA results.
 
-- Variety is good:
+It describes higher sensitivity as creating more niche style DNA results.
 
-  - Different tempos / keys / moods.
+<img
+  src="/images/create/dna/05-full-production-sensitivity.png"
+  alt="Full Production DNA Process DNA sensitivity control set to the balanced value of 5"
+/>
 
-  - But all still recognisably "you".
+### Choosing a lower sensitivity
 
-- Avoid:
+Choose a lower sensitivity when the goal is broader genre-style grouping.
 
-  - Covers you don't fully own rights to.
+This is a creative configuration choice.
 
-  - Low-quality rehearsal recordings, unless that's your intended aesthetic.
+It does not create a separate primary DNA profile.
 
-When you upload for Full DNA, the system will, after training:
+It does not promise that a particular broad genre name will appear in the result.
 
-- Train the core model, controlled later via DNA Sensitivity.
+### Choosing the default sensitivity
 
-- Create track presets (Song Styles, Instrumental Styles, Vocal Styles) from your catalog that users see in Track Based mode.
+The current default is 5.
 
-**2.2 Build Voice DNA (Vocal Model Only)**
+The interface presents that central value as the balanced choice.
 
-Use this to create an only-voice DNA.
+It is a reasonable place to begin when you do not have a clear reason to prefer broader or more niche grouping.
 
-Panel shows:
+### Choosing a higher sensitivity
 
-- Button: **Build Voice DNA**
+Choose a higher sensitivity when you want the catalog processed toward more niche style DNA results.
 
-- Instructions (visible in the UI), summarised:
+Higher sensitivity is not a guarantee that each source track becomes its own style model.
 
-  - Upload clean vocal recordings (no background music).
+The actual results still depend on the processed catalog.
 
-  - Minimum: 2 files (same speaker) required.
+### Start processing once
 
-  - Each file should be under 5 minutes.
+The current primary flow prevents a second processing start while DNA processing is already active for the same DNA.
 
-  - Only one speaker per file (multiple voices confuse the model).
+If the UI says processing is already running, wait for the active run to complete.
 
-  - More diverse recordings ⇒ better results.
+Do not repeatedly launch duplicate attempts while the first run is still active.
 
-**Best practices:**
+### What happens to earlier results on a later run?
 
-    - Use studio or clean home-recorded takes (no reverb, no heavy effects if possible).
+The current primary processing path is additive.
 
-    - Include:
+It preserves existing core playlists rather than clearing them before re-clustering.
 
-        - Different vowels and consonants.
+Later uploads can add new models and track results to the primary DNA.
 
-        - Different dynamics (soft / loud).
+The earlier content is intended to remain in place.
 
-        - Casual speech + singing if allowed.
+### What Process DNA does not promise
 
-Once your audio is uploaded and you're happy with the list, proceed to Step 3.
+It does not promise:
 
-### Step 3 – DNA Sensitivity / Voice DNA Quality
+- A fixed completion time
 
-This step configures how the model trains.
+- A fixed model count
 
-**3.1 For Full DNA – DNA Sensitivity**
+- A fixed track count
 
-You'll see a slider for DNA Sensitivity, which corresponds to training epochs.
+- Every possible reference type
 
-    - Range: 0 to 350
+- A specific genre or tag
 
-    - Recommended default: 150
+Treat the processing result as data derived from the uploaded catalog.
 
-Practical meaning:
+### Step 4: Advanced
 
-- Lower values (e.g. 50–100)
+The Full Production Advanced panel has three current areas:
 
-  - Train faster.
+1. Advanced Options
 
-  - DNA is looser – more variation, slightly less "locked" to your exact catalog.
+2. Tagging & Categorization
 
-- Medium values (around 150 – recommended)
+3. Review
 
-  - Good balance between:
+Use it to inspect and configure product values while the primary DNA flow is in progress.
 
-    - Capturing your signature sound.
+### Advanced Options
 
-    - Still allowing creative variation.
+The current Advanced Options form includes:
 
-- Higher values (250–350)
+- Visibility
 
-  - Train longer.
+- Price
 
-  - DNA becomes very specific to your catalog.
+- License
 
-  - Great if you want extreme fidelity; may be less forgiving to out-of-distribution prompts.
+- Tracks
 
-Also note:
+- Become Partner
 
-    - More audio + higher sensitivity = longer training time.
+These values are surfaced by the product.
 
-    - If you're unsure, start at 150. You can always iterate later with a different sensitivity.
+Do not infer full legal, financial, or payout behavior from a form label alone.
 
-**3.2 For Voice DNA – Model Quality**
+<img
+  src="/images/create/dna/06-full-production-advanced-options.png"
+  alt="Full Production DNA Advanced Options with visibility, price, license, track visibility, and partner controls"
+/>
 
-For voice-only DNAs, instead of sensitivity you'll be asked to pick Model Quality.
+### Visibility in Full Production DNA
 
-Conceptually:
+The current Full Production visibility values are:
 
-- Lower quality = faster training, lighter model.
+- Public
 
-- Higher quality = more accurate voice capture, more detail.
+- Private
 
-Because exact values/levels might change over time, use the in-app description near the selector, and:
+- Personal
 
-- Start at the recommended option.
+Start with Private or Personal when you are evaluating the DNA.
 
-- If you need more nuance (e.g., complex runs, vibrato), you can later try a higher quality setting.
+Use Public only when you are ready for the DNA to be considered for public availability.
 
-### Step 4 – Tagging & Categorisation (Automatic)
+### Price and license
 
-Once training is triggered:
+The current Full Production form includes a price input and a license selection.
 
-- Soundverse automatically runs tagging and categorisation for your DNA:
+The current license labels shown are Full ownership, Standard, and Distribution.
 
-  - Categorizes audios into song, instrumentals and vocal tracks
+The legal effect of those values is governed by the current product terms and license terms.
 
-  - Extracts descriptors like genres, moods, energy, instrumentation, era, etc. based on your audio.
+Do not publish, distribute, or make commercial promises based only on a label in this guide.
 
-  - Generates human-readable tags and style blurbs.
+### Track visibility
 
-From your side:
+The current form includes a Tracks setting with Visible and Hidden choices.
 
-    - You don't have to stay on the page.
+Use the value shown in the product for the content you intend to expose.
 
-         - You can safely close the window or navigate away.
+Do not assume that this field alone overrides every other visibility, moderation, or access rule.
 
-You'll be notified via email/ or a mobile notification (if you have the app) when:
+### Become Partner
 
-    - Training is complete.
+The current Advanced Options area includes a Become Partner checkbox.
 
-    - Tagging & categorisation are done.
+Use the product's current details and terms to understand its commercial effect.
 
-    - Your DNA is ready for Review (Step 5).
+This guide does not promise that selecting it creates earnings eligibility or a payout.
 
-### Step 5 – Review
+### Tagging and Categorization
 
-In Review, you see a complete summary of your DNA:
+The Tagging & Categorization panel includes:
 
-Likely items (based on earlier steps):
+- Primary Category
 
-    - DNA name.
+- Subcategory
 
-    - Creator profile & picture.
+- Tags
 
-    - Description.
+Use those fields to keep the primary DNA organized.
 
-    - Tags (genre, mood, etc.).
+Categories and tags do not guarantee discovery, moderation approval, or a particular generation output.
 
-    - Output types enabled (Song / Instrumental / Singing).
+<img
+  src="/images/create/dna/07-full-production-tagging.png"
+  alt="Full Production DNA Tagging and Categorization tab with category, subcategory, and tag fields"
+/>
 
-    - Price.
+### Review
 
-    - License.
+The current Full Production review area includes tabs for:
 
-    - Visibility (Public / Private).
+- Models
 
-    - Track presets (Song Styles / Vocal Styles / Instrumental Styles) derived from your catalog.
+- Tracks
 
-What you should do here:
+- Voice Models
 
-    - **Check naming**
+It also includes an optional Review Notes field.
 
-        - Is the DNA name clear and unique?
+The current Review Notes input is limited to 500 characters.
 
-        - Does it reflect the vibe (e.g., AfroDesi, Neon Hearts)?
+<img
+  src="/images/create/dna/08-full-production-review.png"
+  alt="Full Production DNA Review tab with Models, Tracks, Voice Models, and review controls"
+/>
 
-    - **Refine description**
+### Review before moving on
 
-        - Short, punchy, and descriptive:
+Review the displayed data before completing the flow.
 
-        - "Emotional synthpop with retro drums and lush pads."
+Check that your visible configuration matches your intent.
 
-    - **Clean up tags**
+Review is useful for finding a wrong name, tag, category, price, visibility value, or source choice before you rely on the finished DNA.
 
-        - Remove irrelevant ones.
+The Review panel is not a promise that the DNA has been approved for public discovery.
 
-        - Add missing but important ones.
+### Step 5: Finalize
 
-    - **Verify license & price**
+Finalize is the final part of the Full Production creation interface.
 
-        - Make sure the **license type** matches your business intent.
+The primary flow starts catalog processing from Process DNA before Finalize.
 
-        - Ensure the price is something you're comfortable with for the value offered.
+Use Finalize to complete the current configuration and review experience.
 
-When everything looks correct, move to **Finalise**.
+Do not assume that Finalize restarts processing if processing has already begun.
 
-### Step 6 – Finalise & Go Live
+### After Finalize
 
-In the last step:
+Return to My DNA to inspect the current result.
 
-- You confirm all details and click Finalise / Publish.
+The product can add model and track results to the primary DNA as processing completes.
 
-- Your DNA is:
+Results can appear as available models, tracks, or voice-related content in the management experience.
 
-  - Saved to My DNA.
+### Model-ready email
 
-  - Set to Public or Private as chosen.
+Soundverse attempts to send a model-ready email after a full-production model run has persisted results.
 
-  - If Public and approved:
+Email is best effort.
 
-    - Eligible to appear in Discover (Top Creators, Top DNAs).
+The model result is queryable in the product before an email delivery issue can affect it.
 
-    - Available in the DNA panel for users to generate music.
+If the email does not arrive, check My DNA rather than assuming the model failed.
 
-- If you have Stripe connected and are part of Become Partner = Yes:
+### When you can leave the page
 
-  - Your DNA is now ready to earn royalties when used by others.
+Once Full Production processing has started, you can leave the page and return later.
 
-  - Usage and earnings will show in the Earn section.
+The current product flow continues the processing work independently of keeping the creation view open.
+
+My DNA is the right place to inspect the outcome later.
+
+## Part 3: What Full Production processing can create
+
+### Models
+
+Full Production processing can add music-style models to the primary DNA.
+
+The models available for a DNA are driven by the processing result.
+
+One catalog can produce a different model result from another catalog.
+
+Do not promise a specific count before the processing result is available.
+
+### Track references
+
+Processing can associate track references with the primary DNA.
+
+The interface can represent available source references as song, vocal, or instrumental.
+
+Those are reference categories.
+
+They are not a universal set of final generation buttons.
+
+### Tags and classifications
+
+The processing pipeline can persist style-related tags and source classification information for uploaded audio.
+
+The final information available in the UI can vary.
+
+Avoid promising tempo, musical key, energy, era, or an exact style description unless the current product explicitly shows it for the selected result.
+
+### When no separate style model appears
+
+Do not assume that every catalog will produce several separate style models.
+
+The system can retain a usable primary model path even when style clustering does not yield multiple usable style results.
+
+Inspect My DNA for what was actually created.
+
+### Adding more catalog material later
+
+Use the existing primary DNA when you have more authorized catalog material.
+
+Upload the new files.
+
+Wait for the upload to become ready.
+
+Start a new processing run when no previous run is active.
+
+Review the new state in My DNA.
+
+## Part 4: Use a DNA in generation
+
+<img
+  src="/images/create/dna/10-dna-generation-controls.png"
+  alt="DNA generation controls with DNA selection, model and track references, and Song and Instrumental choices"
+/>
+
+### Select a DNA
+
+Open the available DNA generation experience.
+
+Choose a DNA that is available to you.
+
+The list of available models and track references depends on that DNA and the product state.
+
+### Select a model or track reference
+
+When the UI presents both options:
+
+- Choose a model for a broader DNA starting point
+
+- Choose a track reference for a more specific starting point
+
+The product decides which controls are available for the chosen context.
+
+### Understand context-aware controls
+
+DNA generation controls are not identical for every model or track.
+
+They depend on the selected DNA, available model, and selected reference.
+
+Use the controls that are enabled.
+
+If a control is missing or disabled, it is not currently supported for that selection.
+
+### Song and Instrumental
+
+The current DNA generation contract accepts Song and Instrumental styles.
+
+Song refers to the available song-generation path.
+
+Instrumental refers to the available instrumental-generation path.
+
+The product may map an available reference to one of those supported request styles.
+
+### Vocal references
+
+A reference can be categorized as vocal.
+
+That does not mean the generation backend accepts a separate vocal or acapella request style.
+
+Do not promise a standalone vocal output from every vocal reference.
+
+Use the options currently enabled in the UI.
+
+### Input text
+
+When a music description or lyrics field is presented, provide text that matches the enabled flow.
+
+The exact available input fields depend on the current product selection.
+
+Keep expectations tied to the visible controls and current DNA result rather than a generic feature matrix.
+
+### If generation controls change
+
+Changing the selected DNA, model, or track reference can change the controls.
+
+This is expected context-aware behavior.
+
+Try another available reference only when it matches your intended musical starting point.
+
+## Part 5: Voice DNA
+
+### Overview
+
+Voice DNA is a dedicated training flow for one person's voice.
+
+It has five current steps:
+
+1. Voice Profile
+
+2. Upload Recordings
+
+3. Settings
+
+4. DNA Quality
+
+5. Finalize
+
+The Start Training control is on DNA Quality.
+
+Finalize then displays the training state.
+
+### Voice source requirements
+
+Use solo-vocal recordings.
+
+Aim for at least 10 minutes of clean voice audio.
+
+Use one speaker or singer only.
+
+Avoid background music and heavy effects.
+
+The cleaner and more representative the source material is, the clearer the training intent.
+
+### Voice consent requirement
+
+The current Voice DNA form requires a consent checkbox.
+
+The checkbox confirms that the voice is yours or that you have the singer's consent to clone it.
+
+The upload step cannot validate without that confirmation.
+
+Do not bypass or misrepresent the consent requirement.
+
+### Step 1: Voice Profile
+
+The Voice Profile area includes:
+
+- Creator Name
+
+- Description
+
+- Tags
+
+- Cover image upload
+
+- Avatar selection
+
+The current description field is limited to 300 characters.
+
+<img
+  src="/images/create/dna/11-voice-profile.png"
+  alt="Voice DNA Voice Profile step with the five-step rail and profile fields"
+/>
+
+### Voice profile naming
+
+Use a name that lets you identify the voice model later.
+
+The training flow generates a model name based on the profile context and the next voice-model number.
+
+You do not need to manually invent an internal numbered model name.
+
+### Existing and primary profile context
+
+The Voice DNA UI has a profile step.
+
+In the current primary mode, the voice model is added to the canonical primary DNA.
+
+Existing DNA content stays unchanged.
+
+Follow the profile context shown in the product when you start the flow.
+
+### Step 2: Upload Recordings
+
+Use Upload Recordings to add voice material.
+
+The form requires at least one recording.
+
+The product guidance says to aim for at least 10 minutes of clean solo-vocal audio.
+
+The two points are different:
+
+- One recording satisfies the basic form requirement
+
+- A useful voice dataset should follow the guidance
+
+<img
+  src="/images/create/dna/12-voice-upload-recordings.png"
+  alt="Voice DNA Upload Recordings step with a selected audio file, recording controls, consent confirmation, and upload progress"
+/>
+
+### Voice accepted formats
+
+The current Voice DNA file input accepts:
+
+- .mp3
+
+- .wav
+
+- .aac
+
+- .ogg
+
+- .flac
+
+- .m4a
+
+It also accepts browser-recognized audio input.
+
+### Add existing audio files
+
+Use the Select audio files action or drag files into the upload area.
+
+The product supports adding more files before training.
+
+Use source recordings you can keep available until upload has completed.
+
+### Record in the product
+
+The Voice DNA upload area includes a Record action.
+
+It can be used when the device and browser permit recording.
+
+Microphone permissions, device selection, and browser behavior remain device-specific.
+
+Review the resulting audio before using it as training material.
+
+### Upload status
+
+The Voice DNA uploader reports progress and status.
+
+It can report that recordings are being packaged.
+
+It can report a successful upload when recordings are ready.
+
+If it reports an upload error, read the error text and retry only after checking the files and consent.
+
+### Consent before moving forward
+
+The Voice DNA upload step validates two required conditions:
+
+- At least one recording is selected
+
+- The consent checkbox is selected
+
+If either condition is missing, the flow directs you to fix it before training.
+
+### Step 3: Voice Settings
+
+The current Voice DNA Settings step asks who can use the voice once it is trained.
+
+It presents private and public visibility options.
+
+Use the visibility value shown in this form.
+
+Do not assume that the Full Production Personal option appears in the Voice DNA form.
+
+<img
+  src="/images/create/dna/13-voice-settings.png"
+  alt="Voice DNA Settings step showing private and public visibility choices"
+/>
+
+### Step 4: DNA Quality
+
+DNA Quality is the Voice DNA configuration step.
+
+It uses epoch count rather than the Full Production sensitivity slider.
+
+The current range is 10 through 350 epochs.
+
+The default is 180 epochs.
+
+<img
+  src="/images/create/dna/14-voice-dna-quality.png"
+  alt="Voice DNA Quality step with the epochs slider, duration and token estimate, and Start Training button"
+/>
+
+### Voice quality labels
+
+The current UI labels the quality range as:
+
+- Fast at 10 epochs
+
+- Balanced at about 180 epochs
+
+- Studio at 350 epochs
+
+It describes 40 to 200 epochs as typical.
+
+### What higher Voice quality means
+
+The current UI describes more epochs as seeking a higher-fidelity clone while taking longer to train.
+
+Higher is not automatically better for every recording set.
+
+Use the balanced default when you do not have a source-specific reason to choose another value.
+
+### Estimates in the Voice quality panel
+
+The quality panel displays an estimated duration and token cost for the chosen epoch value.
+
+Treat those as UI estimates.
+
+They are not a guarantee of completion time, token availability, or training success.
+
+### Start Voice training
+
+Select Start Training from the DNA Quality step.
+
+The product validates the profile and upload requirements before submitting.
+
+It then moves to Finalize and starts showing the model state.
+
+### Step 5: Voice Finalize
+
+Finalize shows a summary of the Voice DNA.
+
+It displays training progress and status after the request begins.
+
+It provides a View in your profile action when the result is ready to inspect.
+
+### Voice training states
+
+The current Finalize view can show:
+
+- Queued
+
+- Preparing
+
+- Training
+
+- Completed
+
+- Failed
+
+### Queued
+
+Queued means the Voice DNA request is waiting for available training capacity.
+
+The current UI describes this as waiting for a GPU to become available.
+
+Queued is not the same as failure.
+
+### Preparing
+
+Preparing means the system is packaging or processing the voice dataset before reported epoch progress is available.
+
+The UI can show an indeterminate progress state during this phase.
+
+This is not a reliable percentage completion estimate.
+
+<img
+  src="/images/create/dna/15-voice-dna-preparing.png"
+  alt="Voice DNA Finalize screen showing the Preparing training state"
+/>
+
+### Training
+
+When epochs are reported, the Finalize view shows training progress by current epoch and total epoch count.
+
+The percentage is tied to that reported epoch progress.
+
+Do not compare it directly to a guaranteed wall-clock completion time.
+
+### Completed
+
+Completed means the voice model reports completion.
+
+The UI changes the status to say that the voice is ready.
+
+Use View in your profile or My DNA to inspect the result.
+
+### Failed
+
+Failed means the current training result reported failure.
+
+The UI reports the failure and directs the flow back to DNA Quality so you can try again.
+
+Before retrying, review the source audio, consent, selected quality, and visible error text.
+
+### Close the Voice DNA window
+
+The current UI states that Voice DNA training continues if you close the window.
+
+The result should appear under the profile's Voice DNAs when it is ready.
+
+Return later to inspect the product state rather than keeping the window open only to watch progress.
+
+## Part 6: Visibility, moderation, and discovery
+
+### Visibility and status are separate
+
+Full Production DNA visibility and moderation status are separate values.
+
+Visibility tells the product whether the DNA is Public, Private, or Personal.
+
+Status tells the product whether it is Pending, Approved, Rejected, or On hold.
+
+One does not replace the other.
+
+### Full Production public eligibility
+
+For the current Full Production public discovery path, a DNA must be:
+
+1. Public
+
+2. Approved
+
+If it is Private, Personal, Pending, Rejected, or On hold, it is not eligible for the public-discovery condition.
+
+### Pending
+
+Pending means the DNA has not reached the Approved state required for public discovery.
+
+Do not share it as publicly discoverable until the product shows the required public eligibility.
+
+This guide does not promise a review duration or outcome.
+
+### Approved
+
+Approved is the status required alongside Public visibility for current public discovery.
+
+It does not change the need to comply with the applicable terms and rights requirements.
+
+### Rejected or On hold
+
+Rejected and On hold are statuses distinct from Approved.
+
+Do not treat a Public visibility selection as sufficient to bypass those states.
+
+Use the status actually shown in the product.
+
+### Private and Personal
+
+Private and Personal Full Production DNA are outside public discovery.
+
+They are useful for setup, testing, and keeping the DNA out of the public browsing path.
+
+Use the product's own visibility and status presentation when deciding how to share the DNA.
+
+### Voice DNA visibility
+
+The current Voice DNA form provides private and public options.
+
+Use its specific visibility field rather than assuming it follows the Full Production visibility set exactly.
+
+### Discover
+
+Discover shows DNA content that is eligible for public discovery.
+
+The available cards depend on the current visibility, moderation status, and product availability.
+
+<img
+  src="/images/create/dna/18-discover-public-dna.png"
+  alt="Soundverse Discover screen with publicly visible DNA cards"
+/>
+
+## Part 7: Earn and Stripe Connect
+
+### Connect Stripe
+
+The Earn section checks the current Stripe connection status.
+
+When no connection is present, it offers a Connect Stripe action.
+
+The action opens a Stripe Connect URL when the service returns one.
+
+If it cannot open the connection request, the UI reports an error.
+
+<img
+  src="/images/create/dna/19-earn-connect-stripe.png"
+  alt="Soundverse Earn screen before Stripe Connect is linked, showing Connect Stripe actions"
+/>
+
+### Connected account view
+
+When Stripe reports that the account is connected, the Earn page can show data from the DNA dashboard summary.
+
+The current UI can include lifetime earnings, recent earnings, usage, export data, and a path to the Stripe dashboard when that data is available.
+
+The exact dashboard values depend on the connected account and returned summary.
+
+### Manage payouts
+
+The connected Earn view provides a way to open Stripe for payout details, banking settings, and account requirements.
+
+Use Stripe and the current product information to manage those details.
+
+### Important earnings boundary
+
+Connecting Stripe does not itself promise:
+
+- Payout eligibility
+
+- A royalty amount
+
+- A payout date
+
+- A minimum balance
+
+- A commercial right
+
+- A successful DNA review
+
+Those issues depend on the current product terms, license terms, account state, and Stripe requirements.
+
+## Part 8: Troubleshooting
+
+### Full Production upload does not start
+
+Check that you selected at least one file.
+
+Check that each file is an accepted audio format.
+
+Check the ownership-and-authority confirmation.
+
+Read any visible error message before retrying.
+
+### Full Production upload stopped partway
+
+Keep the same source files available.
+
+Retry through the product.
+
+The current uploader can reuse a valid upload session and confirmed chunks.
+
+If the session cannot be resumed, the product can create a new session.
+
+### Process DNA is unavailable
+
+Check whether the upload has completed.
+
+Check whether the selected audio is ready to process.
+
+Check whether a previous processing run is still active.
+
+The current flow intentionally blocks duplicate starts while processing is already running.
+
+### I expected a new primary DNA but do not see one
+
+The current Full Production flow uses one primary DNA per owner.
+
+Look in My DNA for the existing primary profile and its new results.
+
+Do not expect later Full Production uploads to create a second primary profile.
+
+### I do not see a new Full Production model
+
+Check My DNA after processing has had time to complete.
+
+Check whether the current processing run is still active.
+
+Do not rely only on a model-ready email because email delivery is best effort.
+
+Do not assume every catalog must create multiple visible style models.
+
+### I do not see a public DNA in Discover
+
+Check the DNA's visibility.
+
+Check the DNA's moderation status.
+
+For the current Full Production public path, both Public visibility and Approved status are required.
+
+### Voice DNA will not continue from upload
+
+Confirm that you selected at least one recording.
+
+Confirm that the consent checkbox is selected.
+
+Check that the source file is an accepted audio format.
+
+Read the exact visible error before retrying.
+
+### Voice DNA remains Queued
+
+Queued indicates that the product is waiting for training capacity.
+
+It is different from a Failed result.
+
+You can close the training window and return to the profile later to check the model state.
+
+### Voice DNA reports Failed
+
+Read the Finalize status.
+
+Return to DNA Quality as the product directs.
+
+Review the source recordings, consent, quality choice, and visible error.
+
+Retry only after understanding what changed.
+
+### A generation option is missing
+
+Check the selected DNA, model, and track reference.
+
+The controls depend on that context.
+
+Use a supported selection and the controls actually enabled in the product.
+
+Do not assume that every vocal reference exposes a standalone vocal output style.
+
+### Stripe Connect does not open
+
+Read the error displayed by the Earn page.
+
+The connection flow requires a Stripe URL returned by the service.
+
+If it continues to fail, record the time, page, visible error, and whether the account was already connected.
+
+Do not share Stripe credentials or financial information in an ordinary support message.
+
+## Part 9: What to send support
+
+### DNA support checklist
+
+Include the following:
+
+- Your Soundverse account email
+
+- Whether the issue is Full Production DNA or Voice DNA
+
+- The exact page or step
+
+- The visible error message
+
+- The approximate time and timezone
+
+- The number of selected files
+
+- The file formats
+
+- Whether the problem is upload, processing, visibility, generation, or Stripe Connect
+
+### Full Production issue checklist
+
+For Full Production DNA, also include:
+
+- Whether the primary DNA already existed
+
+- Whether the upload completed
+
+- The selected sensitivity
+
+- Whether a processing run was already active
+
+- Whether the problem is in My DNA or Discover
+
+### Voice DNA issue checklist
+
+For Voice DNA, also include:
+
+- Whether there was at least one recording
+
+- Whether the consent checkbox was selected
+
+- The selected epoch count
+
+- The reported training state
+
+- Whether the problem occurred before or after Start Training
+
+### Keep secrets private
+
+Do not send:
+
+- Passwords
+
+- Session cookies
+
+- API keys
+
+- Stripe credentials
+
+- Raw private audio
+
+Use a secure support channel if support needs account-specific or private material.
+
+## Part 10: Keep expectations accurate
+
+### Results are catalog-dependent
+
+Do not promise a fixed number of models, tracks, or tags before processing completes.
+
+Different source collections can produce different usable results.
+
+Inspect the primary DNA after the actual processing run.
+
+### Processing time is not guaranteed
+
+The product can show current state and progress where available.
+
+This guide does not promise a completion time for Full Production or Voice DNA training.
+
+Queueing, preparation, processing, and training are distinct states.
+
+### Approval is not guaranteed
+
+Public visibility is not a moderation approval.
+
+No statement in this guide promises a review outcome or review duration.
+
+Use the status shown in the product.
+
+### Earnings are not guaranteed
+
+Stripe connection and visible dashboard figures do not guarantee future earnings, payout timing, or royalty terms.
+
+Use the current product terms and Stripe information before making business decisions.
+
+### Generation capability is context-dependent
+
+Use the enabled DNA generation controls for the selected model or track reference.
+
+The current request contract supports Song and Instrumental.
+
+Do not promise a third universal vocal output style.
+
+## Next steps
+
+Start with the flow that matches your source material.
+
+Keep your authorization and consent clear.
+
+Use Full Production DNA for the continuing primary music catalog.
+
+Use Voice DNA for clean solo-vocal training.
+
+Review My DNA after every processing or training run.
+
+Use Discover only after the product shows that a Full Production DNA is Public and Approved.
+
+Use Earn and Stripe only as the current account and terms allow.
