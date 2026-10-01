@@ -1218,11 +1218,177 @@ The current UI can include lifetime earnings, recent earnings, usage, export dat
 
 The exact dashboard values depend on the connected account and returned summary.
 
+### Where creator earnings come from
+
+The Earn history records protected creator earnings from two current sources:
+
+- **Paid DNA exports**: another creator completes a paid export for audio made with an eligible paid DNA.
+
+- **Fan Support**: a fan completes a one-time or monthly Stripe support payment for a creator from an eligible conversation.
+
+Creating a DNA, training a DNA, publishing a DNA, or generating audio does not by itself create a creator earning.
+
+An entry is created only after the payment provider reports a verified payment through the relevant product flow.
+
+The Earn balance is a creator-earnings ledger. It is not the same thing as the cash balance in a Stripe bank account.
+
+### Paid DNA export earnings
+
+When another creator pays to export audio made with a paid DNA, the current creator policy reserves **50% of the gross purchase payment** for the DNA creator.
+
+For example, if the product records a $10.00 paid DNA export, the protected creator share is $5.00 before any later refund or dispute adjustment.
+
+The buyer must complete the payment successfully. Opening a checkout page, closing it, or having a payment fail does not create an export earning.
+
+The creator can see the source as **Paid DNA export** in the Earn history once the ledger has recorded it.
+
+The price and license controls in the DNA experience can affect what is presented in the product, but they do not independently guarantee a sale, a ledger entry, a particular creator share, or a payout.
+
+### Fan Support earnings
+
+Fan Support is a direct support payment between people in an eligible Soundverse conversation. It is not a purchase of a DNA export and it does not grant ownership of the creator's work.
+
+The current one-time Fan Support presets are $2, $5, $10, and $25 USD. The current monthly presets are $3, $8, and $20 USD.
+
+For each verified Fan Support payment, the current creator policy reserves **75% of the gross support payment** for the recipient in the same protected creator-earnings ledger.
+
+For example, a verified $5.00 one-time support payment reserves $3.75 for the recipient before any later refund, dispute, or reversal adjustment.
+
+The platform records the creator's protected earning first. It does not attempt an immediate direct transfer to the recipient's Stripe account at the moment the fan pays.
+
+### Can a creator earn before connecting Stripe?
+
+Yes. A creator can have a protected earning recorded before they finish Stripe Connect onboarding.
+
+That lets a verified paid DNA export or Fan Support payment appear in the creator's Earn history even when the creator has not yet linked a payout account.
+
+Until Stripe setup is complete and the account is eligible, the balance cannot be sent as a payout. The history can show a note such as **Pending Stripe connection**, **Pending Stripe verification**, or **Payout setup required**.
+
+Connecting Stripe later does not turn a protected balance into an instant bank transfer. The payment still needs to meet the normal protection, eligibility, threshold, and scheduling conditions described below.
+
+### Connection states in Earn
+
+Earn can show several Stripe connection states. The wording is meant to tell you what to do next:
+
+- **Stripe not connected**: no payout account is linked yet. Earnings can still accrue, but a payout cannot be sent until you connect Stripe.
+
+- **Setup incomplete**: a Stripe account is linked, but onboarding still has steps to complete.
+
+- **Verification required**: Stripe needs more information before payments or payouts can be enabled.
+
+- **Verification pending**: Stripe is reviewing the submitted information.
+
+- **Payments restricted**: the linked account is not currently ready for payments or payouts. Review the Stripe setup for the specific requirement.
+
+- **Stripe connected**: the account is linked and the product reports it as connected. Stripe can still impose account, country, identity, banking, and payout requirements.
+
+Use the Stripe dashboard opened from Earn for account-specific requirements. Do not send Stripe login details, bank information, or identity documents through ordinary support messages.
+
+### Read the balance cards
+
+The cards in Earn describe different points in the creator-earnings lifecycle:
+
+- **Current creator balance**: the current protected creator balance recorded by the ledger after known adjustments. It is not a bank balance and is not automatically withdrawable.
+
+- **In payment protection**: earnings that are still inside the payment-protection period. They are intentionally held before becoming payout-eligible.
+
+- **Eligible after protection**: earnings whose protection period has ended. They still require a ready Stripe account, the minimum payout threshold, and an active payout path.
+
+- **Money accrued**: the running total of creator earnings that have been recorded in the ledger.
+
+- **Money paid**: the running total of creator earnings that have been recorded as paid out. It does not include money that is only protected or eligible.
+
+- **Historical paid-DNA estimate**: an analytics estimate that can appear in a live dashboard. It is not a replacement for the protected ledger balance or a promise of a future payout.
+
+The exact set of cards can vary between sandbox and live mode, and when the protected ledger is temporarily unavailable.
+
+### Understand the earning status in history
+
+Each Earn history row identifies a source, date, status, and amount. The current status labels mean:
+
+- **Payment protection**: the payment was recorded but remains inside the protection period.
+
+- **Ready for payout**: the ledger marks the creator amount eligible after protection. It is still subject to payout setup and schedule checks.
+
+- **Payout processing**: a payout is being processed against the ledger balance.
+
+- **Paid**: the ledger has recorded the payout as completed.
+
+- **Payment review**: the payment is being reviewed, such as after a refund or dispute event. The amount may be adjusted or reversed.
+
+- **Payout setup required**: the earning is recorded, but Stripe connection, verification, banking, or another payout prerequisite must be completed first.
+
+The history can also show a reversed amount. A reversal is an adjustment to the creator's earning after a verified refund, dispute, or other payment-provider event.
+
+### Earning-to-payout lifecycle
+
+The normal path is:
+
+1. A buyer completes a paid DNA export or a fan completes a support payment.
+
+2. The payment provider verifies the payment and the product records the creator's share in the protected ledger.
+
+3. The earning remains in **Payment protection** for the applicable protection period.
+
+4. The balance becomes **Ready for payout** when it is eligible, provided the payout setup is complete.
+
+5. A qualifying scheduled payout moves through **Payout processing** and then **Paid** when the ledger records completion.
+
+Not every payment reaches the final step. A refund, dispute, account restriction, missing payout setup, or unavailable payout schedule can change the status.
+
 ### Manage payouts
 
 The connected Earn view provides a way to open Stripe for payout details, banking settings, and account requirements.
 
 Use Stripe and the current product information to manage those details.
+
+### Minimum payout threshold and next payout date
+
+The live Earn view shows the current **Minimum payout threshold**. The current default displayed by the product is **$50 USD**, unless the configured account summary supplies a different amount.
+
+Reaching the threshold is necessary but not sufficient for a payout. The amount must also be eligible after payment protection, the protected ledger must be available, and the Stripe account must be ready for payouts.
+
+When automatic payouts are enabled for a live account, the current product schedule is eligible balances at or above the displayed threshold on the **28th of each month**. The **Next payout date** shown in Earn is the source of truth for the current account.
+
+If Earn says **Not scheduled**, it can mean the balance has not met the conditions yet, automatic payouts are disabled, the account still needs Stripe setup, or the product cannot currently provide a payout schedule.
+
+Stripe and the receiving bank can still take additional time to make a completed payout available. The displayed schedule is not a guarantee of bank-arrival time.
+
+### When automatic payouts are disabled
+
+Earn can continue tracking protected and eligible balances even when automatic payouts are disabled.
+
+In that state, a visible balance is not an instruction to send a transfer yourself. It means the ledger has recorded creator earnings while the payout path is not automatically sending a transfer.
+
+Check the current in-product payout message and Stripe account state rather than assuming that an eligible balance will move on a particular date.
+
+### Test mode and live mode are separate
+
+Soundverse uses separate Stripe environments for testing and live payments.
+
+In **test or sandbox mode**, Stripe Connect and Checkout use Stripe test objects and test funds. Test earnings can be recorded in the sandbox ledger so the Earn flow can be validated, but test payouts are disabled and no real money is sent to a bank account.
+
+In **live mode**, Stripe Connect and Checkout use live Stripe objects. Live earnings and live payouts are kept separate from sandbox data.
+
+Do not mix a test Stripe account, test checkout URL, or test payment method with a live flow. A checkout created in one Stripe mode is not valid in the other.
+
+### Refunds, disputes, and balance changes
+
+An Earn balance can change after a payment is first recorded.
+
+If a buyer receives a refund or a payment is disputed, the corresponding creator earning can move into **Payment review** or be reversed. A reversal can reduce the current balance and can affect an amount that had been waiting for payout.
+
+This protection is intentional. It prevents a creator payout from being treated as final before the source payment is settled under the applicable payment rules.
+
+### Monthly Fan Support
+
+Monthly Fan Support uses a Stripe subscription rather than a one-time payment.
+
+The current product prevents a supporter from creating duplicate active monthly support for the same creator. If an active pledge already exists, the supporter should manage that pledge instead of starting a second one.
+
+Each successful monthly payment is handled as its own verified support payment for the creator-earnings ledger. A monthly pledge can change status when it is active, past due, canceling, canceled, expired, or unpaid.
+
+Canceling a future monthly pledge does not automatically rewrite the status of support payments that were already verified. Check the current subscription and payment records in the product and Stripe.
 
 ### Important earnings boundary
 
@@ -1241,6 +1407,16 @@ Connecting Stripe does not itself promise:
 - A successful DNA review
 
 Those issues depend on the current product terms, license terms, account state, and Stripe requirements.
+
+They can also depend on payment protection, the configured threshold, refunds or disputes, the availability of the protected ledger, and whether automatic payouts are enabled.
+
+### What Earn does not replace
+
+Earn is not a tax return, invoice system, tax advisor, legal advisor, or bank statement.
+
+Stripe may request identity, business, bank, or tax information for the account. Provide accurate information directly to Stripe and seek qualified professional advice for tax, accounting, licensing, or legal questions that apply to you.
+
+For a payment or payout issue, keep the non-sensitive details that help support investigate: the source shown in Earn, visible status, approximate time and timezone, amount, and any non-secret Stripe or Soundverse reference shown by the product.
 
 ## Part 8: Troubleshooting
 
@@ -1453,6 +1629,960 @@ Use the enabled DNA generation controls for the selected model or track referenc
 The current request contract supports Song and Instrumental.
 
 Do not promise a third universal vocal output style.
+
+## Part 11: Creator planning playbooks
+
+This section turns the product concepts above into repeatable planning paths.
+
+Use the playbooks to organize your own decisions before you upload, train, publish, generate, or connect a payout account.
+
+They do not replace the current controls in Soundverse, the applicable terms, or the rights you need for your source material.
+
+### How to use these playbooks
+
+Pick the playbook that matches the outcome you want, then work through it in order.
+
+Keep the key facts for each DNA project in a private project record: source-list summary, ownership or consent confirmation, selected settings, visible product status, and actual result.
+
+Do not put passwords, Stripe details, session cookies, API keys, bank information, or private legal documents into a normal project note.
+
+When a product state conflicts with an expectation, treat the current product state as the source of truth and use the troubleshooting sections before retrying.
+
+### Playbook A: Choose the correct DNA route
+
+Use this decision path before creating a new request.
+
+#### A1. Define the real creative goal
+
+Ask what you want the system to represent.
+
+If the answer is a creator's broader musical catalog, production identity, songs, instrumentals, or authorized acapellas, start with **Full Production DNA**.
+
+If the answer is one person's voice from clean solo-vocal recordings, start with **Voice DNA**.
+
+Do not choose a route based only on the file extension or file name. Choose it based on the source material and the intended training goal.
+
+#### A2. Separate catalog questions from voice questions
+
+Full Production DNA can include vocal material as part of a music catalog.
+
+That does not make it the voice-cloning flow.
+
+Voice DNA is dedicated to the voice-focused request and requires that the source is one authorized speaker or singer.
+
+If you need both a music catalog and a voice model, plan the source sets separately and use each flow only with the required rights and consent.
+
+#### A3. Check who owns or controls the source material
+
+For Full Production DNA, make sure you have the authority to upload the catalog material.
+
+For Voice DNA, make sure the voice is yours or that you have the speaker's or singer's consent for this purpose.
+
+Do not treat public availability, a streaming link, a social post, or a credit line as proof of training rights.
+
+If you cannot make the product confirmation truthfully, do not submit the material.
+
+#### A4. Make a simple source inventory
+
+For each planned file, record:
+
+- A clear local file name
+
+- The original project or recording context
+
+- The intended DNA flow
+
+- Why the file belongs in that source set
+
+- Whether you own it or have the needed authority or consent
+
+- Whether it includes other voices, collaborators, samples, private speech, or sensitive material
+
+This record helps you make a deliberate upload choice and gives you useful non-sensitive context if a support issue occurs later.
+
+#### A5. Decide whether the material is focused enough
+
+A Full Production catalog should reflect a meaningful creator or musical direction.
+
+A Voice DNA dataset should reflect one person's clean voice.
+
+If a file makes the goal harder to explain, contains unclear rights, or belongs to another person or project, leave it out until you can resolve that question.
+
+More material is not automatically better than more relevant material.
+
+#### A6. Choose a non-public starting state when appropriate
+
+Use a non-public visibility choice while you are setting up, testing, or reviewing the DNA.
+
+Full Production DNA currently uses Public, Private, and Personal visibility choices. Voice DNA currently presents private and public choices.
+
+Visibility is separate from approval, so setting a Full Production DNA to Public does not independently make it eligible for Discover.
+
+Do not share a DNA as publicly discoverable until the product shows the necessary status.
+
+#### A7. Write down the success condition
+
+Define a realistic success condition before starting.
+
+For a Full Production DNA, it might be a clearly organized primary profile with available models or track references you can inspect.
+
+For Voice DNA, it might be a completed voice model visible in My DNA.
+
+Do not use an uncertain outcome, such as a guaranteed public listing, fixed earnings, or an exact output, as the only definition of success.
+
+### Playbook B: Prepare a Full Production DNA catalog
+
+Use this path when the goal is a continuing, catalog-based primary DNA.
+
+#### B1. Choose representative catalog material
+
+Select authorized songs, instrumentals, or acapellas that represent the sound you want the primary DNA to learn.
+
+The catalog does not need to contain every piece of music you have ever made.
+
+It should be intentional enough that you can explain the shared creator, project, or musical direction.
+
+Avoid turning the upload area into an unreviewed file dump.
+
+#### B2. Remove accidental duplicates and irrelevant versions
+
+Review the selected files before upload.
+
+Keep a version only when it has a clear reason to be part of the training source, such as an authorized instrumental or a distinct approved arrangement.
+
+Repeated copies of the same export can make your project harder to audit later.
+
+The product does not promise that duplicate versions create extra models, tracks, or earnings.
+
+#### B3. Check the actual audio, not only the metadata
+
+Play each file in a trusted local player before upload.
+
+Verify that it is the intended recording, an accepted audio format, and not a corrupted file, silent file, document, archive, image, or video renamed as audio.
+
+Use a known-good authorized source when a file is damaged or cannot be identified.
+
+Keep the original local source until upload and processing status are clear.
+
+#### B4. Account for collaborators and samples
+
+Review material that contains co-writers, producers, session players, featured artists, sampled works, label-controlled masters, or licensed third-party assets.
+
+Your participation in a project does not necessarily mean you have all permissions required for DNA training.
+
+Resolve questions before upload rather than trying to fix rights after a public or payment-related outcome.
+
+This guide cannot determine rights for a particular track or agreement.
+
+#### B5. Keep the catalog understandable
+
+Use a simple grouping such as a project era, production identity, a creator catalog, or a deliberate sound direction.
+
+You can include more than one genre when it honestly belongs to the same creator or catalog context.
+
+If the selections are unrelated, consider whether the goal needs a clearer source plan before you process them together.
+
+The actual processing result remains dependent on the content that was supplied.
+
+#### B6. Prepare a clear profile
+
+Use a recognizable creator or project name, short accurate description, relevant tags, and authorized cover art.
+
+The current description field has a limit, so concise factual language is usually more useful than marketing claims.
+
+Cover art helps people recognize a profile, but it does not replace the uploaded audio as a processing source.
+
+Do not use another person's name, identity, branding, image, or work in a misleading way.
+
+#### B7. Document the selected sensitivity
+
+Full Production DNA uses a sensitivity control in the Process DNA step.
+
+The current UI uses a 0 through 10 range and provides a balanced default.
+
+Write down the value you choose and why you chose it. This lets you make a meaningful comparison after the result is available.
+
+Sensitivity does not compensate for unclear rights, incomplete uploads, or a catalog that does not represent the intended sound.
+
+#### B8. Start processing once
+
+Wait until the upload has completed and the product reports it is ready to process.
+
+Use Process DNA once for the active request.
+
+The current flow intentionally blocks duplicate starts while processing is already underway.
+
+Do not open additional tabs or repeat clicks in an attempt to force a second run.
+
+#### B9. Review the actual result
+
+Return to My DNA after processing has had time to complete.
+
+Review the primary DNA, models, tracks, and available references that the product actually shows.
+
+A later upload and processing run adds to the current primary DNA; it does not create a second primary Full Production profile for the same owner.
+
+Do not promise a fixed model count, track count, or generation capability before you inspect the result.
+
+### Playbook C: Prepare a Voice DNA dataset
+
+Use this path when the goal is a dedicated model for one authorized voice.
+
+#### C1. Confirm the single-voice rule
+
+Choose one speaker or singer for one Voice DNA training request.
+
+Do not mix singers, speakers, background voices, conversations, choirs, or unrelated vocalists into one intended voice dataset.
+
+If you have several voices, plan separate authorized source sets and use the current product options for each.
+
+The presence of a vocal recording does not by itself prove it is suitable for Voice DNA.
+
+#### C2. Prefer clear solo-vocal source audio
+
+Use recordings where the intended voice is audible and not competing with background music, heavy effects, crowd noise, or other voices.
+
+The current guide recommends aiming for about 10 minutes of usable clean solo-vocal audio.
+
+One recording can satisfy the basic form requirement, but a useful dataset should match the training goal rather than merely satisfy a minimum control.
+
+Do not expect a specific result from duration alone.
+
+#### C3. Keep source privacy in mind
+
+Review whether a recording includes personal conversations, other people, addresses, passwords, financial information, health information, or confidential project details.
+
+If it does, prepare a cleaner authorized recording specifically for the Voice DNA purpose.
+
+Do not upload private audio simply because it contains a usable voice sample.
+
+Use a secure support channel only when support specifically asks for private material.
+
+#### C4. Confirm consent honestly
+
+The current Voice DNA flow requires a consent confirmation before training can begin.
+
+Confirm only if the voice is yours or you have the speaker's or singer's consent to clone it.
+
+Consent is not inferred from a public recording, a social media clip, a celebrity voice, or a casual collaboration.
+
+If consent is unclear, stop and resolve it before continuing.
+
+#### C5. Choose a quality setting intentionally
+
+Voice DNA uses an epoch-based quality control instead of Full Production sensitivity.
+
+The current range is 10 to 350 epochs, with Fast at 10, Balanced at about 180, and Studio at 350.
+
+Read the current duration and token estimate before starting. They are estimates, not a promise of a particular completion time or result.
+
+The balanced default is a reasonable first choice when you do not have a source-specific reason to choose another value.
+
+#### C6. Check the state before retrying
+
+Voice DNA can show Queued, Preparing, Training, Completed, or Failed.
+
+Queued means waiting for capacity; Preparing means the dataset is being processed; Training means epoch progress is available.
+
+Do not submit duplicate training requests while an existing request is in an active state.
+
+When Failed appears, read the visible message and correct a real source, consent, or configuration problem before retrying.
+
+#### C7. Review the completed profile
+
+Completed means the current training result reports completion.
+
+Open My DNA or View in your profile to inspect the actual resulting voice model and available controls.
+
+The completed state does not independently promise public listing, every generation style, commercial rights, or revenue.
+
+Use the model and control state actually displayed to decide how to continue.
+
+### Playbook D: Use a DNA in generation
+
+Use this path when a DNA, model, or reference is already available.
+
+#### D1. Start with the right selection
+
+Choose the DNA that is available to your account and genuinely matches the creative direction you want to explore.
+
+Review the model and track reference options the product presents after that selection.
+
+Do not assume that every DNA has the same assets, output styles, or prompt controls.
+
+The enabled controls are the current capability boundary for that context.
+
+#### D2. Decide between Model Based and Track Based
+
+Use Model Based when you want the broader DNA model as the creative starting point.
+
+Use Track Based when one available song, vocal, or instrumental reference is closer to the specific starting point you want.
+
+Changing between the two can change the controls, and neither choice changes ownership or removes the need to follow product terms.
+
+Compare actual outputs rather than treating one mode as universally better.
+
+#### D3. Pick the currently supported output style
+
+The current DNA generation request contract supports Song and Instrumental.
+
+The product can display vocal references, but that does not create a third universal vocal or acapella output style.
+
+If an output option is missing or disabled, it is not currently supported for the selected context.
+
+Choose another available option only when it fits the creative goal.
+
+#### D4. Write a useful prompt
+
+Use concise creative details that match the enabled flow: mood, pace, arrangement, instrumentation, energy, narrative idea, or lyric direction when relevant.
+
+Keep one part of the prompt stable when you are comparing different DNA models or references.
+
+Only submit text you have the right to use, including lyrics or scripts.
+
+Do not ask the system to impersonate a real artist or claim a collaboration that does not exist.
+
+#### D5. Treat the output as context-dependent
+
+The selected DNA, model, reference, output style, prompt, lyrics, and current product behavior can all affect a result.
+
+Do not promise an exact arrangement, vocal behavior, clone, song length, or replication of a source recording from a setting label alone.
+
+Review the actual generated output before sharing, exporting, or making a commercial decision.
+
+Use honest labels and credits appropriate to the output and applicable terms.
+
+#### D6. Keep a comparison record
+
+For an experiment, write down the DNA, model or reference, Song or Instrumental selection, prompt, lyrics decision, and date.
+
+Change one meaningful factor at a time when you want to understand what changed.
+
+This practice is more useful than trying to infer the cause from a result after many uncontrolled changes.
+
+Do not store private credentials or another user's data in that record.
+
+### Playbook E: Prepare a Full Production DNA for public discovery
+
+Use this path only after you have reviewed the actual primary DNA result and your authority to share it.
+
+#### E1. Review profile accuracy
+
+Check that the creator name, description, tags, cover art, and any advanced options are accurate and authorized.
+
+Correct misleading or incomplete information through the current product controls when appropriate.
+
+Profile polish does not substitute for source rights, moderation, or review.
+
+Do not use a public profile to imply endorsement by a person or brand that has not approved it.
+
+#### E2. Check visibility and moderation separately
+
+For the current Full Production public path, the DNA must be both Public and Approved before it is eligible for Discover.
+
+Public, Private, and Personal are visibility choices. Pending, Approved, Rejected, and On hold are moderation statuses.
+
+One does not replace the other.
+
+Use the status currently displayed in the product rather than an assumption based on an earlier step.
+
+#### E3. Do not promise a review date
+
+The guide does not promise an approval outcome or a review duration.
+
+Keep collaborators informed with the actual status, such as Pending or Approved, and avoid setting dates that the product has not confirmed.
+
+Changing visibility does not bypass a Rejected or On hold state.
+
+If clarification is required, use the visible status and non-sensitive project details in a support request.
+
+#### E4. Set prices and licenses deliberately
+
+Use the current price and license controls only after reading the visible product details and applicable terms.
+
+Those controls can configure what is presented in the product, but they do not independently promise a buyer, export, creator share, or payout.
+
+Do not use a license label as a substitute for understanding the commercial effect of a specific release.
+
+Seek qualified professional advice for legal or contractual questions.
+
+#### E5. Keep public sharing accurate
+
+Describe a DNA as publicly discoverable only when the product shows the needed Public and Approved state.
+
+Describe its available model, track, and generation behavior only from the controls actually shown.
+
+Do not promise standalone vocal output, a fixed style result, a public link, or a revenue outcome that the product has not confirmed.
+
+Clear language protects both creators and users from avoidable confusion.
+
+### Playbook F: Track creator earnings responsibly
+
+Use this path when a paid DNA export or Fan Support payment may affect the creator ledger.
+
+#### F1. Separate payment from payout
+
+A buyer paying for a DNA export or a fan completing a support payment is the first event, not the final payout event.
+
+After payment verification, the creator share is recorded in the protected earnings ledger.
+
+It can move through payment protection, payout eligibility, payout processing, and paid status.
+
+Do not describe a protected balance as money already available in a bank account.
+
+#### F2. Know the current creator shares
+
+The current policy reserves 50% of the gross payment for a paid DNA export for the DNA creator.
+
+The current policy reserves 75% of the gross verified Fan Support payment for the recipient.
+
+Both sources appear in the same protected creator-earnings history when the ledger is available.
+
+The source payment can later be adjusted if it is refunded or disputed.
+
+#### F3. Connect Stripe before expecting a payout
+
+Creator earnings can accrue before a creator finishes Stripe Connect onboarding.
+
+However, a payout cannot be sent until the Stripe account is connected, required setup and verification are complete, and the account is eligible.
+
+The history can show Pending Stripe connection, Pending Stripe verification, or Payout setup required while the earning remains recorded.
+
+Connecting later does not create an immediate bank transfer.
+
+#### F4. Read the balance and history together
+
+Use the balance cards for a summary and View history for the source-level record.
+
+Current creator balance is a protected ledger amount, not a bank balance. Money accrued is the running ledger total, and Money paid is the amount recorded as paid out.
+
+Check whether a row is in Payment protection, Ready for payout, Payout processing, Paid, Payment review, or Payout setup required.
+
+Use any displayed reversed amount to understand a later adjustment.
+
+#### F5. Check the threshold and schedule
+
+The live Earn view displays the current minimum payout threshold. The current default is $50 USD unless the account summary supplies a different amount.
+
+When automatic payouts are enabled for a live account, the current product schedules eligible balances that meet the displayed threshold on the 28th of the month.
+
+The Next payout date shown in Earn is the account-specific source of truth.
+
+The schedule does not guarantee a particular bank-arrival time.
+
+#### F6. Keep test and live separate
+
+Sandbox or test mode uses Stripe test objects and test funds. It can validate the ledger flow, but no real bank payout is sent.
+
+Live mode uses live Stripe objects and live payment data. Test and live accounts, checkouts, earnings, and payouts are separate.
+
+Do not use a test checkout or test Connect account as proof of a live payment result.
+
+Verify the visible Stripe mode before testing or investigating an issue.
+
+#### F7. Preserve non-sensitive evidence
+
+For a payment issue, record the source shown in Earn, status, amount, approximate time and timezone, whether the activity was test or live, and any non-secret product reference.
+
+For Fan Support, record whether it was one-time or monthly and whether checkout completed.
+
+Do not record or transmit card details, cookies, passwords, Stripe credentials, bank information, or API keys.
+
+Use a secure process only when support explicitly requests sensitive material.
+
+## Part 12: Practical scenarios and troubleshooting playbooks
+
+The following scenarios provide a structured first response to common questions.
+
+They are designed to help you gather the right visible information without creating duplicate requests or exposing private data.
+
+### Scenario 1: I am not sure whether to choose Full Production DNA or Voice DNA
+
+Ask whether the source is meant to represent a music catalog or one person's voice.
+
+Choose Full Production DNA for authorized songs, instrumentals, and acapellas that represent a broader musical identity.
+
+Choose Voice DNA for clean solo-vocal recordings of one authorized speaker or singer.
+
+If the answer remains unclear, do not upload yet. Sort the source material into separate catalog and voice groups first.
+
+### Scenario 2: My catalog has very different songs
+
+Review whether the songs still honestly belong to one creator profile or deliberate catalog direction.
+
+If they do, document the variation and use accurate profile copy and tags.
+
+If they do not, start by training with a more focused source set rather than using unrelated files just to increase quantity.
+
+Inspect the current result after processing before deciding whether more authorized material belongs in the same primary DNA.
+
+### Scenario 3: I have a single acapella and do not know where to put it
+
+Check the actual audio.
+
+If it is clean, solo-vocal, authorized, and intended to train one person's voice, it may fit the Voice DNA goal.
+
+If it is a catalog asset with layered vocals, effects, or broader song context, it may fit Full Production DNA instead.
+
+The correct choice is based on the training goal and source content, not the word acapella in the file name.
+
+### Scenario 4: My upload stops midway
+
+Keep the same authorized source files available.
+
+Read the visible error and retry through the product. The current Full Production uploader can reuse a valid session and confirmed chunks when possible.
+
+Do not start a different project, make random duplicate files, or repeatedly click Process DNA before upload readiness is confirmed.
+
+If the issue persists, report the file count, formats, visible error, approximate time, and DNA flow involved.
+
+### Scenario 5: Process DNA is unavailable
+
+Check whether the upload is complete and marked ready.
+
+Check whether a previous Full Production processing run is still active.
+
+The current flow blocks duplicate processing starts intentionally.
+
+If the visible state does not explain the problem, capture the status and error text before contacting support.
+
+### Scenario 6: I expected a new primary DNA after another upload
+
+The current Full Production workflow maintains one primary DNA profile per owner.
+
+Later authorized uploads and processing runs add to that existing primary profile instead of creating a second primary Full Production DNA.
+
+Open My DNA and look for the existing primary profile, its new models, tracks, or processing state.
+
+Do not create duplicate requests merely to obtain a second primary profile.
+
+### Scenario 7: I do not see a new Full Production model
+
+Check whether processing is still active and inspect the primary DNA after it completes.
+
+The product does not promise that every catalog produces multiple new visible style models or references.
+
+Review the actual models and tracks available in My DNA, not just an expected name or notification.
+
+If it remains missing, report the source flow, visible status, approximate time, and non-sensitive upload details.
+
+### Scenario 8: Voice DNA remains Queued
+
+Queued means the current training request is waiting for available capacity.
+
+It is different from a Failed state and does not provide a reliable completion countdown.
+
+You can close the window and return later to check the profile state.
+
+Avoid starting a duplicate request while the original one remains queued.
+
+### Scenario 9: Voice DNA reports Failed
+
+Read the exact visible status and return to the DNA Quality step as the product directs.
+
+Check the source audio, single-voice requirement, consent confirmation, file formats, and selected epoch value.
+
+Make an intentional correction before retrying instead of repeatedly submitting the same failing request.
+
+Include non-sensitive details and the visible error if you need support.
+
+### Scenario 10: A generation control is missing
+
+Check the selected DNA, model, track reference, and output style.
+
+Generation controls are context-aware, so another available selection can show different valid options.
+
+The current request contract supports Song and Instrumental. A vocal reference does not create a universal standalone vocal option.
+
+Use only the controls enabled for the current selection.
+
+### Scenario 11: My Full Production DNA is not in Discover
+
+Check both visibility and moderation status.
+
+For the current Full Production public-discovery path, the DNA must be Public and Approved.
+
+Pending, Private, Personal, Rejected, and On hold do not meet that condition.
+
+Do not promise a public discovery result until the product shows the required state.
+
+### Scenario 12: Stripe Connect does not open
+
+Read the error displayed by the Earn page.
+
+The connection flow requires a Stripe Connect URL returned by the service and a configuration that matches the current Stripe mode.
+
+Record the approximate time, whether the account was already linked, and the visible error before retrying.
+
+Never paste Stripe credentials, cookies, or secret headers into a support message.
+
+### Scenario 13: A creator has earnings but has not connected Stripe
+
+The protected ledger can record a verified paid DNA export or Fan Support earning before the creator completes Stripe onboarding.
+
+The history can show Pending Stripe connection or Payout setup required.
+
+The creator should use Connect Stripe and complete the current setup and verification requirements.
+
+The balance will not become an immediate bank transfer solely because the account was connected later.
+
+### Scenario 14: A balance is below the payout threshold
+
+Read the current minimum payout threshold shown in Earn. The current default is $50 USD unless the account summary provides a different amount.
+
+Keep tracking verified earnings in the ledger and avoid assuming that a smaller protected balance will be transferred immediately.
+
+The balance also needs to be eligible after protection and the Stripe account needs to be ready.
+
+Use the account's Next payout date and status for current information.
+
+### Scenario 15: Earn says Not scheduled
+
+The balance may still be in payment protection, below the threshold, awaiting Stripe setup, or on an account where automatic payouts are disabled or unavailable.
+
+Read the balance cards, history status, minimum threshold, and Stripe account state together.
+
+Do not attempt to manually move money based on an unscheduled balance.
+
+Use the current product message as the account-specific guide.
+
+### Scenario 16: A payment is refunded or disputed
+
+The corresponding creator earning can move to Payment review or show a reversal.
+
+The current creator balance can decrease as the payment provider's event is reconciled.
+
+This is part of the protected earnings design and is why a payment record is not automatically equivalent to a final bank payout.
+
+Check the affected history row and contact support with non-sensitive details if the adjustment is unclear.
+
+### Scenario 17: Fan Support says the conversation is unavailable
+
+Make sure you are using the actual eligible conversation with the intended recipient.
+
+The product verifies the conversation and recipient relationship rather than accepting an arbitrary person supplied from the browser.
+
+Do not try to support yourself or modify browser data to target a different recipient.
+
+If the conversation is valid but the message continues, record the conversation context, visible error, and approximate time for support.
+
+### Scenario 18: I am testing in sandbox mode
+
+Use only the test Connect and Checkout flow provided by the test environment.
+
+Test funds can validate the Earn ledger and history, but test payouts are disabled and cannot be withdrawn as real money.
+
+Keep test and live accounts, checkout sessions, and expectations separate.
+
+Confirm the visible Stripe mode before interpreting any test outcome.
+
+### Scenario 19: I need to explain DNA to a collaborator
+
+Use plain status language: catalog DNA, voice model, upload ready, processing, training, Pending, Approved, protected earnings, or payout setup required.
+
+Do not promise exact model behavior, public availability, ownership, payout amount, or timing that the product has not confirmed.
+
+Share only information you are authorized to share, especially where source audio and voice consent are involved.
+
+Point collaborators to the appropriate My DNA, Discover, or Earn state rather than a vague claim.
+
+### Scenario 20: I need to contact support
+
+Start with the affected surface: Full Production DNA, Voice DNA, generation, Discover, paid export, Fan Support, Stripe Connect, or Earn.
+
+Include the exact visible error, current status, approximate time and timezone, and non-sensitive context such as the file count or payment source type.
+
+Keep raw private audio, passwords, session cookies, API keys, Stripe credentials, bank details, and full card data out of an ordinary support message.
+
+Use a secure support channel only when the support team explicitly asks for sensitive material.
+
+## Part 13: DNA and earning glossary
+
+Use this glossary when a status or product term is unfamiliar.
+
+The definitions describe the current product behavior and should be read together with the visible account state.
+
+### Acapella
+
+An acapella is audio centered on vocals without the full instrumental arrangement.
+
+It can be catalog material for Full Production DNA. It is suitable for Voice DNA only when it is a clean solo-vocal recording of one authorized voice.
+
+### Approved
+
+Approved is the moderation status required together with Public visibility for the current Full Production Discover path.
+
+It is not a payout approval, a commercial-rights statement, or a promise of earnings.
+
+### Artist share
+
+Artist share is the portion of a verified payment reserved in the creator earnings ledger for the relevant creator or Fan Support recipient.
+
+The current policy reserves 50% of a gross paid DNA export and 75% of a gross verified Fan Support payment.
+
+### Available model
+
+An available model is a processed DNA model shown by the product for a selected DNA.
+
+It can be used as a broader Model Based starting point only when the current product makes it selectable.
+
+### Balance card
+
+A balance card summarizes a part of the protected creator-earnings ledger, such as current creator balance, eligible after protection, or in payment protection.
+
+It is not automatically a bank balance or an instruction to withdraw money.
+
+### Become Partner
+
+Become Partner is an Advanced Options configuration presented in the current Full Production flow.
+
+Use the current product wording and applicable terms to understand it; do not treat the label alone as a payout or earnings guarantee.
+
+### Completed
+
+Completed means the current Voice DNA training result reports completion.
+
+Inspect My DNA to see the actual voice model and current available controls.
+
+### Creator earnings ledger
+
+The creator earnings ledger records protected creator shares from paid DNA exports and Fan Support payments.
+
+It tracks earnings and payout status separately from the immediate Stripe or bank cash balance.
+
+### Current creator balance
+
+Current creator balance is the protected ledger amount after known adjustments.
+
+It can include amounts that are still in payment protection or awaiting payout setup, and it is not a promise of immediate withdrawal.
+
+### Discover
+
+Discover is the product area for browsing DNA content that is eligible for public discovery.
+
+It is separate from My DNA and depends on current visibility, approval status, and product availability.
+
+### DNA model
+
+A DNA model is a processed result associated with a DNA profile.
+
+When available, it can provide a broader creative context for Model Based generation.
+
+### Fan Support
+
+Fan Support is a Stripe support payment from one person to a creator in an eligible conversation.
+
+The recipient's 75% creator share is recorded as a protected earning after payment verification.
+
+### Full Production DNA
+
+Full Production DNA is the catalog-based flow for authorized songs, instrumentals, and acapellas that represent a broader musical identity.
+
+It uses a primary DNA profile and a sensitivity control for catalog processing.
+
+### Generation style
+
+The current DNA request contract supports Song and Instrumental generation styles.
+
+The appearance of a vocal reference does not create a universal standalone vocal generation style.
+
+### In payment protection
+
+In payment protection is the portion of a creator balance still held during the applicable payment-protection period.
+
+It is recorded but not yet eligible for payout.
+
+### Ledger unavailable
+
+Ledger unavailable means the product cannot currently read the protected creator-earnings ledger.
+
+The product intentionally avoids presenting that condition as a zero balance because zero would be misleading.
+
+### Model Based
+
+Model Based uses an available DNA model as a broader creative starting point for generation.
+
+The current selection determines which output styles and controls are available.
+
+### Money accrued
+
+Money accrued is the running total of creator earnings recorded in the ledger.
+
+It can include amounts that have not yet been paid out.
+
+### Money paid
+
+Money paid is the running total recorded as paid through the creator payout lifecycle.
+
+It does not include all currently protected or eligible creator earnings.
+
+### My DNA
+
+My DNA is the primary management area for your DNA profiles, models, tracks, and voice models.
+
+Use it as the product source of truth after a processing or training request completes.
+
+### Next payout date
+
+Next payout date is the account-specific payout date shown by Earn when a schedule is available.
+
+It is not a guaranteed bank-arrival time.
+
+### On hold
+
+On hold is a moderation status that is different from Approved.
+
+Public visibility does not bypass an On hold state for current public discovery.
+
+### Payment review
+
+Payment review indicates that a source payment is being reviewed after an event such as a refund or dispute.
+
+The creator amount can be adjusted or reversed while that review is resolved.
+
+### Payment protection
+
+Payment protection is the period in which a verified creator earning is held before it becomes payout-eligible.
+
+It helps account for later payment-provider events such as refunds or disputes.
+
+### Pending
+
+Pending is a Full Production moderation status that has not reached the Approved state required for current public discovery.
+
+It is not the same as a Stripe payment status or Voice DNA training status.
+
+### Pending Stripe connection
+
+Pending Stripe connection means the creator earning is recorded but the recipient has not yet completed connection of a payout account.
+
+The amount can remain in the ledger until payout setup is ready.
+
+### Personal
+
+Personal is a current Full Production visibility choice used to keep the DNA outside the public-discovery path.
+
+It is distinct from moderation approval and from a private commercial agreement.
+
+### Private
+
+Private is a visibility choice that keeps a DNA outside the current public-discovery path.
+
+It does not erase the source, replace rights obligations, or independently control every product record.
+
+### Public
+
+Public is a Full Production visibility choice for DNA intended to be considered for public availability.
+
+For the current Discover path, the DNA must also be Approved.
+
+### Payout processing
+
+Payout processing means a payout is being processed against the creator earnings ledger.
+
+It is later distinct from the Paid status that records completion.
+
+### Payout setup required
+
+Payout setup required means the earning is recorded but Stripe connection, verification, banking, or another payout prerequisite needs attention.
+
+Use the current Stripe setup information to understand the account-specific next step.
+
+### Paid
+
+Paid means the creator payout lifecycle has recorded a payout as completed.
+
+Use Stripe and the receiving bank for account-specific availability information.
+
+### Paid DNA export
+
+Paid DNA export is an earning source recorded when a buyer completes a verified export payment for eligible paid DNA audio.
+
+The current creator policy reserves 50% of the gross purchase payment for the DNA creator before later adjustments.
+
+### Primary DNA profile
+
+The primary DNA profile is the ongoing home for a creator's catalog-based Full Production DNA.
+
+Later authorized catalog uploads and processing runs add to that profile rather than creating a second primary Full Production profile.
+
+### Queued
+
+Queued is a Voice DNA training state that means the request is waiting for available capacity.
+
+It is not a Failed result and does not provide an exact completion timer.
+
+### Ready for payout
+
+Ready for payout means the ledger considers a creator amount eligible after payment protection.
+
+It still needs a ready Stripe account, the relevant threshold, and an available payout path.
+
+### Rejected
+
+Rejected is a moderation status different from Approved.
+
+Changing visibility alone does not bypass a Rejected status for public discovery.
+
+### Reversal
+
+A reversal is an adjustment to a recorded creator earning after a verified refund, dispute, or other payment-provider event.
+
+It can reduce the current creator balance and affect a future payout.
+
+### Song
+
+Song is one of the current DNA generation styles.
+
+The exact input controls still depend on the selected DNA, model, or track reference.
+
+### Stripe Connect
+
+Stripe Connect is the payout-account onboarding flow available through Earn.
+
+It can be required before creator earnings can be sent as a payout, but connecting Stripe does not itself guarantee payout timing or eligibility.
+
+### Test mode
+
+Test mode or sandbox mode uses Stripe test objects and test funds to validate the flow.
+
+Test payouts are disabled and do not send real money to a bank account.
+
+### Track Based
+
+Track Based uses a specific available song, vocal, or instrumental reference as a more focused generation starting point.
+
+The reference type does not guarantee every output style or control.
+
+### Track reference
+
+A track reference is a processed audio reference associated with a DNA profile.
+
+It can appear as song, vocal, or instrumental context in the generation experience.
+
+### Training
+
+Training is the Voice DNA state where the product reports training progression, such as current and total epochs.
+
+It is different from Queued, Preparing, Completed, and Failed.
+
+### Voice DNA
+
+Voice DNA is the voice-focused flow for clean solo-vocal recordings of one authorized speaker or singer.
+
+It uses an epoch-based quality control and can attach a trained voice model to the current primary profile.
+
+### Voice DNA quality
+
+Voice DNA quality is the epoch setting selected before voice training begins.
+
+The current range is 10 to 350 epochs, with Fast, Balanced, and Studio guidance in the product.
+
+### Voice model
+
+A voice model is the completed result of a Voice DNA training request when the product reports it as available.
+
+It is different from a vocal track reference and does not promise every possible vocal output capability.
 
 ## Next steps
 

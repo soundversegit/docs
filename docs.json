@@ -8,6 +8,12 @@
     "dark": "#6E35EF"
   },
   "favicon": "/favicon.png",
+  "redirects": [
+    {
+      "source": "/create/studio-faq",
+      "destination": "/create/agent"
+    }
+  ],
   "navigation": {
     "groups": [
       {
@@ -28,7 +34,7 @@
       {
         "group": "Creating with Soundverse",
         "pages": [
-          "create/studio-faq",
+          "create/agent",
           "create/ai-studio",
           "create/ai-magic-tools",
           "create/dna-faqs",
