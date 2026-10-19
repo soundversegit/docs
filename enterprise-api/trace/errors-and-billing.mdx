@@ -1,0 +1,128 @@
+---
+title: "Errors & Billing"
+description: "Error responses, what Trace charges for, budget caps, safe retries and rate limits."
+---
+
+<Card title="🚀 apiv2 is live!" icon="rocket" href="https://platform.soundverse.ai">
+  Trace is served from **apiv2.soundverse.ai**. Create your API key and manage billing at **platform.soundverse.ai**.
+</Card>
+
+## **Error Format**
+
+Most errors return a JSON body with a stable `error` name, a human-readable `message`, and whether retrying can help:
+
+```json
+{
+  "error": "InvalidGenerationInput",
+  "message": "search_type must be one of '1:1', '1:n', 'm:n'",
+  "retryable": false
+}
+```
+
+Authentication errors omit `retryable`. Dataset, library and legacy-upload endpoints pass through the Trace service's own response, which uses `detail` (for example a duplicate dataset name) or `success` and `message`.
+
+---
+
+## **Status Codes**
+
+| Status | `error` | Meaning | What to do |
+| :--- | :--- | :--- | :--- |
+| `400` | `UnknownTool` | This Trace search type is not currently available | Contact support |
+| `400` | | A legacy upload had no file or an unsupported format | Fix the upload and retry |
+| `401` | `UNAUTHENTICATED` | The `Authorization` header is missing | Send `Authorization: Bearer <your API key>` |
+| `401` | `INVALID_API_KEY` | The key is invalid or has been revoked | Check the key at [platform.soundverse.ai](https://platform.soundverse.ai) |
+| `402` | `InsufficientFunds` | Your balance cannot cover the job | Add credit, then retry |
+| `404` | `ResourceNotFound` | The job or dataset does not exist, or belongs to another account | Check the ID |
+| `409` | | The dataset name is already taken, or an ingestion is still running on a dataset you are deleting | Choose another name, or wait and retry |
+| `422` | `InvalidGenerationInput` | The request body is invalid. `message` says which field | Fix the request. Nothing was queued or charged |
+| `422` | `ToolNotPriced` | Trace is not priced for your account | Contact support |
+| `429` | `RateLimited` | You exceeded a rate limit | Wait, then retry |
+| `502` | | The Trace service was briefly unreachable | Retry with backoff |
+| `503` | `DependencyUnavailable` | A required service is temporarily unavailable | Retry with backoff |
+
+<Note>
+  For privacy, a job or dataset that belongs to another account returns `404`, exactly as if it did not exist.
+</Note>
+
+<Note>
+  When an API key is revoked, it can keep working for up to 30 seconds.
+</Note>
+
+---
+
+## **Billing**
+
+Trace bills your Soundverse balance per job, based on usage.
+
+| Billed | Free |
+| :--- | :--- |
+| Ingestion (`POST /trace/v3/ingest`) | Uploads (`POST /v1/files`, `POST /trace/v3/upload`) |
+| Custom Search (`POST /trace/v3/search`) | Creating, listing, viewing and deleting datasets |
+| Comprehensive Search (`POST /trace/v3/comprehensive1`) | Library (`GET /trace/v3/library`) |
+| Use-Case Searches (`POST /trace/v3/{use_case}`) | Job status and full results |
+
+*   **What a job costs** depends on the songs' length, the layers involved and, for searches, the number of comparisons.
+*   **When you are charged:** a hold may be placed when a job is queued, and the final amount is settled after the job completes, usually within a minute or two.
+*   **Failed jobs are not charged.** Any hold is returned in full.
+*   **Validation errors are not charged.** A request rejected with `4xx` never creates a job.
+
+### **Check your balance**
+
+```bash cURL
+curl "https://apiv2.soundverse.ai/v1/account/balance" \
+  -H "Authorization: Bearer sksoundverse_your_api_key"
+```
+
+```json
+{
+  "total_effective": 4506,
+  "base_effective": 0,
+  "extra_cents": 4506
+}
+```
+
+Amounts are in US cents: `4506` is $45.06. `total_effective` is the amount available to spend.
+
+---
+
+## **Budget Cap**
+
+Add `budget_tokens` to any ingest or search request to cap what the job may cost. Trace prices the job before doing any work. If the price is more than 10% above your cap, the job is refused and finishes as `failed`, and you are not charged. The `error` gives the job's price, for example:
+
+```text
+This job prices at 77 tokens but was reserved for only 1. Re-submit so the correct amount is held; running now would spend more than was checked against the balance.
+```
+
+Re-submit with a `budget_tokens` at least as high as the quoted price. Leave `budget_tokens` out to run without a cap.
+
+---
+
+## **Safe Retries (Idempotency)**
+
+Network errors can leave you unsure whether a job was created. Send an `Idempotency-Key` header with every `POST` that creates a job. Repeating a request with the same key within 24 hours returns the **same job** instead of creating, and charging for, a second one.
+
+```bash cURL
+curl -X POST "https://apiv2.soundverse.ai/trace/v3/search" \
+  -H "Authorization: Bearer sksoundverse_your_api_key" \
+  -H "Content-Type: application/json" \
+  -H "Idempotency-Key: catalog-check-2026-10-20-0001" \
+  -d '{"search_type": "1:1", "query_file_id": "0190a1b2-0003-7000-8000-00000000a003", "candidate_file_id": "0190a1b2-0001-7000-8000-00000000a001"}'
+```
+
+| Rule | Detail |
+| :--- | :--- |
+| Allowed characters | Letters, digits, `_`, `.`, `:` and `-` |
+| Maximum length | 200 characters |
+| Lifetime | 24 hours |
+
+<Warning>
+  A key that breaks these rules is ignored, and the request is processed as if no key was sent. Use a new key for each distinct job.
+</Warning>
+
+---
+
+## **Rate Limits**
+
+Job-creating requests are rate-limited per account over hourly and daily windows. Each kind of job (ingestion, custom search, comprehensive search, use-case search) has its own limit, and all Trace jobs also share an overall limit. The eight use-case searches count together as one kind. Limits depend on your account.
+
+When you exceed a limit you receive `429 RateLimited`; wait, then retry with backoff. Status checks, results, dataset management and uploads do not count towards these limits.

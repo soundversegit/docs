@@ -1,0 +1,158 @@
+---
+title: "Use-Case Search"
+description: "One-call searches tuned for a specific question: cover, remix, genre, lyrics, melody, sample, voice timbre, or a deep comprehensive check."
+---
+
+<Card title="🚀 apiv2 is live!" icon="rocket" href="https://platform.soundverse.ai">
+  Trace is served from **apiv2.soundverse.ai**. Create your API key and manage billing at **platform.soundverse.ai**.
+</Card>
+
+import React from 'react';
+
+export const Method = ({ type, children }) => {
+  const styles = {
+    POST: {
+      backgroundColor: "#16a34a",
+      color: "white",
+      padding: "3px 6px",
+      borderRadius: "6px",
+      fontSize: "0.85rem",
+      fontWeight: "bold",
+      display: "inline-block",
+      marginRight: "8px"
+    }
+  };
+  return <span style={styles[type] || styles.POST}>{children || type}</span>;
+};
+
+## **Use-Case Search**
+
+Each use case is a ready-made search for one question. Soundverse decides which layers, instruments and text signals it compares, so you only choose the songs. Every use case supports `1:1`, `1:n` and `m:n`.
+
+### **Endpoints**
+
+*   <Method type="POST">POST</Method> `/trace/v3/comprehensive2` (Comprehensive – Deep)
+*   <Method type="POST">POST</Method> `/trace/v3/cover`
+*   <Method type="POST">POST</Method> `/trace/v3/remix`
+*   <Method type="POST">POST</Method> `/trace/v3/genre`
+*   <Method type="POST">POST</Method> `/trace/v3/lyrics`
+*   <Method type="POST">POST</Method> `/trace/v3/melody`
+*   <Method type="POST">POST</Method> `/trace/v3/sample`
+*   <Method type="POST">POST</Method> `/trace/v3/timbre` (Voice timbre)
+
+---
+
+## **What Each Use Case Compares**
+
+| Use case | Ask it | Layers | Instruments | Text signals |
+| :--- | :--- | :--- | :--- | :--- |
+| `comprehensive2` | "Is this song similar in any way?" | `track`, `section`, `motif`, `stem` | vocals, bass, drums, other | lyrics, translation, insights |
+| `cover` | "Is this a cover of that song?" | `track`, `section`, `motif`, `stem` | vocals | lyrics, translation |
+| `remix` | "Is this a remix of that song?" | `section`, `motif`, `stem` | vocals, bass, drums, other | lyrics |
+| `genre` | "Do these songs share a style?" | `track`, `stem` | vocals, bass, drums, other | insights |
+| `lyrics` | "Are the lyrics reused?" | `section`, `stem` | vocals | lyrics, translation |
+| `melody` | "Is the melody reused?" | `section`, `motif`, `stem` | vocals, other | none |
+| `sample` | "Was part of the recording sampled?" | `section`, `motif`, `stem` | vocals, bass, drums, other | none |
+| `timbre` | "Does the voice and tone match?" | `track`, `stem` | vocals | insights |
+
+<Note>
+  The layers behind each use case are maintained by Soundverse and may be refined over time. If you need a fixed, explicit set of layers, use [Custom Search](/enterprise-api/trace/search).
+</Note>
+
+---
+
+## **Prepare Your Datasets**
+
+For `1:n` and `m:n`, ingest the datasets with every depth the use case needs. A `1:1` search needs no ingestion.
+
+| Use case | Ingest with `depth` |
+| :--- | :--- |
+| `comprehensive2` | `["track", "section", "motif", "stem", "lyrics", "translation", "insights"]` |
+| `cover` | `["track", "section", "motif", "stem", "lyrics", "translation"]` |
+| `remix` | `["section", "motif", "stem", "lyrics"]` |
+| `genre` | `["track", "stem", "insights"]` |
+| `lyrics` | `["section", "stem", "lyrics", "translation"]` |
+| `melody` | `["section", "motif", "stem"]` |
+| `sample` | `["section", "motif", "stem"]` |
+| `timbre` | `["track", "stem", "insights"]` |
+
+Check readiness with [`GET /trace/v3/dataset/{dataset_id}/tracks`](/enterprise-api/trace/datasets#list-dataset-tracks) before searching. A search against a dataset that lacks a required layer finishes as `failed`, and you are not charged.
+
+---
+
+## **Request Body Fields**
+
+The same fields for every use case:
+
+| Field | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `search_type` | string | ✅ | `"1:1"`, `"1:n"` or `"m:n"` |
+| `query_file_id` | string | 1:1, 1:n | `file_id` of the song you are checking |
+| `candidate_file_id` | string | 1:1 | `file_id` of the song to compare against |
+| `candidate_dataset_name` | string | 1:n, m:n | Name of the dataset to search |
+| `query_dataset_name` | string | m:n | Name of the dataset whose songs are the queries |
+| `limit` | integer | | Maximum number of matches returned per query song |
+| `budget_tokens` | integer | | Optional cap on what this job may cost. See [Errors & Billing](/enterprise-api/trace/errors-and-billing#budget-cap) |
+| `query_url`, `candidate_url` | string | | Legacy alternatives to the file IDs: `blob_name` values from [`/trace/v3/upload`](/enterprise-api/trace/upload#legacy-upload) |
+
+<Warning>
+  Use-case searches ignore `depth`, `stem_types`, `lyrics`, `translation` and `audio_to_text`. The use case decides them. To choose your own, use [Custom Search](/enterprise-api/trace/search).
+</Warning>
+
+<Note>
+  Use cases with text signals (lyrics, translation, insights) need `file_id` inputs. Trace looks up each song's lyrics and tags through its file.
+</Note>
+
+---
+
+## **Request Example**
+
+<CodeGroup>
+```bash cURL
+curl -X POST "https://apiv2.soundverse.ai/trace/v3/cover" \
+  -H "Authorization: Bearer sksoundverse_your_api_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "search_type": "1:n",
+    "query_file_id": "0190a1b2-0003-7000-8000-00000000a003",
+    "candidate_dataset_name": "reference-catalog"
+  }'
+```
+
+```python Python
+import requests
+
+resp = requests.post(
+    "https://apiv2.soundverse.ai/trace/v3/cover",
+    headers={"Authorization": "Bearer sksoundverse_your_api_key"},
+    json={
+        "search_type": "1:n",
+        "query_file_id": "0190a1b2-0003-7000-8000-00000000a003",
+        "candidate_dataset_name": "reference-catalog",
+    },
+)
+job_id = resp.json()["job_id"]
+```
+</CodeGroup>
+
+To run a different use case, change only the path, for example `/trace/v3/melody`.
+
+### **Response**
+
+**Status 201 Created**
+```json
+{
+  "job_id": "0190a1c0-4444-7000-8000-000000000104",
+  "status": "queued"
+}
+```
+
+Poll [`GET /trace/v3/jobs/{job_id}`](/enterprise-api/trace/search-status) for the results. Each layer the use case compares appears as its own block, as described in [Multiple layers](/enterprise-api/trace/search-status#multiple-layers).
+
+<Note>
+  Matches are ranked by the first available layer in this order: `track`, `light_stem`, `stem`, `section`, `stem_section`, `motif`. Use cases that include `track` therefore rank by the full mix. To compare songs on a specific signal, read that layer's block rather than the overall order.
+</Note>
+
+### **Errors**
+
+Validation errors return `422` and are the same as for [Custom Search](/enterprise-api/trace/search#errors). For authentication, balance and rate-limit errors, see [Errors & Billing](/enterprise-api/trace/errors-and-billing).

@@ -1,0 +1,92 @@
+---
+title: "Full Results"
+description: "Download the complete result of a Trace job, including results too large to return inline."
+---
+
+<Card title="🚀 apiv2 is live!" icon="rocket" href="https://platform.soundverse.ai">
+  Trace is served from **apiv2.soundverse.ai**. Create your API key and manage billing at **platform.soundverse.ai**.
+</Card>
+
+import React from 'react';
+
+export const Method = ({ type, children }) => {
+  const styles = {
+    GET: {
+      backgroundColor: "#2563eb",
+      color: "white",
+      padding: "3px 6px",
+      borderRadius: "6px",
+      fontSize: "0.85rem",
+      fontWeight: "bold",
+      display: "inline-block",
+      marginRight: "8px"
+    }
+  };
+  return <span style={styles[type] || styles.GET}>{children || type}</span>;
+};
+
+## **Get Full Results**
+
+Returns the complete result of a finished job. You need it when a result is larger than about 200 KB, which is common for `m:n` searches and searches over many layers. In that case [Job Status](/enterprise-api/trace/search-status) returns `"results_complete": false` and a `results_url` pointing here. Fetching results is **free**.
+
+*   <Method type="GET">GET</Method> `/trace/v3/jobs/{job_id}/results`
+
+### **Path Parameters**
+
+| Parameter | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `job_id` | string | ✅ | The `job_id` of a completed job |
+
+<CodeGroup>
+```bash cURL
+curl "https://apiv2.soundverse.ai/trace/v3/jobs/0190a1c0-5555-7000-8000-000000000105/results" \
+  -H "Authorization: Bearer sksoundverse_your_api_key"
+```
+
+```python Python
+import requests
+
+resp = requests.get(
+    "https://apiv2.soundverse.ai/trace/v3/jobs/0190a1c0-5555-7000-8000-000000000105/results",
+    headers={"Authorization": "Bearer sksoundverse_your_api_key"},
+)
+results = resp.json()
+```
+</CodeGroup>
+
+### **Response**
+
+**Status 200 OK** returns the results object directly, without the `success` / `data` envelope. It has the same shape as `data.results` described in [Reading the Results](/enterprise-api/trace/search-status#reading-the-results). For example, an `m:n` search:
+
+```json
+{
+  "search_type": "m:n",
+  "depth": "track",
+  "query_dataset_id": "1a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+  "candidate_dataset_id": "8e7d6c5b-4a39-4281-9706-f5e4d3c2b1a0",
+  "results": [
+    {
+      "query_audio_id": "e017cb015b32….mp3",
+      "matches": [
+        { "id": "b3ea82b7b97c….mp3", "score": 0.71, "percentage": 71.0 }
+      ]
+    }
+  ]
+}
+```
+
+This endpoint also works for small results. It then returns the same `results` that [Job Status](/enterprise-api/trace/search-status) already includes.
+
+<Warning>
+  **Download large results within 24 hours of the job completing.** The stored copy of a large result is available through this endpoint for 24 hours. After that it returns `404`, and you need to run the search again.
+</Warning>
+
+### **Errors**
+
+All errors return `404`:
+
+| Message | Cause |
+| :--- | :--- |
+| `job not found` | The job does not exist or belongs to another account |
+| `this job has no results yet` | The job is still running, or it failed. Check [Job Status](/enterprise-api/trace/search-status) |
+| `results unavailable -- the link has expired; poll the job again` | More than 24 hours have passed since a large result was produced. Run the search again |

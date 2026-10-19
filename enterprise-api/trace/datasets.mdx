@@ -1,10 +1,10 @@
 ---
 title: "Datasets"
-description: "Create, view, and list datasets for similarity indexing."
+description: "Create, list, inspect and delete the song collections that Trace searches against."
 ---
 
-<Card title="🚀 apiv2 is live!" icon="rocket" href="https://platform.soundverse.ai/docs">
-  Soundverse's Enterprise API platform has moved to **apiv2.soundverse.ai**, with self-serve account setup, API keys, and billing now managed at **platform.soundverse.ai**. Check the current docs there for the latest endpoints and auth.
+<Card title="🚀 apiv2 is live!" icon="rocket" href="https://platform.soundverse.ai">
+  Trace is served from **apiv2.soundverse.ai**. Create your API key and manage billing at **platform.soundverse.ai**.
 </Card>
 
 import React from 'react';
@@ -31,42 +31,74 @@ export const Method = ({ type, children }) => {
       display: "inline-block",
       marginRight: "8px"
     },
+    DELETE: {
+      backgroundColor: "#dc2626",
+      color: "white",
+      padding: "3px 6px",
+      borderRadius: "6px",
+      fontSize: "0.85rem",
+      fontWeight: "bold",
+      display: "inline-block",
+      marginRight: "8px"
+    },
   };
   return <span style={styles[type] || styles.GET}>{children || type}</span>;
 };
 
+A **dataset** is a named collection of songs. You ingest songs into a dataset once, then search against it as often as you like. Datasets are private to your account, and all dataset endpoints are **free**.
+
+---
+
 ## **Create Dataset**
 
-Create a named dataset to organize your candidate tracks.
-
-*   <Method type="POST">POST</Method> `/trace/v1/dataset`
+*   <Method type="POST">POST</Method> `/trace/v3/dataset`
 
 ### **Request Body**
 
 | Field | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
-| `name` | string | ✅ | Unique name for the dataset |
-| `description` | string | | Optional description for the dataset |
+| `name` | string | ✅ | Name of the dataset. Must be unique within your account. You use this name in ingest and search requests |
+| `description` | string | | A note for your own reference |
 
-```json Request Body Example
-{
-  "name": "my-reference-catalog",
-  "description": "Our main candidate lookup library"
-}
+<CodeGroup>
+```bash cURL
+curl -X POST "https://apiv2.soundverse.ai/trace/v3/dataset" \
+  -H "Authorization: Bearer sksoundverse_your_api_key" \
+  -H "Content-Type: application/json" \
+  -d '{"name": "reference-catalog", "description": "Our main catalog"}'
 ```
+
+```python Python
+import requests
+
+resp = requests.post(
+    "https://apiv2.soundverse.ai/trace/v3/dataset",
+    headers={"Authorization": "Bearer sksoundverse_your_api_key"},
+    json={"name": "reference-catalog", "description": "Our main catalog"},
+)
+print(resp.json()["dataset_id"])
+```
+</CodeGroup>
 
 ### **Response**
 
 **Status 201 Created**
 ```json
 {
-  "dataset_id": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
-  "user_id": "user_12345",
-  "name": "my-reference-catalog",
-  "description": "Our main candidate lookup library",
-  "created_at": "2026-06-19T12:00:00Z",
+  "dataset_id": "3f2a1b4c-5d6e-4f70-8a91-b2c3d4e5f607",
+  "user_id": "0190a1b2-c3d4-7e5f-8a6b-7c8d9e0f1a2b",
+  "name": "reference-catalog",
+  "description": "Our main catalog",
+  "created_at": "2026-10-15T18:24:27.512301",
   "ingested_tasks": [],
   "encoder_types": []
+}
+```
+
+**Status 409 Conflict**: a dataset with this name already exists in your account.
+```json
+{
+  "detail": "User '0190a1b2-c3d4-7e5f-8a6b-7c8d9e0f1a2b' already has a dataset named 'reference-catalog'."
 }
 ```
 
@@ -74,9 +106,14 @@ Create a named dataset to organize your candidate tracks.
 
 ## **List Datasets**
 
-List all datasets owned by the authenticated API key user.
+Returns every dataset in your account, with the layers that have been ingested into each.
 
-*   <Method type="GET">GET</Method> `/trace/v1/dataset`
+*   <Method type="GET">GET</Method> `/trace/v3/dataset`
+
+```bash cURL
+curl "https://apiv2.soundverse.ai/trace/v3/dataset" \
+  -H "Authorization: Bearer sksoundverse_your_api_key"
+```
 
 ### **Response**
 
@@ -84,64 +121,131 @@ List all datasets owned by the authenticated API key user.
 ```json
 [
   {
-    "dataset_id": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
-    "user_id": "user_12345",
-    "name": "my-reference-catalog",
-    "description": "Our main candidate lookup library",
-    "created_at": "2026-06-19T12:00:00Z",
-    "ingested_tasks": [
-      "full_audio_latent",
-      "light_stem"
-    ],
-    "encoder_types": [
-      "type1"
-    ]
+    "dataset_id": "3f2a1b4c-5d6e-4f70-8a91-b2c3d4e5f607",
+    "user_id": "0190a1b2-c3d4-7e5f-8a6b-7c8d9e0f1a2b",
+    "name": "reference-catalog",
+    "description": "Our main catalog",
+    "created_at": "2026-10-15T18:24:27.512301",
+    "ingested_tasks": ["full_audio_latent", "light_stem", "motif"],
+    "encoder_types": ["type3"]
   }
 ]
 ```
 
+| Field | Description |
+| :--- | :--- |
+| `ingested_tasks` | The layers ingested into this dataset. See the mapping from depths to tasks in [Ingest Audio](/enterprise-api/trace/ingest#depths-and-what-they-prepare) |
+| `encoder_types` | The Trace model used. Currently always `type3` |
+
 ---
 
-## **Get Dataset Details**
+## **Get Dataset**
 
-Retrieve details for a specific dataset using its unique ID.
+*   <Method type="GET">GET</Method> `/trace/v3/dataset/{dataset_id}`
 
-*   <Method type="GET">GET</Method> `/trace/v1/dataset/{dataset_id}`
+| Path Parameter | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `dataset_id` | string | ✅ | The `dataset_id` returned when the dataset was created |
+
+```bash cURL
+curl "https://apiv2.soundverse.ai/trace/v3/dataset/3f2a1b4c-5d6e-4f70-8a91-b2c3d4e5f607" \
+  -H "Authorization: Bearer sksoundverse_your_api_key"
+```
+
+**Status 200 OK** returns the same object as one entry of [List Datasets](#list-datasets).
+
+**Status 404 Not Found** when the dataset does not exist or belongs to another account:
+```json
+{
+  "error": "ResourceNotFound",
+  "message": "dataset not found",
+  "retryable": false
+}
+```
+
+---
+
+## **List Dataset Tracks**
+
+Shows every song in a dataset and which of its layers are finished, still running, or waiting. Use it to confirm a dataset is ready before searching, and to map Trace's audio IDs back to your own file IDs.
+
+*   <Method type="GET">GET</Method> `/trace/v3/dataset/{dataset_id}/tracks`
+
+```bash cURL
+curl "https://apiv2.soundverse.ai/trace/v3/dataset/3f2a1b4c-5d6e-4f70-8a91-b2c3d4e5f607/tracks" \
+  -H "Authorization: Bearer sksoundverse_your_api_key"
+```
 
 ### **Response**
 
 **Status 200 OK**
 ```json
 {
-  "dataset_id": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
-  "user_id": "user_12345",
-  "name": "my-reference-catalog",
-  "description": "Our main candidate lookup library",
-  "created_at": "2026-06-19T12:00:00Z",
-  "ingested_tasks": [
-    "full_audio_latent",
-    "light_stem"
-  ],
-  "encoder_types": [
-    "type1"
+  "dataset_id": "3f2a1b4c-5d6e-4f70-8a91-b2c3d4e5f607",
+  "track_count": 2,
+  "tracks": [
+    {
+      "audio_id": "d79efad889c32e5537210f024e073632ec65fb9b5feb8576e91cad7c2bdc0466.mp3",
+      "source_ref": "0190a1b2-0001-7000-8000-00000000a001",
+      "completed_tasks": ["full_audio_latent", "light_stem", "motif"],
+      "running_tasks": [],
+      "pending_tasks": []
+    },
+    {
+      "audio_id": "e4a4d5f567804d885eb41b56ad039079049f9f11a10ae743f397a42504ad6bea.mp3",
+      "source_ref": "0190a1b2-0002-7000-8000-00000000a002",
+      "completed_tasks": ["full_audio_latent"],
+      "running_tasks": ["light_stem", "motif"],
+      "pending_tasks": []
+    }
   ]
 }
 ```
 
+| Field | Description |
+| :--- | :--- |
+| `track_count` | Number of songs with at least one finished layer |
+| `audio_id` | Trace's identifier for the song. Search results refer to songs by this ID |
+| `source_ref` | The `file_id` you ingested this song from. Empty for songs ingested from a legacy `blob_name` |
+| `completed_tasks` | Layers that are ready to search |
+| `running_tasks` | Layers being processed now |
+| `pending_tasks` | Layers that are not finished: queued, or failed in an earlier ingestion. Ingest the song again to retry them |
+
+<Tip>
+  A song is ready for a search once every layer that search needs appears in `completed_tasks`. If a layer is missing, ingest the song again with that depth; layers it already has are skipped.
+</Tip>
+
 ---
 
-## **Limits & Validation Errors**
+## **Delete Dataset**
 
-To prevent processing failures, datasets enforce the following system limits:
+Deletes the dataset and everything Trace derived from it. Your uploaded source files are **not** deleted.
 
-*   **File Sizes**: Max 100 MB per file.
-*   **Track Duration**: Max 300 seconds (5 minutes) per track.
-*   **File Formats**: `.mp3`, `.wav`, `.flac`, `.m4a` files only.
-*   **Max Number of Files**: Max 10 blobs per `/trace/v1/ingest/type*` request.
-*   **Max Search Matrix (M×N)**: Max 100,000 comparison pairs per search job.
+*   <Method type="DELETE">DELETE</Method> `/trace/v3/dataset/{dataset_id}`
 
-### **Common Error Scenarios**
+```bash cURL
+curl -X DELETE "https://apiv2.soundverse.ai/trace/v3/dataset/3f2a1b4c-5d6e-4f70-8a91-b2c3d4e5f607" \
+  -H "Authorization: Bearer sksoundverse_your_api_key"
+```
 
-*   `400 Bad Request`: Returned if a batch exceeds 10 files, the audio duration is longer than 5 minutes, or the file format is unsupported.
-*   `413 Payload Too Large`: Returned during upload if a file exceeds 100 MB.
-*   `404 Not Found`: Returned if the requested `dataset_name` does not exist in the database.
+### **Response**
+
+**Status 200 OK**
+```json
+{
+  "message": "Dataset deleted",
+  "dataset_id": "3f2a1b4c-5d6e-4f70-8a91-b2c3d4e5f607",
+  "artifact_rows_deleted": 11,
+  "blobs_deleted": 4,
+  "vectors_deleted": 1
+}
+```
+
+| Status | When |
+| :--- | :--- |
+| `404` | The dataset does not exist or belongs to another account |
+| `409` | An ingestion into this dataset is still running. Wait for it to finish, then retry |
+
+<Warning>
+  Deletion cannot be undone. Searches that name a deleted dataset will fail.
+</Warning>

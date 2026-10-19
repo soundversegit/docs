@@ -1,136 +1,176 @@
 ---
 title: "Overview"
-description: "Understand how Soundverse Trace works before calling the API."
+description: "How Soundverse Trace compares songs, and how the Trace API fits together."
 ---
 
-<Card title="🚀 apiv2 is live!" icon="rocket" href="https://platform.soundverse.ai/docs">
-  Soundverse's Enterprise API platform has moved to **apiv2.soundverse.ai**, with self-serve account setup, API keys, and billing now managed at **platform.soundverse.ai**. Check the current docs there for the latest endpoints and auth.
+<Card title="🚀 apiv2 is live!" icon="rocket" href="https://platform.soundverse.ai">
+  Trace is served from **apiv2.soundverse.ai**. Create your API key and manage billing at **platform.soundverse.ai**.
 </Card>
 
-## What is Trace?
+## **What is Trace?**
 
-Soundverse Trace is an audio similarity engine built for large-scale music identification, copyright detection, and catalog matching. It takes audio files, extracts deep acoustic fingerprints from them, and lets you run fast, accurate similarity comparisons across millions of tracks.
+Soundverse Trace measures **how similar two songs are, and in what way**. Instead of a single yes/no match, it compares songs on separate layers (the full mix, the individual instruments, the song's structure, its melody, its lyrics and its style) and returns a score for each layer, along with the evidence behind it, such as which moments of the two songs line up.
 
-Unlike simple audio fingerprinting (which requires an exact or near-exact match), Trace finds musically similar content even when pitch, tempo, arrangement, or production style has changed. It operates across several levels of musical detail, from the full mix down to individual stems and melodic motifs.
+Typical uses:
+
+*   **Copyright and catalog screening**: check a new track against your catalog before release.
+*   **Cover, remix and sample detection**: find where a melody, a vocal or an instrument part was reused.
+*   **Catalog matching**: compare one catalog against another, every song against every song.
+
+<Note>
+  Audio fingerprinting answers "is this the same recording?". Trace answers "how similar are these two songs, layer by layer?", so it can surface reuse that an exact-match fingerprint would miss.
+</Note>
 
 ---
 
-## How It Works
+## **Base URL and Authentication**
 
-Trace processes audio in two stages: **Ingestion** and **Search**.
+All Trace endpoints are served from:
 
-### Stage 1: Ingestion
+```text
+https://apiv2.soundverse.ai
+```
 
-Before you can search, every track must be preprocessed and indexed. During ingestion, Trace:
+Every request needs your API key as a Bearer token. Create a key at [platform.soundverse.ai](https://platform.soundverse.ai).
 
-1. **Encodes** the full audio into a sequence of latent vectors using a deep neural model.
-2. **Separates stems**: splitting the track into vocals, bass, drums, and accompaniment using our source-separation models.
-3. **Fingerprints vocals**: extracting vocal-specific identity vectors for precise vocal-level matching.
-4. **Extracts motifs**: short melodic contours (chroma-based) that capture repeating melodic patterns.
-5. **Detects sections**: structural boundaries like intro, verse, chorus.
-6. **Indexes and stores everything** securely in our high-performance vector index and cloud storage for fast retrieval.
+```http
+Authorization: Bearer sksoundverse_your_api_key
+Content-Type: application/json
+```
 
-Ingestion is a one-time cost per track. Once a track is ingested into a dataset, it can be searched against indefinitely.
+---
 
-### Stage 2: Search
+## **How It Works**
 
-A search compares one or more query tracks against an indexed dataset. You choose the **search depth** which controls what acoustic features are compared:
+Trace works in two stages. **Ingestion** does the heavy audio analysis once per song and stores the result. **Search** then compares the stored analysis, so you can run as many searches as you need without reprocessing.
 
-| Depth | What It Compares |
+<Steps>
+  <Step title="Upload your audio">
+    Upload each song with `POST /v1/files` and keep the returned `file_id`. See [Upload Audio](/enterprise-api/trace/upload).
+  </Step>
+  <Step title="Create a dataset">
+    A dataset is a named collection of songs that you search against. See [Datasets](/enterprise-api/trace/datasets).
+  </Step>
+  <Step title="Ingest songs into the dataset">
+    Choose which layers to prepare. Trace analyses each song once. See [Ingest Audio](/enterprise-api/trace/ingest).
+  </Step>
+  <Step title="Run a search">
+    Pick a [Custom Search](/enterprise-api/trace/search), [Comprehensive Search](/enterprise-api/trace/comprehensive-search) or a [Use-Case Search](/enterprise-api/trace/use-case-search). Each returns a `job_id` immediately.
+  </Step>
+  <Step title="Get the results">
+    Poll the job until it completes, then read the scores. See [Job Status & Results](/enterprise-api/trace/search-status).
+  </Step>
+</Steps>
+
+<Note>
+  A **1:1** search (one song against one song) works directly on file IDs. You only need a dataset and ingestion for **1:N** and **M:N** searches.
+</Note>
+
+---
+
+## **Search Shapes**
+
+Every search route accepts the same three shapes, set with `search_type`:
+
+| `search_type` | Compares | Required fields |
+| :--- | :--- | :--- |
+| `1:1` | One song against one song | `query_file_id`, `candidate_file_id` |
+| `1:n` | One song against every song in a dataset | `query_file_id`, `candidate_dataset_name` |
+| `m:n` | Every song in one dataset against every song in another | `query_dataset_name`, `candidate_dataset_name` |
+
+---
+
+## **Layers (Depths)**
+
+A **depth** is one layer of comparison. You choose depths in a [Custom Search](/enterprise-api/trace/search); [Comprehensive](/enterprise-api/trace/comprehensive-search) and [Use-Case](/enterprise-api/trace/use-case-search) searches choose them for you. A dataset can only be searched at the depths it was ingested with.
+
+| Depth | What it compares | Best for |
+| :--- | :--- | :--- |
+| `track` | The full mix | Overall sound, production and genre |
+| `light_stem` | The vocals and the accompaniment, separately | Reuse of the same vocal recording |
+| `stem` | Vocals, bass, drums and other instruments, separately | A lifted bassline, drum loop or vocal |
+| `section` | Matching sections (intro, verse, chorus, bridge, outro) | Structure and harmony, part by part |
+| `stem_section` | Sections within each instrument (search only) | Detailed structural comparison |
+| `motif` | Short melodic phrases | Melody reuse. In `1:n` and `m:n` searches, also when the melody is moved to another key |
+| `lyrics` | The transcribed lyrics | Covers and reused lyrics |
+| `translation` | The lyrics after translating both songs to English | Covers in another language |
+| `insights` | Genre, instrument and style tags | Style proximity |
+
+<Note>
+  A high score on the vocal stem means the **same vocal recording** was reused. It does not identify the same singer singing something new.
+</Note>
+
+---
+
+## **Search Types**
+
+| Search | Endpoint | Use it when |
+| :--- | :--- | :--- |
+| [Custom Search](/enterprise-api/trace/search) | `POST /trace/v3/search` | You want to choose the exact depths and stems |
+| [Comprehensive Search](/enterprise-api/trace/comprehensive-search) | `POST /trace/v3/comprehensive1` | You want a fast all-round check (full mix, vocals, accompaniment and melody) |
+| [Use-Case Search](/enterprise-api/trace/use-case-search) | `POST /trace/v3/{use_case}` | You have a specific question: cover, remix, genre, lyrics, melody, sample, voice timbre, or the deep comprehensive check |
+
+---
+
+## **Reading Scores**
+
+Scores range from `0` (no similarity) to `1` (identical); `percentage` is the same value from 0 to 100. Trace cuts each song into 16 windows of 8 seconds, compares every window of one song with every window of the other, and reports:
+
+| Field | Meaning |
 | :--- | :--- |
-| `track` | Full audio latent sequence |
-| `light_stem` | Full audio + vocal stem latents |
-| `stem` | Full audio + all 4 individual stem latents |
-| `motif` | Short melodic contour matching |
-| `section` | Structural section-level alignment |
-| `stem_section` | Stems compared at the section level |
+| `hungarian_mean` | **The headline score.** The best one-to-one pairing of windows, averaged |
+| `max_then_mean` | Each window's closest match, averaged (several windows may pick the same partner) |
+| `max` | The single most similar pair of windows |
 
-Results are returned as normalized similarity scores mapped to a range of 0 to 1 (with 0 indicating no similarity and 1 indicating a perfect match).
+Melody (`motif`) results report the **number of matching phrases** rather than a percentage. Scores are raw similarity values, not legal or copyright determinations.
 
 ---
 
-## Comprehensive Search
+## **What to Expect**
 
-Comprehensive Search is a fixed, pre-tuned search profile that runs three types of comparisons simultaneously:
-
-1. **Track-level alignment** on the full audio latent sequence
-2. **Light Stem alignment** on separated vocals and accompaniment
-3. **Motif alignment** on melodic contours extracted from vocals and accompaniment
-
-It is designed for use cases requiring high-confidence similarity detection, such as copyright screening, where a single metric is not sufficient. All three metrics are run and returned together so you can make an informed decision based on multiple signals.
+*   **Ingestion and search are asynchronous.** Every `POST` returns a `job_id` at once; poll it for the result.
+*   **Ingestion is incremental.** Layers a song already has are skipped. Adding a new depth later only processes that depth.
+*   **Billing is per job and based on usage.** Ingestion and search are charged when the job completes; failed jobs are not charged. Uploads, dataset management and status checks are free. See [Errors & Billing](/enterprise-api/trace/errors-and-billing).
+*   **Large results are delivered separately.** Results over about 200 KB (common for M:N) are fetched through [Full Results](/enterprise-api/trace/job-results).
 
 ---
 
-## Key Definitions
+## **Endpoint Reference**
 
-**Stems**: Individual instrument/vocal components separated from the full mix. Stem-level comparison catches similarity that is masked in the full mix.
-
-**Motif**: A short repeating melodic fragment, captured as a chroma contour. Motif matching detects melodic plagiarism even when the instrumentation or key has changed.
-
-**Dataset**: A named collection of ingested tracks. All search queries run against a dataset. You manage datasets via the Datasets API.
-
----
-
-## Workflow: Step by Step
-
-```
-1. Create a dataset
-   POST /trace/v1/dataset
-
-2. Upload your audio files
-   POST /trace/v1/upload  (one file at a time, returns blob_name)
-
-3. Ingest the uploaded files into your dataset
-   POST /trace/v1/ingest/type1  (up to 10 files per request, legacy model)
-   POST /trace/v1/ingest/type2  (up to 10 files per request, new efficient model)
-   GET  /trace/v1/ingest/{job_id}  (poll until complete)
-
-4. Run a similarity search
-   POST /trace/v1/search/type1    (similarity search with legacy model)
-   POST /trace/v1/search/type2    (similarity search with new efficient model)
-   POST /trace/v1/comprehensive1/type1  (Comprehensive Search: Legacy)
-   POST /trace/v1/comprehensive1/type2  (Comprehensive Search: New Efficient)
-
-5. Poll for results
-   GET /trace/v1/jobs/{job_id}              (general search results)
-   GET /trace/v1/comprehensive1/jobs/{job_id}   (Comprehensive Search results)
-```
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `POST` | `/v1/files` | [Upload a song](/enterprise-api/trace/upload) and get its `file_id` |
+| `POST` | `/trace/v3/dataset` | [Create a dataset](/enterprise-api/trace/datasets) |
+| `GET` | `/trace/v3/dataset` | [List your datasets](/enterprise-api/trace/datasets) |
+| `GET` | `/trace/v3/dataset/{dataset_id}` | [Get one dataset](/enterprise-api/trace/datasets) |
+| `GET` | `/trace/v3/dataset/{dataset_id}/tracks` | [Per-song ingestion state](/enterprise-api/trace/datasets) |
+| `DELETE` | `/trace/v3/dataset/{dataset_id}` | [Delete a dataset](/enterprise-api/trace/datasets) |
+| `GET` | `/trace/v3/library` | [List legacy uploads](/enterprise-api/trace/library) |
+| `POST` | `/trace/v3/upload` | [Legacy upload](/enterprise-api/trace/upload) |
+| `POST` | `/trace/v3/ingest` | [Ingest songs into a dataset](/enterprise-api/trace/ingest) |
+| `GET` | `/trace/v3/ingest/{job_id}` | [Ingestion status](/enterprise-api/trace/ingest-status) |
+| `POST` | `/trace/v3/search` | [Custom search](/enterprise-api/trace/search) |
+| `POST` | `/trace/v3/comprehensive1` | [Comprehensive search](/enterprise-api/trace/comprehensive-search) |
+| `POST` | `/trace/v3/{use_case}` | [Use-case search](/enterprise-api/trace/use-case-search) (8 routes) |
+| `GET` | `/trace/v3/jobs/{job_id}` | [Job status and results](/enterprise-api/trace/search-status) |
+| `GET` | `/trace/v3/comprehensive1/jobs/{job_id}` | [Comprehensive search status](/enterprise-api/trace/comprehensive-search-status) |
+| `GET` | `/trace/v3/jobs/{job_id}/results` | [Full results](/enterprise-api/trace/job-results) |
 
 ---
 
-## What to Expect from the APIs
+## **Frequently Asked Questions (FAQ)**
 
-- **Ingestion and search are asynchronous.** Every `POST` returns a `job_id` immediately. You must poll the corresponding `GET` endpoint to retrieve results.
-- **Upload is free.** The `POST /trace/v1/upload` endpoint does not deduct from your balance.
-- **Polling is free.** Status check endpoints (`GET .../jobs/{job_id}` and `GET .../comprehensive1/jobs/{job_id}`) do not deduct balance.
-- **Costs are dynamic.** Ingestion cost is calculated based on track duration and tasks requested. Search cost is based on the number of comparison pairs (N × M).
-- **Idempotent ingestion.** Re-ingesting a file that already exists in a dataset is automatically skipped. You are not charged.
-- **Rate limits apply per API request**, not per track. Each ingest request can include up to 10 audio files.
+### Do I need a dataset to compare two songs?
+No. A `1:1` search compares two uploaded files directly. Datasets are needed for `1:n` and `m:n` searches.
 
----
+### How do I map a result back to my own file?
+Each match is identified by a Trace audio ID (for example `d79efad8…c0466.mp3`). Call [`GET /trace/v3/dataset/{dataset_id}/tracks`](/enterprise-api/trace/datasets): every track lists its `audio_id` next to `source_ref`, which is the `file_id` you uploaded.
 
-## Frequently Asked Questions (FAQ)
-
-### What makes Trace different from standard audio fingerprinting (like Shazam)?
-Standard audio fingerprinting is designed to find exact or near-exact matches of a specific recording (same audio file, same mastering). Trace uses deep neural models to extract semantic embeddings (latents). This allows it to identify matches even if the tempo is changed, the pitch is shifted, a new instrument is used, or the song is re-arranged.
-
-### When should I use `type1` vs. `type2` models?
-- **`type1` (Legacy):** Legacy model.
-- **`type2` (New Efficient):** New efficient model.
-
-*Note: You must ingest your datasets using the corresponding model (`/ingest/type1` or `/ingest/type2`) before searching with that model.*
+### What happened to `type1` and `type2`?
+They were earlier Trace models and have been retired. Trace now runs a single model, which appears as `type3` in dataset responses. You do not choose a model in requests.
 
 ### Why are ingestion and search asynchronous?
-Processing audio files and computing detailed similarity comparisons are complex computational tasks. To handle requests reliably and efficiently without blocking connection threads, these operations run in the background. They return a `job_id` instantly, allowing you to poll for completion.
+Audio analysis and large comparisons can take from seconds to several minutes. Returning a `job_id` immediately avoids request timeouts and lets you poll at your own pace.
 
-### Can I search an audio file directly without creating a dataset?
-Yes! A **1:1 Search** allows you to compare a query audio file directly against a candidate audio file by providing their uploaded blob names. However, for **1:N** or **M:N** searches, you must first ingest the candidate files into a dataset. This pre-computes and indexes their features, making future searches near-instantaneous.
-
-### How is billing calculated?
-- **Upload, listing, and polling status** are completely free.
-- **Ingestion** is billed dynamically based on the audio duration and the specific tasks requested (e.g. track-only vs. full stems).
-- **Search** is billed based on the number of comparison pairs (cardinality). For example, a 1:N search is billed for 1 query track × N candidate tracks.
-
-### Is my audio stored permanently?
-The audio files uploaded and their processing artifacts are saved, but will be automatically removed after 30 days.
-
+### What does a search cost?
+Searches and ingestion are billed by usage when the job completes. The amount depends on the songs' length, the layers involved and the number of comparisons. Failed jobs are not charged. Your balance is shown at [platform.soundverse.ai](https://platform.soundverse.ai).

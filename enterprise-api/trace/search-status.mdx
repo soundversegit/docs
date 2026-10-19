@@ -1,10 +1,10 @@
 ---
-title: "Search Job Status"
-description: "Poll the status and retrieve results of a similarity search job."
+title: "Job Status & Results"
+description: "Poll any Trace job and read its similarity scores."
 ---
 
-<Card title="🚀 apiv2 is live!" icon="rocket" href="https://platform.soundverse.ai/docs">
-  Soundverse's Enterprise API platform has moved to **apiv2.soundverse.ai**, with self-serve account setup, API keys, and billing now managed at **platform.soundverse.ai**. Check the current docs there for the latest endpoints and auth.
+<Card title="🚀 apiv2 is live!" icon="rocket" href="https://platform.soundverse.ai">
+  Trace is served from **apiv2.soundverse.ai**. Create your API key and manage billing at **platform.soundverse.ai**.
 </Card>
 
 import React from 'react';
@@ -25,177 +25,229 @@ export const Method = ({ type, children }) => {
   return <span style={styles[type] || styles.GET}>{children || type}</span>;
 };
 
-## **Get Search Status**
+## **Get Job Status**
 
-Check the execution state of a similarity search query and retrieve matches. This endpoint is **completely free** to poll and does not deduct balance.
+Returns the status of any Trace job (custom search, comprehensive search, use-case search or ingestion) and its results once it has completed. Polling is **free**.
 
-*   <Method type="GET">GET</Method> `/trace/v1/jobs/{job_id}`
+*   <Method type="GET">GET</Method> `/trace/v3/jobs/{job_id}`
 
 ### **Path Parameters**
 
 | Parameter | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
-| `job_id` | string | ✅ | Unique job ID returned from `POST /trace/v1/search/type*`. |
+| `job_id` | string | ✅ | The `job_id` returned when the job was created |
 
-### **Response**
+```bash cURL
+curl "https://apiv2.soundverse.ai/trace/v3/jobs/0190a1c0-2222-7000-8000-000000000102" \
+  -H "Authorization: Bearer sksoundverse_your_api_key"
+```
 
-**Status 200 OK (Completed 1:N Search)**
+### **Response Envelope**
+
 ```json
 {
   "success": true,
   "data": {
-    "job_id": "search_job_d8e9f0a1-b2c3-4d5e-6f7a-8b9c0d1e2f3a",
+    "job_id": "0190a1c0-2222-7000-8000-000000000102",
     "status": "completed",
-    "search_type": "1:n",
     "error": null,
-    "results": {
-      "status": "success",
-      "timestamp": "2026-06-19 22:45:00",
-      "search_type": "1:n",
-      "depth": "track",
-      "candidate_dataset_id": "ref-dataset-uuid",
-      "matches": [
-        {
-          "id": "dataset/candidate_song_1.wav",
-          "score": 0.892,
-          "percentage": 89.2,
-          "payload": {
-            "filename": "dataset/candidate_song_1.wav",
-            "dataset_id": "ref-dataset-uuid",
-            "metric": "pairwise_chunk_cosine"
-          },
-          "full_audio_latent_scores": {
-            "max": 0.912,
-            "max_then_mean": 0.892,
-            "hungarian_mean": 0.795,
-            "matched_windows": [
-              {
-                "query_index": 5,
-                "candidate_index": 8,
-                "similarity_score": 0.892,
-                "query_audio_timestamps": [[44.5], [52.5]],
-                "candidate_audio_timestamps": [[125.1], [133.1]]
-              }
-            ]
-          },
-          "summary": {
-            "full_audio_hungarian_mean": 0.795,
-            "full_audio_max_then_mean": 0.892,
-            "full_audio_max": 0.912
-          }
-        },
-        {
-          "id": "dataset/candidate_song_2.wav",
-          "score": 0.745,
-          "percentage": 74.5,
-          "payload": {
-            "filename": "dataset/candidate_song_2.wav",
-            "dataset_id": "ref-dataset-uuid",
-            "metric": "pairwise_chunk_cosine"
-          },
-          "full_audio_latent_scores": {
-            "max": 0.785,
-            "max_then_mean": 0.745,
-            "hungarian_mean": 0.680,
-            "matched_windows": []
-          },
-          "summary": {
-            "full_audio_hungarian_mean": 0.680,
-            "full_audio_max_then_mean": 0.745,
-            "full_audio_max": 0.785
-          }
-        }
-      ],
-      "full_audio_latent_scores": {
-        "best_song_by_max_per_query_then_avg": [
-          {
-            "song_id": "dataset/candidate_song_1.wav",
-            "max_then_mean_score": 0.892,
-            "hungarian_mean_score": 0.795,
-            "max_score": 0.912
-          },
-          {
-            "song_id": "dataset/candidate_song_2.wav",
-            "max_then_mean_score": 0.745,
-            "hungarian_mean_score": 0.680,
-            "max_score": 0.785
-          }
-        ]
-      },
-      "summary": {
-        "full_audio_max_then_mean": 0.892
-      }
-    }
+    "results": { }
   }
 }
 ```
 
-**Status 200 OK (Completed M:N Search)**
-```json
-{
-  "success": true,
-  "data": {
-    "job_id": "search_job_a1b2c3d4",
-    "status": "completed",
-    "search_type": "m:n",
-    "error": null,
-    "results": {
-      "search_type": "m:n",
-      "depth": "track",
-      "metric": "pairwise_chunk_cosine",
-      "query_dataset_id": "query-dataset-uuid",
-      "candidate_dataset_id": "ref-dataset-uuid",
-      "results": [
-        {
-          "query_audio_id": "dataset/incoming_track_1.wav",
-          "matches": [
-            {
-              "id": "dataset/catalog_reference_99.wav",
-              "score": 0.892,
-              "percentage": 89.2,
-              "payload": {
-                "filename": "dataset/catalog_reference_99.wav",
-                "dataset_id": "ref-dataset-uuid",
-                "metric": "pairwise_chunk_cosine"
-              },
-              "full_audio_latent_scores": {
-                "max": 0.912,
-                "max_then_mean": 0.892,
-                "hungarian_mean": 0.795,
-                "matched_windows": [
-                  {
-                    "query_index": 5,
-                    "candidate_index": 8,
-                    "similarity_score": 0.892,
-                    "query_audio_timestamps": [[44.5], [52.5]],
-                    "candidate_audio_timestamps": [[125.1], [133.1]]
-                  }
-                ]
-              },
-              "summary": {
-                "full_audio_hungarian_mean": 0.795,
-                "full_audio_max_then_mean": 0.892,
-                "full_audio_max": 0.912
-              }
-            }
-          ]
-        },
-        {
-          "query_audio_id": "dataset/incoming_track_2.wav",
-          "matches": []
-        }
-      ]
-    }
-  }
-}
-```
+| Field | Description |
+| :--- | :--- |
+| `data.status` | `pending`, `processing`, `completed` or `failed` |
+| `data.error` | Why the job failed, when `status` is `failed`. Otherwise `null` |
+| `data.results` | The scores. Present once the job has completed |
+| `data.results_complete` | Present and `false` when the result was too large to include. See [Large results](#large-results) |
+| `data.results_url` | Present with `results_complete`. The path to fetch the full result from |
 
+### **Job Status Values**
+
+| `status` | Meaning |
+| :--- | :--- |
+| `pending` | Queued, waiting for a worker |
+| `processing` | Running |
+| `completed` | Finished successfully. Read `results` |
+| `failed` | Did not finish. Read `error`. You are not charged |
 
 ---
 
-### **Job States**
+## **Polling**
 
-*   `pending`: Job is queued and waiting for an available worker thread on the VM.
-*   `processing`: Job is currently executing time-series alignment math.
-*   `completed`: Job completed successfully. Scored matches are returned in the `results` object.
-*   `failed`: An error occurred during matching. Details are available in the `error` field.
+Most searches finish within seconds to a few minutes. A `1:1` search over many layers takes longest, because both songs are analysed on the spot. Poll every 5 to 15 seconds.
+
+```python Python
+import time
+import requests
+
+API = "https://apiv2.soundverse.ai"
+HEADERS = {"Authorization": "Bearer sksoundverse_your_api_key"}
+
+
+def wait_for_job(job_id: str, interval: float = 10.0) -> dict:
+    while True:
+        data = requests.get(f"{API}/trace/v3/jobs/{job_id}", headers=HEADERS).json()["data"]
+        if data["status"] == "completed":
+            if data.get("results_complete") is False:
+                return requests.get(f"{API}{data['results_url']}", headers=HEADERS).json()
+            return data["results"]
+        if data["status"] == "failed":
+            raise RuntimeError(data["error"])
+        time.sleep(interval)
+```
+
+---
+
+## **Reading the Results**
+
+Every layer reports three scores between `0` (no similarity) and `1` (identical):
+
+| Score | Meaning |
+| :--- | :--- |
+| `hungarian_mean` | **The headline score.** Trace cuts each song into 16 windows of 8 seconds and pairs every window with its best one-to-one partner; this is the average of those pairs |
+| `max_then_mean` | Each window's closest match, averaged. Several windows may share a partner |
+| `max` | The single most similar pair of windows |
+
+`percentage` is the ranking score multiplied by 100. Melody (`motif`) results report numbers of matching phrases rather than a percentage.
+
+<Note>
+  Results may include more fields than are shown here, such as per-window details (`score_matrix`, `matched_windows`). Read the fields you need and ignore the rest; new fields can be added over time.
+</Note>
+
+### **`1:1` result**
+
+The scores for the requested layers, for example `full_audio_latent_scores` for `depth: ["track"]`:
+
+```json
+{
+  "status": "success",
+  "search_type": "1:1",
+  "depth": "track",
+  "full_audio_latent_scores": {
+    "hungarian_mean": 0.576373,
+    "max_then_mean": 0.636297,
+    "max": 0.725281,
+    "matched_windows": [
+      {
+        "query_index": 3,
+        "candidate_index": 5,
+        "similarity_score": 0.725281,
+        "query_audio_timestamps": [24.0, 32.0],
+        "candidate_audio_timestamps": [40.0, 48.0]
+      }
+    ],
+    "score_matrix": [[0.51, 0.48, "…"], "…"]
+  }
+}
+```
+
+`matched_windows` shows which moments of the two songs line up (start and end, in seconds).
+
+### **`1:n` result**
+
+`matches` lists every song in the dataset, most similar first:
+
+```json
+{
+  "status": "success",
+  "search_type": "1:n",
+  "depth": "track",
+  "candidate_dataset_id": "8e7d6c5b-4a39-4281-9706-f5e4d3c2b1a0",
+  "matches": [
+    {
+      "id": "d79efad889c32e5537210f024e073632ec65fb9b5feb8576e91cad7c2bdc0466.mp3",
+      "score": 1.0,
+      "percentage": 100.0,
+      "payload": { "filename": "d79efad889c32e5537210f024e073632ec65fb9b5feb8576e91cad7c2bdc0466.mp3", "dataset_id": "8e7d6c5b-4a39-4281-9706-f5e4d3c2b1a0" },
+      "full_audio_latent_scores": { "hungarian_mean": 1.0, "max_then_mean": 1.0, "max": 1.0 }
+    },
+    {
+      "id": "b3ea82b7b97c8e2f733cd7850d12db41f4f334aa59c88cdd09538c3554d28326.mp3",
+      "score": 0.636743,
+      "percentage": 63.67,
+      "payload": { "filename": "b3ea82b7b97c8e2f733cd7850d12db41f4f334aa59c88cdd09538c3554d28326.mp3", "dataset_id": "8e7d6c5b-4a39-4281-9706-f5e4d3c2b1a0" },
+      "full_audio_latent_scores": { "hungarian_mean": 0.636743, "max_then_mean": 0.69, "max": 0.81 }
+    }
+  ]
+}
+```
+
+<Tip>
+  Each match's `id` is Trace's audio ID. To find which of your files it is, look it up in [`GET /trace/v3/dataset/{dataset_id}/tracks`](/enterprise-api/trace/datasets#list-dataset-tracks): the track with that `audio_id` carries your `file_id` as `source_ref`.
+</Tip>
+
+### **`m:n` result**
+
+`results` holds one entry per query song, each with its own `matches` list:
+
+```json
+{
+  "search_type": "m:n",
+  "depth": "track",
+  "query_dataset_id": "1a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+  "candidate_dataset_id": "8e7d6c5b-4a39-4281-9706-f5e4d3c2b1a0",
+  "results": [
+    {
+      "query_audio_id": "e017cb015b32….mp3",
+      "matches": [
+        { "id": "b3ea82b7b97c….mp3", "score": 0.71, "percentage": 71.0 },
+        { "id": "d79efad889c3….mp3", "score": 0.62, "percentage": 62.0 }
+      ]
+    }
+  ]
+}
+```
+
+### **Multiple layers**
+
+When you request several depths, each layer adds its own block next to the others:
+
+| Depth | Result block |
+| :--- | :--- |
+| `track` | `full_audio_latent_scores` |
+| `light_stem` | `vocal_latent_scores`, `instrumental_latent_scores` |
+| `stem` | per-instrument scores; a `1:n` search with only `stem` groups its matches by instrument in `matches_by_stem` |
+| `section` | `section_breakdown` |
+| `motif` | `motif_matches` |
+| `lyrics`, `translation` | `lyrics_similarity`, `translation_similarity` |
+| `insights` | `tag_overlap` |
+
+ Matches are ranked by the first available layer in this order: `track`, `light_stem`, `stem`, `section`, `stem_section`, `motif`.
+
+---
+
+## **Large Results**
+
+When a result is larger than about 200 KB (common for `m:n` searches over several layers), it is not included in the job response. Instead you get:
+
+```json
+{
+  "success": true,
+  "data": {
+    "job_id": "0190a1c0-5555-7000-8000-000000000105",
+    "status": "completed",
+    "error": null,
+    "results": {},
+    "results_complete": false,
+    "results_url": "/trace/v3/jobs/0190a1c0-5555-7000-8000-000000000105/results"
+  }
+}
+```
+
+Fetch the full result from `results_url`. See [Full Results](/enterprise-api/trace/job-results).
+
+---
+
+## **Errors**
+
+**Status 404 Not Found** when the job does not exist or belongs to another account. The two cases return the same response.
+```json
+{
+  "error": "ResourceNotFound",
+  "message": "job not found",
+  "retryable": false
+}
+```
