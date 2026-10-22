@@ -64,7 +64,7 @@
     },
     {
       "group": "Account Management",
-      "pages": ["account/manage-your-account", "account/user-settings"]
+      "pages": ["account/manage-your-account", "account/user-settings", "account/private-profile"]
     },
     {
       "group": " Enterprise Platform",
