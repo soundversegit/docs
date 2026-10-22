@@ -1,10 +1,10 @@
 ---
 title: "Ingestion Status"
-description: "Poll progress and verify completions of audio preprocessing."
+description: "Poll an ingestion job until your songs are ready to search."
 ---
 
-<Card title="🚀 apiv2 is live!" icon="rocket" href="https://platform.soundverse.ai/docs">
-  Soundverse's Enterprise API platform has moved to **apiv2.soundverse.ai**, with self-serve account setup, API keys, and billing now managed at **platform.soundverse.ai**. Check the current docs there for the latest endpoints and auth.
+<Card title="🚀 apiv2 is live!" icon="rocket" href="https://platform.soundverse.ai">
+  Trace is served from **apiv2.soundverse.ai**. Create your API key and manage billing at **platform.soundverse.ai**.
 </Card>
 
 import React from 'react';
@@ -27,44 +27,91 @@ export const Method = ({ type, children }) => {
 
 ## **Get Ingestion Status**
 
-Check the preprocessing and vector-indexing status of your audio uploads. This endpoint is **completely free** and does not deduct balance.
+Returns the status of an ingestion job and, once it has finished, the state of every layer in the dataset. Polling is **free**.
 
-*   <Method type="GET">GET</Method> `/trace/v1/ingest/{job_id}`
+*   <Method type="GET">GET</Method> `/trace/v3/ingest/{job_id}`
+
+This endpoint returns exactly the same response as [`GET /trace/v3/jobs/{job_id}`](/enterprise-api/trace/search-status). Either one works for any Trace job.
 
 ### **Path Parameters**
 
 | Parameter | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
-| `job_id` | string | ✅ | Unique job ID returned from `POST /trace/v1/ingest/type*`. |
+| `job_id` | string | ✅ | The `job_id` returned by [`POST /trace/v3/ingest`](/enterprise-api/trace/ingest) |
+
+```bash cURL
+curl "https://apiv2.soundverse.ai/trace/v3/ingest/0190a1c0-1111-7000-8000-000000000101" \
+  -H "Authorization: Bearer sksoundverse_your_api_key"
+```
 
 ### **Response**
 
-**Status 200 OK**
+**Status 200 OK** (while the job runs)
 ```json
 {
-
   "success": true,
   "data": {
-    "job_id": "ingest_job_7e8f9a0b-c1d2-3e4f-5a6b-7c8d9e0f1a2b",
-    "status": "completed",
-    "tasks_requested": ["full_audio_latent", "light_stem", "motif"],
-    "artifacts": [
-      {
-        "audio_id": "song_candidate_1.wav",
-        "artifact_type": "full_audio_latent",
-        "status": "complete"
-      }
-    ]
+    "job_id": "0190a1c0-1111-7000-8000-000000000101",
+    "status": "processing",
+    "error": null
   }
 }
 ```
 
+**Status 200 OK** (once it has completed)
+```json
+{
+  "success": true,
+  "data": {
+    "job_id": "0190a1c0-1111-7000-8000-000000000101",
+    "status": "completed",
+    "error": null,
+    "results": {
+      "job_id": "5c1d8e2a-3f4b-4c6d-9e7f-0a1b2c3d4e5f",
+      "dataset_id": "3f2a1b4c-5d6e-4f70-8a91-b2c3d4e5f607",
+      "status": "completed",
+      "tasks_requested": ["full_audio_latent", "light_stem", "motif"],
+      "error": null,
+      "artifacts": [
+        { "audio_id": "e4a4d5f567804d885eb41b56ad039079049f9f11a10ae743f397a42504ad6bea.mp3", "artifact_type": "full_audio_latent", "status": "complete" },
+        { "audio_id": "e4a4d5f567804d885eb41b56ad039079049f9f11a10ae743f397a42504ad6bea.mp3", "artifact_type": "light_stem", "status": "complete" },
+        { "audio_id": "e4a4d5f567804d885eb41b56ad039079049f9f11a10ae743f397a42504ad6bea.mp3", "artifact_type": "motif", "status": "complete" }
+      ]
+    }
+  }
+}
+```
 
----
+| Field | Description |
+| :--- | :--- |
+| `data.job_id` | The job you are polling |
+| `data.status` | The job status. See the table below |
+| `data.error` | A description of the failure when `status` is `failed`, otherwise `null` |
+| `data.results.artifacts` | One entry per song and layer in the dataset, with its own `status` |
+| `data.results.job_id` | Trace's internal reference for this ingestion. Use `data.job_id` for polling |
 
 ### **Job Status Values**
 
-*   `pending`: Audio files are queued and waiting to load onto the GPU worker.
-*   `running`: Preprocessing (stem splitting and audio latent encoding) is currently active.
-*   `completed`: Audio features have been successfully computed and indexed. Candidates are now searchable.
-*   `failed`: Processing failed. Refer to the `error` field for diagnosis.
+| `data.status` | Meaning |
+| :--- | :--- |
+| `pending` | Queued, waiting for a worker |
+| `processing` | Songs are being analysed |
+| `completed` | Finished. Check each artifact's `status` to confirm every layer succeeded |
+| `failed` | The job failed. `data.error` explains why. You are not charged |
+
+Each artifact has its own `status`: `pending`, `running`, `complete` or `failed`.
+
+<Tip>
+  A job can finish as `completed` while one layer of one song failed (for example, `lyrics` on an instrumental track). To see exactly which layers are searchable, call [`GET /trace/v3/dataset/{dataset_id}/tracks`](/enterprise-api/trace/datasets#list-dataset-tracks).
+</Tip>
+
+### **Errors**
+
+**Status 404 Not Found** when the job does not exist or belongs to another account:
+```json
+{
+  "error": "ResourceNotFound",
+  "message": "job not found",
+  "retryable": false
+}
+```

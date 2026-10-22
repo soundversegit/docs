@@ -1,10 +1,10 @@
 ---
 title: "Ingest Audio"
-description: "Queue preprocessing for one or more uploaded audio blobs into a dataset."
+description: "Analyse songs once and add them to a dataset so they can be searched."
 ---
 
-<Card title="🚀 apiv2 is live!" icon="rocket" href="https://platform.soundverse.ai/docs">
-  Soundverse's Enterprise API platform has moved to **apiv2.soundverse.ai**, with self-serve account setup, API keys, and billing now managed at **platform.soundverse.ai**. Check the current docs there for the latest endpoints and auth.
+<Card title="🚀 apiv2 is live!" icon="rocket" href="https://platform.soundverse.ai">
+  Trace is served from **apiv2.soundverse.ai**. Create your API key and manage billing at **platform.soundverse.ai**.
 </Card>
 
 import React from 'react';
@@ -27,69 +27,112 @@ export const Method = ({ type, children }) => {
 
 ## **Ingest Audio**
 
-Preprocess one or more uploaded raw audio blobs to compute acoustic features, split stems, extract motifs, and index them into your target dataset. This operation is idempotent.
+Analyses one or more songs and adds them to a dataset. Ingestion does the heavy work once (separating instruments, measuring the audio, detecting structure and melody) so that later searches only compare stored results.
 
-*   <Method type="POST">POST</Method> `/trace/v1/ingest/type1` (Forces the legacy model)
-*   <Method type="POST">POST</Method> `/trace/v1/ingest/type2` (Forces the new efficient model)
+The request returns a `job_id` immediately. Poll it with [Ingestion Status](/enterprise-api/trace/ingest-status).
+
+*   <Method type="POST">POST</Method> `/trace/v3/ingest`
+
+<Note>
+  The dataset must already exist. Create it first with [`POST /trace/v3/dataset`](/enterprise-api/trace/datasets#create-dataset).
+</Note>
 
 ### **Request Body Fields**
 
 | Field | Type | Required | Default | Description |
 | :--- | :--- | :--- | :--- | :--- |
-| `dataset_name` | string | ✅ | None | Name of your target dataset. |
-| `audio_blobs` | string[] | ✅ | None | Array of `blob_name` values. Max: 10 per request. |
-| `tasks` | string[] | | `["full_audio_latent"]` | List of features to compute. |
-| `webhook_url` | string | | | URL for completion callbacks. |
+| `dataset_name` | string | ✅ | | Name of the dataset to add the songs to |
+| `audio_file_ids` | string[] | ✅ * | | `file_id` values from [`POST /v1/files`](/enterprise-api/trace/upload). Recommended |
+| `audio_blobs` | string[] | ✅ * | | Legacy alternative: `blob_name` values from [`POST /trace/v3/upload`](/enterprise-api/trace/upload#legacy-upload) |
+| `depth` | string or string[] | | `["track", "light_stem", "motif"]` | The layers to prepare. See the table below |
+| `tasks` | string[] | | | Legacy alternative to `depth`, using the internal task names listed below |
+| `budget_tokens` | integer | | | Optional cap on what this job may cost. See [Errors & Billing](/enterprise-api/trace/errors-and-billing#budget-cap) |
 
-#### **Valid `tasks` Options:**
-*   `full_audio_latent`: Encodes full audio sequence latents.
-*   `stem_vocals`: Splits vocals stem.
-*   `stem_bass`: Splits bass stem.
-*   `stem_drums`: Splits drums stem.
-*   `stem_other`: Splits accompaniment/other stem.
-*   `light_stem`: Splits 2 stems (vocals + accompaniment).
-*   `motif`: Computes melody contours / motif chroma.
-*   `section`: Runs structural section boundary segmentation.
+\* Provide at least one song through `audio_file_ids` or `audio_blobs`. You can combine both in one request.
 
----
+### **Depths and What They Prepare**
 
-### **Ingestion In-App Pricing**
+| `depth` | Prepares | Internal tasks (shown in `ingested_tasks`) |
+| :--- | :--- | :--- |
+| `track` | The full mix | `full_audio_latent` |
+| `light_stem` | Vocals and accompaniment | `light_stem` |
+| `stem` | Vocals, bass, drums and other, separately | `stem_vocals`, `stem_bass`, `stem_drums`, `stem_other` |
+| `section` | Song structure | `section` |
+| `motif` | Melodic phrases | `motif` |
+| `lyrics` | Transcribed lyrics | `lyrics`, `light_stem` |
+| `translation` | Lyrics translated to English | `translation`, `lyrics`, `light_stem` |
+| `insights` | Genre, instrument and style tags | `audio_to_text` |
 
-| Ingestion Profile | Enterprise Price |
-| :--- | :--- |
-| **Track Only** *(Full Audio Latents)* | **$0.0300** |
-| **Comprehensive Search Profile (New Efficient)** | **$0.0352** (3-min song) // **$0.0513** (5-min song) |
-| **Comprehensive Search Profile (Legacy)** | **$0.0388** (3-min song) // **$0.1554** (5-min song) |
-| **Heaviest Custom Ingest** | **$0.1628** (5-min song) |
+With no `depth` and no `tasks`, Trace prepares `track`, `light_stem` and `motif`. That is everything [Comprehensive Search](/enterprise-api/trace/comprehensive-search) needs. To run a [Use-Case Search](/enterprise-api/trace/use-case-search), ingest the depths that use case lists.
 
----
+<Tip>
+  Ingestion is incremental. Layers a song already has are skipped and not recomputed, so you can add a new depth to an existing dataset later.
+</Tip>
+
+<Note>
+  `lyrics` and `translation` need vocals and a `file_id` input. They cannot be produced for instrumental tracks or for legacy `blob_name` inputs.
+</Note>
 
 ### **Request Example**
 
-```json
-{
-  "dataset_name": "my-reference-catalog",
-  "audio_blobs": [
-    "dataset/123e4567-e89b-12d3-a456-426614174000_song_candidate_1.wav"
-  ],
-  "tasks": [
-    "full_audio_latent",
-    "light_stem",
-    "motif"
-  ],
-  "webhook_url": "https://my-service.com/webhooks/trace"
-}
+<CodeGroup>
+```bash cURL
+curl -X POST "https://apiv2.soundverse.ai/trace/v3/ingest" \
+  -H "Authorization: Bearer sksoundverse_your_api_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "dataset_name": "reference-catalog",
+    "audio_file_ids": [
+      "0190a1b2-0001-7000-8000-00000000a001",
+      "0190a1b2-0002-7000-8000-00000000a002"
+    ],
+    "depth": ["track", "light_stem", "motif", "section"]
+  }'
 ```
+
+```python Python
+import requests
+
+resp = requests.post(
+    "https://apiv2.soundverse.ai/trace/v3/ingest",
+    headers={"Authorization": "Bearer sksoundverse_your_api_key"},
+    json={
+        "dataset_name": "reference-catalog",
+        "audio_file_ids": [
+            "0190a1b2-0001-7000-8000-00000000a001",
+            "0190a1b2-0002-7000-8000-00000000a002",
+        ],
+        "depth": ["track", "light_stem", "motif", "section"],
+    },
+)
+job_id = resp.json()["job_id"]
+```
+</CodeGroup>
 
 ### **Response**
 
-**Status 202 Accepted**
+**Status 201 Created**
 ```json
 {
-  "success": true,
-  "data": {
-    "job_id": "ingest_job_7e8f9a0b-c1d2-3e4f-5a6b-7c8d9e0f1a2b",
-    "cost_usd": 0.0513
-  }
+  "job_id": "0190a1c0-1111-7000-8000-000000000101",
+  "status": "queued"
 }
 ```
+
+### **Errors**
+
+All validation errors return `422` and nothing is queued or charged.
+
+| Message | Cause |
+| :--- | :--- |
+| `dataset_name is required` | `dataset_name` is missing |
+| `audio_file_ids (or audio_blobs) must not be empty` | No songs were given |
+| `unknown depth 'x'` | A `depth` value is not in the table above |
+| `unknown task 'x'` | A `tasks` value is not a known task name |
+| `audio_blobs takes a blob_name from /trace/v3/upload, not a url. …` | A full URL was passed instead of a `blob_name`. Upload the file with `POST /v1/files` and pass its `file_id` |
+
+For authentication, balance and rate-limit errors, see [Errors & Billing](/enterprise-api/trace/errors-and-billing).
+
+### **Billing**
+
+Ingestion is billed when the job completes, based on the songs' length and the layers requested. A failed job is not charged.

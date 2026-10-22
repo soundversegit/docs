@@ -1,10 +1,10 @@
 ---
 title: "Library"
-description: "List all uploaded raw audio files in your library."
+description: "List the audio you uploaded through the legacy Trace upload endpoint."
 ---
 
-<Card title="🚀 apiv2 is live!" icon="rocket" href="https://platform.soundverse.ai/docs">
-  Soundverse's Enterprise API platform has moved to **apiv2.soundverse.ai**, with self-serve account setup, API keys, and billing now managed at **platform.soundverse.ai**. Check the current docs there for the latest endpoints and auth.
+<Card title="🚀 apiv2 is live!" icon="rocket" href="https://platform.soundverse.ai">
+  Trace is served from **apiv2.soundverse.ai**. Create your API key and manage billing at **platform.soundverse.ai**.
 </Card>
 
 import React from 'react';
@@ -27,13 +27,22 @@ export const Method = ({ type, children }) => {
 
 ## **Get Library**
 
-List all audio tracks uploaded to your library.
+Lists every file you uploaded with the legacy [`POST /trace/v3/upload`](/enterprise-api/trace/upload#legacy-upload), newest first. This endpoint is **free**.
 
-*   <Method type="GET">GET</Method> `/trace/v1/library`
+*   <Method type="GET">GET</Method> `/trace/v3/library`
+
+<Note>
+  Files uploaded with `POST /v1/files` (the recommended way) do not appear here. They live in your account's file storage and are referenced by `file_id`.
+</Note>
 
 ### **Query Parameters**
 
-None
+None.
+
+```bash cURL
+curl "https://apiv2.soundverse.ai/trace/v3/library" \
+  -H "Authorization: Bearer sksoundverse_your_api_key"
+```
 
 ### **Response**
 
@@ -41,14 +50,20 @@ None
 ```json
 [
   {
-    "id": 45,
-    "user_id": "user_12345",
-    "filename": "song_candidate_1.wav",
-    "blob_name": "dataset/123e4567-e89b-12d3-a456-426614174000_song_candidate_1.wav",
-    "file_size": 25165824,
-    "duration_seconds": 180.0,
-    "mime_type": "audio/wav",
-    "created_at": "2026-06-19T12:05:00Z"
+    "id": "5b6c7d8e-9f01-4a23-b456-c789d0e1f234",
+    "user_id": "0190a1b2-c3d4-7e5f-8a6b-7c8d9e0f1a2b",
+    "filename": "song.mp3",
+    "blob_name": "dataset/2c3d4e5f-6a7b-4c8d-9e0f-1a2b3c4d5e6f_song.mp3",
+    "file_size": 2927399,
+    "duration_seconds": 182.9,
+    "mime_type": "audio/mpeg",
+    "created_at": "2026-10-15T18:23:55.127441"
   }
 ]
 ```
+
+| Field | Description |
+| :--- | :--- |
+| `blob_name` | Pass this as `query_url`, `candidate_url` or in `audio_blobs` |
+| `file_size` | Size in bytes |
+| `duration_seconds` | Length of the audio in seconds |

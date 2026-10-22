@@ -1,10 +1,10 @@
 ---
-title: "Search Similarity"
-description: "Queue a Trace similarity search job to find matches in your catalog."
+title: "Custom Search"
+description: "Compare songs at exactly the layers you choose: full mix, instruments, structure, melody, lyrics and style."
 ---
 
-<Card title="🚀 apiv2 is live!" icon="rocket" href="https://platform.soundverse.ai/docs">
-  Soundverse's Enterprise API platform has moved to **apiv2.soundverse.ai**, with self-serve account setup, API keys, and billing now managed at **platform.soundverse.ai**. Check the current docs there for the latest endpoints and auth.
+<Card title="🚀 apiv2 is live!" icon="rocket" href="https://platform.soundverse.ai">
+  Trace is served from **apiv2.soundverse.ai**. Create your API key and manage billing at **platform.soundverse.ai**.
 </Card>
 
 import React from 'react';
@@ -25,105 +25,160 @@ export const Method = ({ type, children }) => {
   return <span style={styles[type] || styles.POST}>{children || type}</span>;
 };
 
-## **Search Similarity**
+## **Custom Search**
 
-Execute a similarity search between a query audio track and your candidate dataset using either the legacy (`type1`) or new efficient (`type2`) model. These endpoints return a `job_id` immediately. You must poll `GET /trace/v1/jobs/{job_id}` to retrieve results.
+Run a similarity search at the depths you choose. The request returns a `job_id` immediately; poll it with [Job Status & Results](/enterprise-api/trace/search-status).
 
-*   <Method type="POST">POST</Method> `/trace/v1/search/type1` (Legacy)
-*   <Method type="POST">POST</Method> `/trace/v1/search/type2` (New Efficient)
+*   <Method type="POST">POST</Method> `/trace/v3/search`
+
+<Tip>
+  Not sure which depths to pick? [Comprehensive Search](/enterprise-api/trace/comprehensive-search) and the [Use-Case Searches](/enterprise-api/trace/use-case-search) choose them for you.
+</Tip>
 
 ### **Request Body Fields**
 
-| Field | Type | Required For | Description |
+| Field | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
-| `search_type` | string | ✅ all | "1:1", "1:n", or "m:n". |
-| `depth` | string | | Search resolution: "track", "stem", "light_stem", "section", "stem_section", or "motif". Defaults to "track". |
-| `stem_types` | string[] | | Stems to compare if depth is "stem" or "stem_section". Defaults to `["vocals"]`. Allowed values: `vocals`, `bass`, `drums`, `other`. |
-| `limit` | int | | Max number of matches to return (for 1:n or m:n). |
-| `query_url` | string | 1:1, 1:n | blob_name of the query track. |
-| `candidate_url` | string | 1:1 | blob_name of the candidate track. |
-| `candidate_dataset_name` | string | 1:n, m:n | Dataset name to search against. |
-| `query_dataset_name` | string | m:n | The query dataset name (for bulk matching). |
+| `search_type` | string | ✅ | `"1:1"`, `"1:n"` or `"m:n"` |
+| `query_file_id` | string | 1:1, 1:n | `file_id` of the song you are checking |
+| `candidate_file_id` | string | 1:1 | `file_id` of the song to compare against |
+| `candidate_dataset_name` | string | 1:n, m:n | Name of the dataset to search |
+| `query_dataset_name` | string | m:n | Name of the dataset whose songs are the queries |
+| `depth` | string or string[] | | Layers to compare. Defaults to `["track"]`. See [Depth values](#depth-values) |
+| `stem_types` | string[] | | Instruments to compare when `depth` includes `stem` or `stem_section`: `vocals`, `bass`, `drums`, `other`. Defaults to `["vocals"]` |
+| `limit` | integer | | Maximum number of matches returned per query song (1:n and m:n). Must be 1 or more |
+| `budget_tokens` | integer | | Optional cap on what this job may cost. See [Errors & Billing](/enterprise-api/trace/errors-and-billing#budget-cap) |
+| `query_url` | string | | Legacy alternative to `query_file_id`: a `blob_name` from [`/trace/v3/upload`](/enterprise-api/trace/upload#legacy-upload) |
+| `candidate_url` | string | | Legacy alternative to `candidate_file_id`: a `blob_name` |
+
+<Note>
+  If you send both a file ID and a `blob_name` for the same side, the file ID is used. Full URLs are never accepted as song inputs; upload the file with [`POST /v1/files`](/enterprise-api/trace/upload) and pass its `file_id`.
+</Note>
+
+### **Depth Values**
+
+| `depth` | Compares | The dataset must have |
+| :--- | :--- | :--- |
+| `track` | The full mix | `track` |
+| `light_stem` | Vocals and accompaniment, separately | `light_stem` |
+| `stem` | The instruments listed in `stem_types`, separately | `stem` |
+| `section` | Matching song sections | `section` |
+| `stem_section` | Sections within each instrument in `stem_types` | `stem` and `section` |
+| `motif` | Melodic phrases | `motif` |
+| `lyrics` | Transcribed lyrics | `lyrics` |
+| `translation` | Lyrics after translating both songs to English | `translation` |
+| `insights` | Genre, instrument and style tags | `insights` |
+
+You can combine several depths in one search, for example `["track", "section", "lyrics"]`. For `1:n` and `m:n`, the candidate dataset (and, for `m:n`, the query dataset) must have been [ingested](/enterprise-api/trace/ingest) with every depth you request. A `1:1` search needs no ingestion.
+
+<Note>
+  `lyrics`, `translation` and `insights` need `file_id` inputs, because Trace looks up each song's lyrics and tags through its file. You can send a search with only text depths to compare lyrics or style without any audio layer.
+</Note>
 
 ---
 
-## **Search Topologies: 1:1, 1:N, and M:N**
+## **Search Shapes**
 
-### **1. Single-Pair Search (1:1)**
-Compares one query track directly against one candidate track.
-* **Required Fields**: `search_type: "1:1"`, `query_url`, `candidate_url`, `depth`.
-
-### **2. One-to-Many Search (1:N)**
-Compares one query track against an entire dataset of candidate tracks.
-* **Required Fields**: `search_type: "1:n"`, `query_url`, `candidate_dataset_name`, `depth`.
-
-### **3. Bulk Matrix Search (M:N)**
-Think of an M:N search as a comparison grid. Instead of triggering multiple individual 1:N search jobs one-by-one for a folder of new submissions, an M:N search lets you package a batch of query tracks (M) and evaluate them against your reference catalog dataset (N) in one single operation.
-
-For example, if you have 3 new tracks and want to check them against a catalog of 500 reference tracks, the system runs all 1,500 comparisons in a single pass.
-
-* **Why Use It?**
-  * **Network Efficiency**: Reduces overhead by sending 1 consolidated API request.
-  * **Grouped Results**: The response maps matches directly to each query track in a structured array.
-
-* **How to Use It:**
-  1. Create a temporary query dataset (e.g., `incoming-batch-01`).
-  2. Upload and Ingest your M query tracks into `incoming-batch-01`.
-  3. POST a search to `/trace/v1/search/type1` (legacy model) or `/trace/v1/search/type2` (new efficient model) with `search_type: "m:n"`, setting `query_dataset_name` to your query dataset and `candidate_dataset_name` to your candidate library.
-
----
-
-### **Examples**
+### **1. One song against one song (`1:1`)**
 
 <CodeGroup>
-
-```json 1:1 Search
-{
-  "search_type": "1:1",
-  "query_url": "dataset/987f6543-e21b-12d3-a456-426614174000_query.wav",
-  "candidate_url": "dataset/123e4567-e89b-12d3-a456-426614174000_candidate.wav",
-  "depth": "track"
-}
+```bash cURL
+curl -X POST "https://apiv2.soundverse.ai/trace/v3/search" \
+  -H "Authorization: Bearer sksoundverse_your_api_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "search_type": "1:1",
+    "query_file_id": "0190a1b2-0003-7000-8000-00000000a003",
+    "candidate_file_id": "0190a1b2-0001-7000-8000-00000000a001",
+    "depth": ["track"]
+  }'
 ```
 
-```json 1:N Search
-{
-  "search_type": "1:n",
-  "query_url": "dataset/987f6543-e21b-12d3-a456-426614174000_query.wav",
-  "candidate_dataset_name": "my-reference-catalog",
-  "depth": "track",
-  "limit": 5
-}
-```
+```python Python
+import requests
 
-```json M:N Search
-{
-  "search_type": "m:n",
-  "query_dataset_name": "my-query-catalog",
-  "candidate_dataset_name": "my-reference-catalog",
-  "depth": "track"
-}
+resp = requests.post(
+    "https://apiv2.soundverse.ai/trace/v3/search",
+    headers={"Authorization": "Bearer sksoundverse_your_api_key"},
+    json={
+        "search_type": "1:1",
+        "query_file_id": "0190a1b2-0003-7000-8000-00000000a003",
+        "candidate_file_id": "0190a1b2-0001-7000-8000-00000000a001",
+        "depth": ["track"],
+    },
+)
+job_id = resp.json()["job_id"]
 ```
-
 </CodeGroup>
 
+### **2. One song against a dataset (`1:n`)**
+
+```json Request Body
+{
+  "search_type": "1:n",
+  "query_file_id": "0190a1b2-0003-7000-8000-00000000a003",
+  "candidate_dataset_name": "reference-catalog",
+  "depth": ["track", "section", "lyrics"],
+  "limit": 10
+}
+```
+
+### **3. A dataset against a dataset (`m:n`)**
+
+Every song in the query dataset is compared with every song in the candidate dataset.
+
+```json Request Body
+{
+  "search_type": "m:n",
+  "query_dataset_name": "new-releases",
+  "candidate_dataset_name": "reference-catalog",
+  "depth": ["track"]
+}
+```
+
+### **4. Choosing instruments**
+
+Compare the bass and drums separately, for example to look for a lifted groove:
+
+```json Request Body
+{
+  "search_type": "1:n",
+  "query_file_id": "0190a1b2-0003-7000-8000-00000000a003",
+  "candidate_dataset_name": "reference-catalog",
+  "depth": ["stem"],
+  "stem_types": ["bass", "drums"]
+}
+```
 
 ---
 
-### **Response**
+## **Response**
 
-**Status 202 Accepted**
+**Status 201 Created**
 ```json
 {
-  "success": true,
-  "data": {
-    "job_id": "search_job_a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
-    "status": "pending",
-    "search_type": "1:n",
-    "depth": "track",
-    "n": 1,
-    "m": 120,
-    "cost_usd": 0.045
-  }
+  "job_id": "0190a1c0-2222-7000-8000-000000000102",
+  "status": "queued"
 }
 ```
+
+Poll [`GET /trace/v3/jobs/{job_id}`](/enterprise-api/trace/search-status) until `status` is `completed` to read the scores.
+
+---
+
+## **Errors**
+
+All validation errors return `422`, and nothing is queued or charged.
+
+| Message | Cause |
+| :--- | :--- |
+| `search_type must be one of '1:1', '1:n', 'm:n'` | `search_type` is missing or invalid |
+| `a 1:1 search needs both a query and a candidate track (…)` | A `1:1` search is missing one of its songs |
+| `a 1:n search needs a query track and candidate_dataset_name` | A `1:n` search is missing the query song or the dataset |
+| `an m:n search needs query_dataset_name and candidate_dataset_name` | An `m:n` search is missing a dataset |
+| `unknown depth 'x'` | A `depth` value is not in the table above |
+| `stem_types takes vocals, bass, drums and other` | A `stem_types` value is not one of the four instruments |
+| `limit must be an integer >= 1` | `limit` is zero, negative or not a whole number |
+| `query_url takes a blob_name from /trace/v3/upload, not a url. …` | A full URL was passed as a song input |
+
+A search that names a dataset you do not have, or a depth the dataset was not ingested with, is accepted but finishes as `failed` with an explanation in `error`. You are not charged for it. For authentication, balance and rate-limit errors, see [Errors & Billing](/enterprise-api/trace/errors-and-billing).

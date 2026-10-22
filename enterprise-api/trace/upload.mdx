@@ -1,10 +1,10 @@
 ---
 title: "Upload Audio"
-description: "Upload a raw audio file to cloud storage before ingestion or search."
+description: "Upload songs to your account and get the file IDs that Trace ingestion and search use."
 ---
 
-<Card title="🚀 apiv2 is live!" icon="rocket" href="https://platform.soundverse.ai/docs">
-  Soundverse's Enterprise API platform has moved to **apiv2.soundverse.ai**, with self-serve account setup, API keys, and billing now managed at **platform.soundverse.ai**. Check the current docs there for the latest endpoints and auth.
+<Card title="🚀 apiv2 is live!" icon="rocket" href="https://platform.soundverse.ai">
+  Trace is served from **apiv2.soundverse.ai**. Create your API key and manage billing at **platform.soundverse.ai**.
 </Card>
 
 import React from 'react';
@@ -25,57 +25,146 @@ export const Method = ({ type, children }) => {
   return <span style={styles[type] || styles.POST}>{children || type}</span>;
 };
 
-## **Upload File**
+## **Upload a File (Recommended)**
 
-Upload a raw audio track (e.g. WAV, MP3, FLAC, M4A) to secure cloud storage. This endpoint is **completely free** and does not deduct from your plan balance.
+Upload a song to your account and receive a `file_id`. Pass this `file_id` to [Ingest Audio](/enterprise-api/trace/ingest) and to every search. Uploading is **free**.
 
-The returned `blob_name` must be used as the identifier in ingest and search requests.
+*   <Method type="POST">POST</Method> `/v1/files`
 
-*   <Method type="POST">POST</Method> `/trace/v1/upload`
+<Tip>
+  Always prefer `file_id` inputs. Trace uses the file ID to look up lyrics, translations and style tags for a song, and to tell you which of your files each result refers to. Legacy `blob_name` inputs have no file identity, so those layers cannot be produced for them.
+</Tip>
 
-### **Request Headers**
+You can upload in either of two ways.
 
-```http
-Content-Type: multipart/form-data
-```
+### **Option A: Upload the file directly**
 
-### **Request Body**
+Send the audio as `multipart/form-data` with a single `file` part. Maximum size: **100 MiB**.
 
 | Field | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
-| `file` | file | ✅ | The raw audio file to upload. Max file size: **100 MB**. |
+| `file` | file | ✅ | The audio file to upload |
+
+<CodeGroup>
+```bash cURL
+curl -X POST "https://apiv2.soundverse.ai/v1/files" \
+  -H "Authorization: Bearer sksoundverse_your_api_key" \
+  -F "file=@/path/to/song.mp3"
+```
+
+```python Python
+import requests
+
+with open("/path/to/song.mp3", "rb") as audio:
+    resp = requests.post(
+        "https://apiv2.soundverse.ai/v1/files",
+        headers={"Authorization": "Bearer sksoundverse_your_api_key"},
+        files={"file": ("song.mp3", audio, "audio/mpeg")},
+    )
+print(resp.json()["file_id"])
+```
+</CodeGroup>
+
+### **Option B: Import from a URL you host**
+
+Send JSON with a publicly reachable `source_url`. Soundverse downloads the file into your account.
+
+| Field | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `source_url` | string | ✅ | A URL Soundverse can download the audio from |
+| `filename` | string | | The name to store the file under |
+
+```bash cURL
+curl -X POST "https://apiv2.soundverse.ai/v1/files" \
+  -H "Authorization: Bearer sksoundverse_your_api_key" \
+  -H "Content-Type: application/json" \
+  -d '{"source_url": "https://example.com/audio/song.mp3", "filename": "song.mp3"}'
+```
 
 ### **Response**
 
-**Status 200 OK**
+**Status 201 Created**
 ```json
 {
-  "success": true,
-  "message": "Upload successful",
-  "data": {
-    "blob_name": "dataset/123e4567-e89b-12d3-a456-426614174000_song_candidate_1.wav"
-  }
+  "file_id": "0190a1b2-0004-7000-8000-00000000a004",
+  "filename": "song.mp3",
+  "size_bytes": 2927399,
+  "mime_type": "audio/mpeg"
 }
 ```
+
+Files are private to your account. Use the `file_id` as `query_file_id`, `candidate_file_id` or an entry in `audio_file_ids`.
+
+### **Errors**
+
+| Status | When |
+| :--- | :--- |
+| `422` | `source_url` is missing, the multipart body has no `file` part, the file exceeds 100 MiB, or the `Content-Type` is neither `application/json` nor `multipart/form-data` |
+| `503` | The upload service is temporarily unavailable. Retry after a short wait |
 
 ---
 
-### **Error Responses**
+## **Legacy Upload**
 
-**Payload Too Large (413)**
-Returned if the uploaded file exceeds the **100 MB** limit.
+<Warning>
+  This endpoint is kept for existing integrations. New integrations should use `POST /v1/files`. A `blob_name` has no file identity, so lyrics, translation and insights cannot be produced for it, and results cannot be mapped back to your files.
+</Warning>
+
+Upload audio into Trace's own storage and receive a `blob_name`. You can pass a `blob_name` as `query_url`, `candidate_url` or in `audio_blobs`.
+
+*   <Method type="POST">POST</Method> `/trace/v3/upload`
+
+### **Request Body** (`multipart/form-data`)
+
+| Field | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `file` or `files` | file | ✅ | One or more audio files. Accepted formats: `.mp3`, `.wav`, `.flac`, `.m4a` |
+
+```bash cURL
+curl -X POST "https://apiv2.soundverse.ai/trace/v3/upload" \
+  -H "Authorization: Bearer sksoundverse_your_api_key" \
+  -F "file=@/path/to/song.mp3"
+```
+
+### **Response**
+
+**Status 200 OK** (single file)
 ```json
 {
-  "success": false,
-  "message": "Upload file size exceeds the maximum limit of 100 MB."
+  "message": "Upload successful",
+  "blob_name": "dataset/2c3d4e5f-6a7b-4c8d-9e0f-1a2b3c4d5e6f_song.mp3",
+  "file_size": 2927399,
+  "duration_seconds": 182.9,
+  "mime_type": "audio/mpeg"
 }
 ```
 
-**Unsupported Format (400)**
-Returned if the file format is not supported (only `.mp3`, `.wav`, `.flac`, `.m4a` are allowed).
+When you send several files at once, the response wraps one entry per file:
+
+```json
+{
+  "success": true,
+  "uploads": [
+    { "message": "Upload successful", "blob_name": "dataset/…_song_a.mp3", "file_size": 2927399, "duration_seconds": 182.9, "mime_type": "audio/mpeg" },
+    { "message": "Upload successful", "blob_name": "dataset/…_song_b.mp3", "file_size": 3104512, "duration_seconds": 194.1, "mime_type": "audio/mpeg" }
+  ]
+}
+```
+
+### **Errors**
+
+**Unsupported format (400)**
 ```json
 {
   "success": false,
-  "message": "Unsupported audio format. Use .mp3, .wav, .flac, or .m4a"
+  "message": "Unsupported format for file 'notes.txt'. Use .mp3, .wav, .flac, or .m4a"
+}
+```
+
+**No file in the request (400)**
+```json
+{
+  "success": false,
+  "message": "No file uploaded. Use form parameter 'file' or 'files'"
 }
 ```

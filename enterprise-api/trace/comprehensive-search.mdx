@@ -1,10 +1,10 @@
 ---
 title: "Comprehensive Search"
-description: "Queue a Comprehensive Search similarity search using baseline similarity alignments (Track, Light Stem, and Motif)."
+description: "A fast, all-round similarity check across the full mix, vocals, accompaniment and melody."
 ---
 
-<Card title="🚀 apiv2 is live!" icon="rocket" href="https://platform.soundverse.ai/docs">
-  Soundverse's Enterprise API platform has moved to **apiv2.soundverse.ai**, with self-serve account setup, API keys, and billing now managed at **platform.soundverse.ai**. Check the current docs there for the latest endpoints and auth.
+<Card title="🚀 apiv2 is live!" icon="rocket" href="https://platform.soundverse.ai">
+  Trace is served from **apiv2.soundverse.ai**. Create your API key and manage billing at **platform.soundverse.ai**.
 </Card>
 
 import React from 'react';
@@ -25,83 +25,122 @@ export const Method = ({ type, children }) => {
   return <span style={styles[type] || styles.POST}>{children || type}</span>;
 };
 
-## **Comprehensive Search Endpoints**
+## **Comprehensive Search (Efficient)**
 
-Comprehensive Search executes a fixed comparison profile composed of three distinct similarity alignment metrics:
-1. **Track-level alignment**
-2. **Light-stem alignment** (Vocals and Accompaniment separation)
-3. **Motif alignment** (Micro-melodic motif detection on Vocals and Accompaniment/Other stems)
+A fixed search profile that compares songs on three independent signals at once, so you can judge similarity from more than one angle:
 
-These endpoints return a `job_id` immediately. You must poll `GET /trace/v1/comprehensive1/jobs/{job_id}` to retrieve results.
+1.  **Full mix**: the whole track.
+2.  **Vocals and accompaniment**: each compared separately.
+3.  **Melody**: melodic phrases in the vocals and in the other instruments.
 
-Two routing variants are available depending on the similarity model used:
+It is designed for screening work such as copyright checks, where one score on its own is not enough. You do not choose depths; the profile decides them.
 
-*   <Method type="POST">POST</Method> `/trace/v1/comprehensive1/type1` (Legacy)
-*   <Method type="POST">POST</Method> `/trace/v1/comprehensive1/type2` (New Efficient)
+*   <Method type="POST">POST</Method> `/trace/v3/comprehensive1`
+
+<Note>
+  For `1:n` and `m:n`, the datasets must be ingested with `track`, `light_stem` and `motif`. That is the [default ingestion](/enterprise-api/trace/ingest#depths-and-what-they-prepare), so a dataset ingested without a `depth` is ready. A `1:1` search needs no ingestion.
+</Note>
+
+<Tip>
+  For a deeper check that also compares structure, every instrument, lyrics and style, use the [Comprehensive – Deep use case](/enterprise-api/trace/use-case-search) (`POST /trace/v3/comprehensive2`).
+</Tip>
 
 ### **Request Body Fields**
 
-| Field | Type | Required For | Description |
+| Field | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
-| `search_type` | string | ✅ all | "1:1", "1:n", or "m:n". |
-| `limit` | int | | Max matches to return. |
-| `verbose_output` | boolean | | Detailed frame-by-frame similarities. |
-| `query_url` | string | 1:1, 1:n | blob_name of the query track. |
-| `candidate_url` | string | 1:1 | blob_name of the candidate track. |
-| `candidate_dataset_name` | string | 1:n, m:n | Dataset name to search against. |
-| `query_dataset_name` | string | m:n | The query dataset name (for bulk matching). |
+| `search_type` | string | ✅ | `"1:1"`, `"1:n"` or `"m:n"` |
+| `query_file_id` | string | 1:1, 1:n | `file_id` of the song you are checking |
+| `candidate_file_id` | string | 1:1 | `file_id` of the song to compare against |
+| `candidate_dataset_name` | string | 1:n, m:n | Name of the dataset to search |
+| `query_dataset_name` | string | m:n | Name of the dataset whose songs are the queries |
+| `limit` | integer | | Maximum number of matches returned per query song |
+| `budget_tokens` | integer | | Optional cap on what this job may cost. See [Errors & Billing](/enterprise-api/trace/errors-and-billing#budget-cap) |
+| `query_url`, `candidate_url` | string | | Legacy alternatives to the file IDs: `blob_name` values from [`/trace/v3/upload`](/enterprise-api/trace/upload#legacy-upload) |
 
----
-
-### **Examples**
+### **Request Example**
 
 <CodeGroup>
-
-```json 1:1 Search
-{
-  "search_type": "1:1",
-  "query_url": "dataset/987f6543-e21b-12d3-a456-426614174000_query.wav",
-  "candidate_url": "dataset/123e4567-e89b-12d3-a456-426614174000_candidate.wav"
-}
+```bash cURL
+curl -X POST "https://apiv2.soundverse.ai/trace/v3/comprehensive1" \
+  -H "Authorization: Bearer sksoundverse_your_api_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "search_type": "1:n",
+    "query_file_id": "0190a1b2-0003-7000-8000-00000000a003",
+    "candidate_dataset_name": "reference-catalog"
+  }'
 ```
 
-```json 1:N Search
-{
-  "search_type": "1:n",
-  "query_url": "dataset/987f6543-e21b-12d3-a456-426614174000_query.wav",
-  "candidate_dataset_name": "my-reference-catalog",
-  "limit": 3
-}
-```
+```python Python
+import requests
 
-```json M:N Search
-{
-  "search_type": "m:n",
-  "query_dataset_name": "incoming-batch-01",
-  "candidate_dataset_name": "reference-catalog",
-  "limit": 3
-}
+resp = requests.post(
+    "https://apiv2.soundverse.ai/trace/v3/comprehensive1",
+    headers={"Authorization": "Bearer sksoundverse_your_api_key"},
+    json={
+        "search_type": "1:n",
+        "query_file_id": "0190a1b2-0003-7000-8000-00000000a003",
+        "candidate_dataset_name": "reference-catalog",
+    },
+)
+job_id = resp.json()["job_id"]
 ```
-
 </CodeGroup>
-
-
----
 
 ### **Response**
 
-**Status 202 Accepted**
+**Status 201 Created**
 ```json
 {
-  "success": true,
-  "data": {
-    "job_id": "search_job_f5g6h7j8-k9l0-1a2b-3c4d-5e6f7g8h9i0j",
-    "status": "pending",
-    "usecase_id": "comprehensive1",
-    "search_type": "1:1",
-    "n": 1,
-    "m": 1,
-    "cost_usd": 0.15
-  }
+  "job_id": "0190a1c0-3333-7000-8000-000000000103",
+  "status": "queued"
 }
 ```
+
+Poll it with [Comprehensive Search Status](/enterprise-api/trace/comprehensive-search-status) or [`GET /trace/v3/jobs/{job_id}`](/enterprise-api/trace/search-status). Both return the same response.
+
+---
+
+## **What the Results Contain**
+
+Each match carries a `summary` with the three signals side by side, and is ranked by `score`, the full-mix headline score.
+
+```json
+{
+  "id": "b3ea82b7b97c8e2f733cd7850d12db41f4f334aa59c88cdd09538c3554d28326.mp3",
+  "score": 0.636743,
+  "percentage": 63.67,
+  "summary": {
+    "full_audio_hungarian_mean": 0.636743,
+    "full_audio_max_then_mean": 0.69,
+    "full_audio_max": 0.81,
+    "vocal_hungarian_mean": 0.58,
+    "vocal_max_then_mean": 0.62,
+    "vocal_max": 0.77,
+    "motif_matches_vocals_count": 2,
+    "motif_matches_other_count": 5
+  },
+  "full_audio_latent_scores": { },
+  "vocal_latent_scores": { },
+  "instrumental_latent_scores": { },
+  "motif_matches": { }
+}
+```
+
+| Field | Description |
+| :--- | :--- |
+| `full_audio_*` | Similarity of the full mix |
+| `vocal_*` | Similarity of the separated vocals |
+| `instrumental_latent_scores` | Similarity of the accompaniment |
+| `motif_matches_vocals_count`, `motif_matches_other_count` | How many melodic phrases matched in the vocals and in the other instruments |
+
+The full blocks (`full_audio_latent_scores`, `vocal_latent_scores`, `instrumental_latent_scores`, `motif_matches`) carry the per-window detail. See [Reading the Results](/enterprise-api/trace/search-status#reading-the-results).
+
+<Note>
+  If a dataset is missing one of the required layers, the job still completes, but `results.error` names what is missing. Ingest the missing layers and run the search again.
+</Note>
+
+<Note>
+  `m:n` comprehensive results are often larger than 200 KB. In that case the job response points to [Full Results](/enterprise-api/trace/job-results).
+</Note>
