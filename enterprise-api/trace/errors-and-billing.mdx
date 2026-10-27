@@ -61,7 +61,7 @@ Trace bills your Soundverse balance per job, based on usage.
 | Comprehensive Search (`POST /trace/v3/comprehensive1`) | Library (`GET /trace/v3/library`) |
 | Use-Case Searches (`POST /trace/v3/{use_case}`) | Job status and full results |
 
-*   **What a job costs** depends on the songs' length, the layers involved and, for searches, the number of comparisons.
+*   **What a job costs** depends on the songs' length, the layers involved and, for searches, the number of songs searched. Prices are in US cents, with a $0.03 minimum per job. See [Pricing](https://platform.soundverse.ai/pricing#trace) for examples.
 *   **When you are charged:** a hold may be placed when a job is queued, and the final amount is settled after the job completes, usually within a minute or two.
 *   **Failed jobs are not charged.** Any hold is returned in full.
 *   **Validation errors are not charged.** A request rejected with `4xx` never creates a job.
@@ -87,10 +87,10 @@ Amounts are in US cents: `4506` is $45.06. `total_effective` is the amount avail
 
 ## **Budget Cap**
 
-Add `budget_tokens` to any ingest or search request to cap what the job may cost. Trace prices the job before doing any work. If the price is more than 10% above your cap, the job is refused and finishes as `failed`, and you are not charged. The `error` gives the job's price, for example:
+Add `budget_tokens` to any ingest or search request to cap what the job may cost, in US cents. Trace prices the job before doing any work. If the price is more than 10% above your cap, the job is refused and finishes as `failed`, and you are not charged. The `error` gives the job's price in cents, for example:
 
 ```text
-This job prices at 77 tokens but was reserved for only 1. Re-submit so the correct amount is held; running now would spend more than was checked against the balance.
+This job prices at 7 but was reserved for only 1. Re-submit so the correct amount is held; running now would spend more than was checked against the balance.
 ```
 
 Re-submit with a `budget_tokens` at least as high as the quoted price. Leave `budget_tokens` out to run without a cap.
