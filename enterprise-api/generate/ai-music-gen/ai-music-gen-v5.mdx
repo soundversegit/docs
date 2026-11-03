@@ -52,7 +52,6 @@ export const Method = ({ type, children }) => {
     prompt: str = Field(..., description="Prompt for music generation")
     duration: Optional[int] = Field(30, description="Duration in seconds")
     style: Optional[str] = Field(None, description="Musical style")
-    # model: Optional[str] = Field("mureka-7.5", description="Model to use")
     parameters: Optional[Dict[str, Any]] = Field(
         default_factory=dict, description="Additional parameters"
     ) */}

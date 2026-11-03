@@ -59,7 +59,6 @@ class v6SongGenRequest(BaseModel):
     lyrics: Optional[str] = Field(
         None, description="Lyrics for the song (will be generated if not provided)"
     )
-    # model: Optional[str] = Field("mureka-7.5", description="Model to use")
     parameters: Optional[Dict[str, Any]] = Field(
         default_factory=dict, description="Additional parameters"
     ) */}
