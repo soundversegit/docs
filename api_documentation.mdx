@@ -1,156 +1,69 @@
 ---
 title: 'API Documentation'
-description: 'Welcome to Soundverse API. Our current API domain is https://apiv2.soundverse.ai/'
+description: 'The Soundverse Enterprise API runs on apiv2.soundverse.ai, with accounts, keys and billing at platform.soundverse.ai.'
 ---
 
-import React from 'react';
-
-<Card title="🚀 apiv2 is live!" icon="rocket" href="https://platform.soundverse.ai/docs">
-  Soundverse's Enterprise API has moved to **apiv2.soundverse.ai**, with new self-serve account setup, API keys, and billing all managed at **platform.soundverse.ai**. Everything below this point documents the legacy `api.soundverse.ai` domain — if you're setting up a new integration, click through for current endpoints, request/response shapes, and auth.
+<Card title="Soundverse API docs" icon="rocket" href="https://platform.soundverse.ai/docs">
+  The full API reference, with every endpoint, request and response, lives at **platform.soundverse.ai/docs**. Start there for any new integration.
 </Card>
 
-<Info>
-  🔗 <a href="https://platform.soundverse.ai/" target="_blank" rel="noopener">Soundverse Platform</a> &nbsp;|&nbsp;
-  <a href="https://platform.soundverse.ai/docs" target="_blank" rel="noopener">Current API Docs (apiv2)</a>
-</Info>
-
----
-
-Soundverse’s **Enterprise API** lets you generate and edit music programmatically covering **AI song generation (with lyrics + vocals)**, instrumental music generation, extend, lyrics, singing, stem separation, and loop/trim, with both **streaming (SSE)** and **synchronous** workflows depending on the endpoint. Soundverse is constantly adding new endpoints to make it an extensive platform with all potential Audio AI usecases.
-
-<Warning>
-  The endpoints, base domain, and key-issuance flow described on **this page** are for the legacy `api.soundverse.ai` API. Accounts and API keys created through the current self-serve platform (**platform.soundverse.ai**) are **not** recognized on this legacy domain and will return `403 Invalid API Key` there — use `apiv2.soundverse.ai` instead. See the [current docs](https://platform.soundverse.ai/docs) for up-to-date endpoints.
-</Warning>
-
-Base domain (legacy — you’ll hit different paths depending on the endpoint/version): [https://api.soundverse.ai](https://api.soundverse.ai). For new integrations, use `https://apiv2.soundverse.ai` instead — see the [current API docs](https://platform.soundverse.ai/docs).
-
-**Pick your API plan based on expected usage:**
-- **Starter** (includes Royalty-Free)
-- **Growth** (includes Sample)
-- **Scale** (includes Distribution)
-- **Pay as you go** (Choose any License)
-
-Soundverse’s API licensing is **plan-based by default** and you can **upgrade licenses via dashboard, or contact the Soundverse Support**.
+Soundverse's **Enterprise API** lets you generate and edit music programmatically: songs with vocals, instrumentals, singing, extend, remix, stem separation, lyrics, voice cloning, transcription, sound effects, copyright recognition, Agent One and ready-made workflows. It runs on `https://apiv2.soundverse.ai`.
 
 ### How to get an API key
 1. Sign in at [platform.soundverse.ai](https://platform.soundverse.ai) and set up your enterprise account.
-2. Generate a key from the dashboard's API Keys page.
-3. Send it on every request using a Bearer header against `apiv2.soundverse.ai` (see the [current docs](https://platform.soundverse.ai/docs) for endpoint-specific examples).
-
-<Note>
-  Legacy flow (existing `api.soundverse.ai` integrations only): purchase a plan, open the [old API Dashboard](https://www.soundverse.ai/ai-music-generation-api), and generate a key from there. Keys from that flow are not valid on `apiv2.soundverse.ai`, and keys from the new platform dashboard are not valid on `api.soundverse.ai` — the two are separate systems.
-</Note>
-
-**Example header:**
+2. Generate a key from the dashboard's **API Keys** page.
+3. Send it on every request as a Bearer header:
 
 ```http
 Authorization: Bearer your_api_key_here
 Content-Type: application/json
 ```
 
+### Plans and prices
+Pick an API plan based on expected usage:
+- **Starter** (includes Royalty-Free)
+- **Growth** (includes Sample)
+- **Scale** (includes Distribution)
+
+Per-request prices for every tool, by license, are in the [Tool Catalog](https://platform.soundverse.ai/docs/tool-catalog). See [platform pricing](https://platform.soundverse.ai/pricing) for the plans.
+
 ### How to choose the right license
-Here’s the simplest way to decide (you can also show this as a tooltip / helper in your onboarding):
+Here's the simplest way to decide:
 - **Royalty-Free** (default on many plans): broad commercial use for exported tracks, but _no reselling raw/unmodified exports as libraries/sample packs_.
 - **Sample**: you can sample/chop/transform exports inside a new work, but still not resell raw exports “as is.”
 - **Distribution**: use when you want explicit rights to release to DSPs/social platforms (Spotify/Apple/YouTube/TikTok, etc.).
 - **Sync**: use when pairing music to picture (film/TV/ads/games/apps/campaigns), typically project/campaign scoped.
 - **Full Ownership**: exclusive buy-out of the master for that track—best for high-stakes brand work / catalogs / label deals, with broad exploitation rights.
 
-**Plan mapping:**
-- Starter includes Royalty-Free
-- Growth includes Sample
-- Scale includes Distribution, with upgrades optional
-- Pay as you go has All Licenses, but costs more
 
-**FAQ links (recommended to surface in your docs)**
-- [Enterprise API FAQs (license definitions, FAQs, ownership, sublicensing etc.)](https://help.soundverse.ai/enterprise-api/faqs)
+**More:** [Enterprise API FAQs](/enterprise-api/faqs) covers license definitions, ownership and sublicensing.
 
-## Trace Audio Similarity (`apiv2.soundverse.ai`)
+## Where each endpoint is documented
+
+| What you want to do | Docs |
+| --- | --- |
+| Generate a song with vocals | [Song Generation](https://platform.soundverse.ai/docs/song-generation) |
+| Generate an instrumental | [Music Generation](https://platform.soundverse.ai/docs/music-generation) |
+| Generate singing | [Singing Generation](https://platform.soundverse.ai/docs/singing-generation) |
+| Extend a song or instrumental | [Extend](https://platform.soundverse.ai/docs/extend) |
+| Remix a song | [Remix](https://platform.soundverse.ai/docs/remix) |
+| Separate stems | [Stem Separation](https://platform.soundverse.ai/docs/stem-separation) |
+| Recognize a song or check copyright | [Copyright / Recognition](https://platform.soundverse.ai/docs/copyright-recognition) |
+| Write lyrics | [Lyrics](https://platform.soundverse.ai/docs/lyrics) |
+| Everything else | [Tool Catalog](https://platform.soundverse.ai/docs/tool-catalog) |
+
+### Moving from api.soundverse.ai
+
+The older `api.soundverse.ai` paths (`/v5`, `/v6` and `/v7` for song, music, singing, remix and extend, plus stem separation, lyrics and recognition) are also served on `apiv2.soundverse.ai`, so most integrations only change the domain and the key. Some behaviour differs: every request returns a `job_id` that you poll, and there is no `/sync` variant. See [Compat Routes](https://platform.soundverse.ai/docs/compat-routes) for the details.
+
+Keys from the old API dashboard don't work on `apiv2.soundverse.ai`, and keys from platform.soundverse.ai don't work on `api.soundverse.ai`. Generate a new key on the platform when you switch.
+
+## Trace Audio Similarity
 
 Trace compares songs layer by layer (full mix, instruments, structure, melody, lyrics and style) for copyright screening, cover and remix detection, and catalog matching. It runs on `https://apiv2.soundverse.ai` with the same API keys.
 
-- [Trace Overview](enterprise-api/trace/overview)
-- [Upload Audio](enterprise-api/trace/upload)
-- [Custom Search](enterprise-api/trace/search)
-- [Use-Case Search](enterprise-api/trace/use-case-search)
-- [Errors & Billing](enterprise-api/trace/errors-and-billing)
-
-## Available API Endpoints (legacy `api.soundverse.ai`)
-
-<Tip>
-  Building something new? Check [platform.soundverse.ai/docs](https://platform.soundverse.ai/docs) for the current endpoint list on `apiv2.soundverse.ai` first — not every legacy endpoint below has an `apiv2` equivalent yet.
-</Tip>
-
-### AI Song Generation
-- [AI Song Gen v7](enterprise-api/generate/ai-song-gen/ai-song-gen-v7)
-- [AI Song Gen v6](enterprise-api/generate/ai-song-gen/ai-song-gen-v6)
-- [AI Song Gen v5](enterprise-api/generate/ai-song-gen/ai-song-gen-v5)
-- [AI Song Gen v4](enterprise-api/generate/ai-song-gen/ai-song-gen-v4)
-- [AI Song Gen v1](enterprise-api/generate/ai-song-gen/ai-song-gen-v1)
-
-### AI Music (Instrumental) Generation
-- [AI Music Gen v5](enterprise-api/generate/ai-music-gen/ai-music-gen-v5)
-- [AI Music Gen v4](enterprise-api/generate/ai-music-gen/ai-music-gen-v4)
-- [AI Music Gen v1](enterprise-api/generate/ai-music-gen/ai-music-gen-v1)
-- [Text to Music](enterprise-api/generate/ai-music-gen/text-to-music)
-
-### AI Extend
-- [Extend Song v5](enterprise-api/generate/ai-music-extend/extend-song-v5)
-- [Extend Music v5](enterprise-api/generate/ai-music-extend/extend-music-v5)
-- [Extend Music](enterprise-api/generate/ai-music-extend/extend-music)
-
-### AI Remix
-- [AI Remix v7](enterprise-api/generate/ai-remix/ai-remix-v7)
-
-### AI Lyric Generation
-- [Generate Lyrics](enterprise-api/generate/ai-lyric-gen/generate-lyrics)
-
-### AI Singing
-- [AI Singing Gen v2](enterprise-api/generate/ai-singing-gen/ai-singing-gen-v2)
-
-### AI Stem Separation
-- [Stem Separation](enterprise-api/generate/ai-stem-separation/stem-separation)
-
-### Loop And Trim
-- [Loop and Trim](enterprise-api/generate/loop-trim/loop-and-trim)
-- [Gen Loop and Trim](enterprise-api/generate/loop-trim/gen_loop_and_trim)
-
-### AI Chat (Beta)
-- [Chat Assistant](enterprise-api/assistant/chat)
-- [Voice Assistant](enterprise-api/assistant/voice)
-
-### Check Status (`/v5/status`)
-
-- Method: `GET`
-- Path: `/v5/status`
-- Query parameters:
-  - `message_id` *(required)* — string ID of the request to check
-
-**Example Request**
-
-```bash
-curl -X 'GET' \
-  'https://api.soundverse.ai/v5/status?message_id=6a05ae81e622f4000cb9d988' \
-  -H 'accept: application/json' \
-  -H 'Authorization: Bearer your_api_key_here'
-```
-
-**Successful Response (200)**
-
-```json
-{
-  "status": "string",
-  "message_id": "string",
-  "audio_data": {
-    "additionalProp1": {}
-  },
-  "album_art": "string",
-  "song_name": "string",
-  "progress": 0
-}
-```
-
-**Errors**
-
-- `401` — Invalid API key format. Use `Bearer <your_api_key>`.
-- `422` — Validation Error (invalid or missing `message_id`).
+- [Trace Overview](/enterprise-api/trace/overview)
+- [Upload Audio](/enterprise-api/trace/upload)
+- [Custom Search](/enterprise-api/trace/search)
+- [Use-Case Search](/enterprise-api/trace/use-case-search)
+- [Errors & Billing](/enterprise-api/trace/errors-and-billing)

@@ -27,6 +27,10 @@ export const Method = ({ type, children }) => {
 
 ## **Get Full Results**
 
+<Warning>
+  This endpoint is not available on `apiv2.soundverse.ai` yet. Until it is, the request returns 404.
+</Warning>
+
 Returns the complete result of a finished job. You need it when a result is larger than about 200 KB, which is common for `m:n` searches and searches over many layers. In that case [Job Status](/enterprise-api/trace/search-status) returns `"results_complete": false` and a `results_url` pointing here. Fetching results is **free**.
 
 *   <Method type="GET">GET</Method> `/trace/v3/jobs/{job_id}/results`
