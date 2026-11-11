@@ -167,6 +167,10 @@ curl "https://apiv2.soundverse.ai/trace/v3/dataset/3f2a1b4c-5d6e-4f70-8a91-b2c3d
 
 ## **List Dataset Tracks**
 
+<Warning>
+  This endpoint is not available on `apiv2.soundverse.ai` yet. Until it is, the request returns 404.
+</Warning>
+
 Shows every song in a dataset and which of its layers are finished, still running, or waiting. Use it to confirm a dataset is ready before searching, and to map Trace's audio IDs back to your own file IDs.
 
 *   <Method type="GET">GET</Method> `/trace/v3/dataset/{dataset_id}/tracks`
@@ -218,6 +222,10 @@ curl "https://apiv2.soundverse.ai/trace/v3/dataset/3f2a1b4c-5d6e-4f70-8a91-b2c3d
 ---
 
 ## **Delete Dataset**
+
+<Warning>
+  This endpoint is not available on `apiv2.soundverse.ai` yet. Until it is, the request returns 404.
+</Warning>
 
 Deletes the dataset and everything Trace derived from it. Your uploaded source files are **not** deleted.
 
