@@ -1,22 +1,53 @@
 ---
-title: "Agent"
+title: "Agent One"
+description: "Describe your goal once, and Agent One plans the steps and runs the right tools to deliver finished music."
 ---
 
-## **What is Soundverse Agent?**
+## What is Agent One?
 
-**Soundverse Agent** is a conversational “AI producer” that can:
+Agent One is Soundverse's AI music producer. Describe what you want in plain language, and it plans the steps, picks the tools and runs them in order. One request can write lyrics, generate the song, give it a title and cover art, then separate stems or make a music video. Every result stays editable in the chat, your Library and AI Studio.
 
-* Use all Soundverse creation tools (Song / Music / Lyrics / Singing / DNA / Melody-to-Song / MIDI-to-Song, etc.).  
-* Use modification tools (Stem Separator, Inpainting, Extend, Section Analysis, Voice Swap, Voice to Instrument, Similar Music/Song, etc.).  
-* Analyze key / tempo and change them.  
-* Apply audio effects (EQ, reverb, delay, compressor, distortion, etc.).  
-* Layer and merge audio.  
-* Use system abilities (web search, YouTube URL extractor, record / upload / library selection)  
-* Maintain context across messages, so follow-ups like “make it a little louder” refer to the last thing you changed.
+Agent One can:
+
+* Use the creation tools: songs, instrumentals, lyrics, singing, speech, sound effects, images, video and music videos, Melody to Song, MIDI to Song and Artist DNA.
+* Use the editing tools: Stem Separator, Extend, Inpainting, AI Remix, Voice Swap, Voice to Instrument, Similar Song and Similar Music, Translate Lyrics and more.
+* Analyze songs: tempo and key, sections, transcription and copyright checks.
+* Apply audio effects (EQ, reverb, delay, compression and more).
+* Search the web and read YouTube links.
+* Remember the conversation, so follow-ups like "make it a little louder" refer to the last thing you changed.
 
 You always talk to it in natural language. There is no strict syntax.
 
-## **1\. General “How do I talk to Agent?” questions**
+## Getting started
+
+1. Click **Chat** in the left sidebar (or **Agent One** in AI Tools) and type your goal in the composer.
+2. Optional: add references. Use the **+** menu to attach files from your Library, a document (PDF, DOCX, TXT or XLSX), a microphone recording of up to 60 seconds, or a YouTube or direct media link. Type **@** to reference a song, Library file, DNA or playlist you already have.
+3. Pick a mode and send. Agent One may ask a quick question first, then shows its plan as a row of steps and runs each tool.
+4. Review the results. Play and download them in the chat, ask for changes in a follow-up, press **Regenerate**, or click **Open in AI Studio** to edit.
+
+You need the rights to anything you attach.
+
+## Modes
+
+Pick a mode in the composer:
+
+| Mode | Best for | Plans |
+| --- | --- | --- |
+| Lite | Quick ideas and short tasks | Every plan |
+| Standard | Everyday requests | Paid plans |
+| Pro | Complex, multi-step jobs, such as a full song with a music video | Paid plans |
+
+Each run uses tokens: the tools Agent One calls, plus its own steps (about 7 tokens a step in Lite, 54 in Standard and 128 in Pro). On the Free plan, Agent One runs in Lite mode, and a step that needs a paid tool stops at an upgrade prompt.
+
+## Which model does Agent One use?
+
+Agent One makes songs with the newest Soundverse version your plan includes: Soundverse v6 on Free, v8 on Creator, and v9 on Pro and Max. To choose a specific model, open the tool you want from the composer (for example AI Song Generator) and pick a version from its **Model** menu. See [Content and Generation](/faqs/content-and-generation) for prices.
+
+## Agent One in AI Studio
+
+Click **Agent One** in the AI Studio top bar to have it edit your project live: it can add tracks and MIDI parts, write notes, choose instruments and effects, set the tempo and arrange clips. See [AI Studio](/create/ai-studio).
+
+## **1\. How do I talk to Agent One?**
 
 ### **Q1. How do I reference audio?**
 
@@ -28,7 +59,7 @@ You can say:
 * “Use the **YouTube link I just pasted** as reference.”  
 * “Use my **DNA model ‘DNA Name’** for style.”
 
-Agent keeps track of the current working song / section unless you switch.
+Agent One keeps track of the current working song / section unless you switch.
 
 ### 
 
@@ -144,15 +175,15 @@ You’ll first record or upload the melody.
 
 You’ll combine with AI Music / Song Generator when specifying more details.
 
-#### **2.1.8 Model Selection (V5 streaming, v4.5 Asian Languages)**
+#### **2.1.8 Model Selection**
 
-**What it does:** Lets you influence which underlying model/engine Agent uses.
+**What it does:** Agent One uses the newest Soundverse version your plan includes. You can ask for a different one your plan allows.
 
 **Things you can say:**
 
-* “Use the V5 model with streaming so I can hear it while it’s generating.”  
-* “Use the v4.5 model with Hindi/Punjabi support for these lyrics.”  
-* “Regenerate this but with the higher quality model you used earlier.”
+* "Make this with Soundverse v8 instead."
+* "Regenerate this with the same model you used earlier."
+* "Write and sing the lyrics in Hindi."
 
 ### **2.2 Music Modification, Editing & Analysis**
 
@@ -242,7 +273,8 @@ You can also chain instructions:
   `"delay",`  
   `"chorus",`  
   `"phaser",`  
-  `"distortion"`  
+  `"distortion",`  
+  `"noise_gate"`  
 `]`
 
 **Things you can say:**
@@ -604,7 +636,7 @@ Below are concrete multi-step workflows. For each, we show:
 
 1. **Stem Separator** → isolate vocals & instrumental.
 
-2. **AI Lyrics Writer** → translate/adapt lyrics into Hindi, Spanish, Swedish, French (matching phrasing).
+2. **Translate Lyrics** → translate the lyrics into Hindi, Spanish, Swedish and French, keeping the phrasing singable.
 
 3. For each language:
 
@@ -625,7 +657,7 @@ Below are concrete multi-step workflows. For each, we show:
 
 1. **Section Analysis** → find chorus and verse regions.
 
-2. **AI Lyrics Writer** → translate or rewrite chorus in Hindi; keep verses in English.
+2. **Translate Lyrics** → translate the chorus into Hindi; keep verses in English.
 
 3. **AI Singing Generator** → generate Hindi chorus vocals \+ English verse vocals.
 
@@ -861,7 +893,7 @@ Agent adjusts the same effect chain with new parameters.
 
 1. **Upload / Library selection** → choose the 10 songs.
 
-2. **DNA Build / Training** → create new DNA model (e.g., “EP 2025 DNA”).
+2. **DNA Build / Training** → Agent One asks you to confirm you own the songs or have permission, then creates the new DNA model (e.g., “EP 2025 DNA”). Training a DNA needs the Creator plan or above.
 
 3. Return status \+ future prompts:
 
