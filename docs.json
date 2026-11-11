@@ -12,6 +12,10 @@
     {
       "source": "/create/studio-faq",
       "destination": "/create/agent"
+    },
+    {
+      "source": "/create/ai-magic-tools",
+      "destination": "/create/ai-tools"
     }
   ],
   "navigation": {
@@ -36,7 +40,7 @@
         "pages": [
           "create/agent",
           "create/ai-studio",
-          "create/ai-magic-tools",
+          "create/ai-tools",
           "create/dna-faqs",
           "create/dna-help-center"
         ]
