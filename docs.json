@@ -177,6 +177,8 @@
           "create/agent",
           "create/ai-studio",
           "create/ai-tools",
+          "create/models",
+          "create/dj-one",
           "create/dna-faqs",
           "create/dna-help-center"
         ]
@@ -189,11 +191,21 @@
         ]
       },
       {
+        "group": "Plans & Billing",
+        "pages": [
+          "account/plans-and-pricing",
+          "account/tokens",
+          "account/downloads",
+          "account/student-discount"
+        ]
+      },
+      {
         "group": "Account Management",
         "pages": [
           "account/manage-your-account",
           "account/user-settings",
-          "account/private-profile"
+          "account/private-profile",
+          "account/apps-and-extension"
         ]
       },
       {
