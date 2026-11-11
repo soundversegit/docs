@@ -16,6 +16,8 @@ Use the detailed DNA Help Center when you need a step-by-step walkthrough.
 
 Only upload material that you own or are authorized to use.
 
+Training a DNA (Full Production or Voice) needs the Creator plan or above.
+
 For Voice DNA, you must also be the speaker or have the speaker's consent.
 
 ## 1. What is DNA?
@@ -555,21 +557,19 @@ Choosing a track reference narrows the musical starting point for the available 
 
 It does not guarantee that every generation control will be enabled.
 
-## 45. What generation styles does the current DNA contract support?
+## 45. What can DNA generation make?
 
-The current DNA generation contract accepts:
+Choose one of three outputs:
 
-- **Song**
+- **Song**: a full song with vocals. You can add lyrics (up to 3,000 characters) or use **Help me write**.
 
-- **Instrumental**
+- **Instrumental**: music with no vocals.
 
-The backend does not accept a standalone vocal or acapella generation style.
-
-The UI can show vocal references, but that does not create a universal third output style.
+- **Singing**: a stand-alone sung vocal in the DNA's style.
 
 <img
   src="/images/create/dna/10-dna-generation-controls.png"
-  alt="DNA generation controls with Song and Instrumental options"
+  alt="DNA generation controls with the Output options"
 />
 
 ## 46. Why is a generation option missing or disabled?
@@ -584,15 +584,11 @@ If an option is absent, that selection does not currently support it.
 
 Changing to another available model or reference can change the controls shown.
 
-## 47. Can a vocal reference generate a standalone vocal output?
+## 47. Can DNA make a vocal on its own?
 
-Do not assume that it can.
+Yes. Choose **Singing** as the output to get a stand-alone sung vocal in the DNA's style.
 
-A vocal reference can appear in the interface as a type of track reference.
-
-The current generation request contract still maps available generation to Song or Instrumental.
-
-Use the enabled product controls rather than expecting a separate universal vocal output.
+A vocal track reference is different: it is a reference you pick under **Vocal** to guide the generation.
 
 ## 48. What are the Voice DNA steps?
 
@@ -893,8 +889,6 @@ Do not promise a specific number of models or tracks.
 Do not promise public discovery before the DNA is both Public and Approved.
 
 Do not promise a payout merely because Stripe is connected.
-
-Do not promise a standalone vocal output from every vocal reference.
 
 ## 72. Where can I find the full walkthrough?
 
@@ -2152,7 +2146,7 @@ This documentation does not provide legal advice about a specific work.
 
 ## 204. What does the Song generation style mean?
 
-Song is one of the current generation styles supported by the DNA request contract.
+Song is one of the three DNA outputs (Song, Instrumental and Singing).
 
 It refers to the available song-generation path for the selected DNA context.
 
@@ -2162,7 +2156,7 @@ Use the enabled Song controls rather than expecting every DNA to behave the same
 
 ## 205. What does the Instrumental generation style mean?
 
-Instrumental is the other current generation style supported by the DNA request contract.
+Instrumental is one of the three DNA outputs (Song, Instrumental and Singing).
 
 It refers to the available instrumental-generation path for the selected DNA context.
 
@@ -2170,25 +2164,13 @@ The presence of an instrumental reference does not guarantee every model, prompt
 
 Use the actual selection and enabled controls in the product.
 
-## 206. Why is there no separate universal Vocal generation style?
+## 206. What does the Singing output mean?
 
-The current DNA generation request contract supports Song and Instrumental styles.
+Singing makes a stand-alone sung vocal in the DNA's style, with no backing music.
 
-The interface can show vocal references, but a vocal reference is not the same thing as a universal standalone vocal or acapella request style.
+## 207. Is a vocal reference the same as the Singing output?
 
-Do not promise a specific vocal-only output merely because a vocal reference appears in the selection list.
-
-Use the output styles enabled for that exact context.
-
-## 207. Can a vocal reference guarantee a standalone vocal output?
-
-No.
-
-A vocal reference can be useful context within the current DNA experience, but it does not guarantee that the backend supports a separate standalone vocal output for every selection.
-
-The selected DNA, model, reference, and enabled controls determine what can be requested.
-
-Check the product rather than relying on a generic label.
+No. A vocal reference is a processed track from the DNA that you pick under **Vocal** to guide a generation. Singing is an output type: what the generation makes.
 
 ## 208. Why is an output option disabled?
 

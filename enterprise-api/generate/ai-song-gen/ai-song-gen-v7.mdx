@@ -37,7 +37,7 @@ export const Method = ({ type, children }) => {
 ## **Generate Song (v7)**
 
 - The API supports both streaming and synchronous responses.
-- Every streaming response begins with a `job_created` event containing a `job_id`, allowing you to safely disconnect and poll [`/v7/status`](/api_documentation.mdx#check-status-v5status) for the result.
+- Every streaming response begins with a `job_created` event containing a `job_id`, allowing you to safely disconnect and poll [`/v7/status`](/api_documentation#check-status-v5status) for the result.
 
 ### **Endpoints**
 - <Method type="POST">POST</Method> `/v7/generate/song` **- streaming**
@@ -239,7 +239,7 @@ always the very first chunk; guarantees `job_id` is available before any process
 data: {"type": "job_created", "job_id": "...", "message_id": "...", "status": "processing", "isComplete": false, "chunkIndex": 0}
 ```
 
-> Save `job_id` immediately — if your connection drops, you can resume tracking via [`/v7/status`](/api_documentation.mdx#check-status-v5status).
+> Save `job_id` immediately — if your connection drops, you can resume tracking via [`/v7/status`](/api_documentation#check-status-v5status).
 
 fields sent: `type`, `job_id`, `message_id`, `status`, `isComplete`, `chunkIndex`
 

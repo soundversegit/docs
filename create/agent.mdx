@@ -136,7 +136,7 @@ You’ll first record or upload the melody.
 
 **Things you can say:**
 
-* “Generate 10 song ideas in my ‘BlueNucleus DNA 01’ style, each around 1 minute.”  
+* “Generate 10 song ideas in my ‘My DNA’ style, each around 1 minute.”  
 * “Make a new track using my ‘Lo-fi DNA’ but slower, around 85 BPM.”  
 * “Train a new DNA model from these 15 tracks I’m uploading called ‘New Album DNA’.”  
 * “Use my DNA model but make the drums more acoustic and less electronic.”  
@@ -158,7 +158,7 @@ You’ll combine with AI Music / Song Generator when specifying more details.
 
 #### **2.2.1 Stem Separator**
 
-**What it does:** Splits a mixed song into vocal and instrument stems (and possibly multiple instrument stems like drums, guitar, etc., depending on your configuration).
+**What it does:** Splits a mixed song into stems: 2 stems (vocals and music), 6 stems (vocals, drums, bass, guitar, piano and other), or every part with a MIDI file for each (Creator and above).
 
 **Things you can say:**
 
@@ -263,7 +263,7 @@ You can also chain instructions:
 You can then refine with context:
 
 * “Increase the reverb just a little more on the chorus vocals.”  
-* “Undo the distortion but keep the EQ changes.” (If you implement selective removal.)
+* “Undo the distortion but keep the EQ changes.”
 
 #### **2.2.7 Merge Audio (Concatenate)**
 
@@ -440,7 +440,7 @@ Below are concrete multi-step workflows. For each, we show:
 
 **Tool sequence:**
 
-1. **DNA Generation** → select given DNA model (e.g., “BlueNucleus DNA 01”).
+1. **DNA Generation** → select given DNA model (e.g., “My DNA”).
 
 2. For each of 10 tracks:
 
