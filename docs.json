@@ -184,6 +184,16 @@
         ]
       },
       {
+        "group": "Soundverse AI VST",
+        "pages": [
+          "plugin/overview",
+          "plugin/install",
+          "plugin/daws",
+          "plugin/build-a-plugin",
+          "plugin/troubleshooting"
+        ]
+      },
+      {
         "group": "Exploring Soundverse",
         "pages": [
           "explore/explore",

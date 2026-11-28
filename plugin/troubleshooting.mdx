@@ -1,0 +1,27 @@
+---
+title: 'Troubleshooting'
+description: "Soundverse AI VST doesn't show up, won't open, or won't install."
+---
+
+## It doesn't show up in my DAW
+
+- Restart your DAW, then rescan plug-ins ([how, per DAW](/plugin/daws)).
+- Check that VST3 (or Audio Units on a Mac) is turned on in your DAW's plug-in settings.
+- Make sure your DAW is 64-bit and loads VST3, Audio Unit or CLAP. Pro Tools (AAX only) isn't supported yet.
+- On a Mac, check the files are there: in Finder press **Shift+Cmd+G** and go to `/Library/Audio/Plug-Ins/VST3`.
+
+## "This Audio Unit plug-in could not be opened", or the VST3s are missing on a Mac
+
+Beta 6 and earlier needed **macOS 15** and had a signature problem that made some DAWs skip the VST3s. Download the latest installer from [soundverse.ai/features/vst-plugin](https://www.soundverse.ai/features/vst-plugin) and install it over the old one, then rescan in your DAW.
+
+## macOS or Windows blocks the installer
+
+The beta installers aren't code-signed yet. On a Mac use **System Settings › Privacy & Security › Open Anyway**; on Windows click **More info › Run anyway**. Full steps: [Install](/plugin/install).
+
+## Previews take a while to start
+
+The first time you play a song, the plug-in downloads it, so a long song can take a few seconds on a slow connection. The play button shows a spinner while it loads. After that it plays straight away.
+
+## Still stuck?
+
+Email [help@soundverse.ai](mailto:help@soundverse.ai) with your computer (Mac or Windows and its version), your DAW and its version, and a screenshot.
